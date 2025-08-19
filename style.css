@@ -1,0 +1,311 @@
+/* General & Typography */
+:root {
+    --primary-orange: #ff9800;
+    --light-bg-color: #fcefdc;
+    --card-bg-color: #ffffff;
+    --text-color: #343a40;
+    --bg-color: #f8f9fa;
+    --border-radius-lg: 25px;
+    --border-radius-sm: 15px;
+    --shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+
+    /* Nuevos colores para las tarjetas temáticas */
+    --dog-card-color: #fff8eb; /* Naranja claro para el perro */
+    --cat-card-color: #f0fff0; /* Verde suave para el gato */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    background-color: var(--light-bg-color);
+    line-height: 1.6;
+}
+
+main {
+    padding: 1rem;
+}
+
+h2, h3 {
+    color: #495057;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Header */
+.main-header {
+    background-color: var(--card-bg-color);
+    box-shadow: var(--shadow);
+    padding: 1rem;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.header-logo img {
+    height: 30px;
+}
+
+.search-bar {
+    display: flex;
+    flex: 1;
+    position: relative;
+    max-width: 600px;
+    order: 3;
+    margin: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.search-bar input {
+    width: 100%;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    background-color: #fff;
+}
+
+.search-bar .search-button {
+    background-color: var(--primary-orange);
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+}
+
+.header-icons {
+    display: flex;
+    gap: 1.5rem;
+    white-space: nowrap;
+    order: 2;
+}
+
+.header-icons .icon {
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* Hero Section Combined */
+.hero-section-combined {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-direction: column;
+    min-height: 300px;
+}
+
+.slider-wrapper {
+    flex: 2;
+    overflow: hidden;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+    height: auto;
+    min-height: 200px;
+}
+
+.slider-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    height: 100%;
+}
+
+.slider-container::-webkit-scrollbar {
+    display: none;
+}
+
+.slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    object-fit: contain;
+}
+
+.pet-spaces-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.pet-card {
+    flex: 1;
+    min-width: 150px;
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+    text-align: center;
+    padding: 1.5rem 1rem;
+}
+
+.pet-card a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.pet-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.pet-card img {
+    width: 100px;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Colores de las tarjetas de animales */
+.pet-card-dog {
+    background-color: var(--dog-card-color);
+}
+
+.pet-card-cat {
+    background-color: var(--cat-card-color);
+}
+
+/* Services Bar */
+.services-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem;
+    margin-top: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.service-item {
+    text-align: center;
+    flex: 1 1 45%;
+    margin-bottom: 1rem;
+}
+
+.service-item .icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Discount Offers Section */
+.discount-offers {
+    margin-top: 1rem;
+}
+
+.offers-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1rem 0;
+    scrollbar-width: none;
+}
+
+.offers-container::-webkit-scrollbar {
+    display: none;
+}
+
+.offer-item {
+    flex: 0 0 150px;
+    text-align: center;
+    position: relative;
+}
+
+.offer-item img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow);
+}
+
+.discount-tag {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--primary-orange);
+    color: white;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+}
+
+/* Responsive adjustments for Desktop */
+@media (min-width: 768px) {
+    .main-header {
+        padding: 1rem 5rem;
+    }
+    .header-content {
+        flex-wrap: nowrap;
+    }
+    .search-bar {
+        order: initial;
+        margin: 0 2rem;
+    }
+    .header-icons {
+        order: 3;
+    }
+    .hero-section-combined {
+        flex-direction: row;
+        gap: 2rem;
+        padding: 0 5rem;
+        align-items: stretch;
+    }
+    .pet-spaces-container {
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+    .pet-card {
+        flex: 1;
+    }
+    .services-bar {
+        justify-content: space-between;
+        padding: 1rem 5rem;
+    }
+    .service-item {
+        flex: initial;
+        width: 22%;
+    }
+    .discount-offers {
+        padding: 0 5rem;
+    }
+}
