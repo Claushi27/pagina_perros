@@ -8,10 +8,8 @@
     --border-radius-lg: 25px;
     --border-radius-sm: 15px;
     --shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-
-    /* Nuevos colores para las tarjetas temáticas */
-    --dog-card-color: #fff8eb; /* Naranja claro para el perro */
-    --cat-card-color: #f0fff0; /* Verde suave para el gato */
+    --dog-card-color: #fff8eb;
+    --cat-card-color: #f0fff0;
 }
 
 * {
@@ -158,6 +156,56 @@ a {
     object-fit: contain;
 }
 
+/* Estilos para la slide de oferta */
+.offer-slide-content {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    background-color: #fff8eb;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+}
+
+.offer-slide-content img {
+    max-height: 100%;
+    width: 50%;
+    object-fit: cover;
+}
+
+.offer-text {
+    padding: 2rem;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.offer-text h3 {
+    color: var(--primary-orange);
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.offer-text p {
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.offer-text .button {
+    background-color: var(--primary-orange);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.offer-text .button:hover {
+    background-color: #e08a00;
+}
+
 .pet-spaces-container {
     display: flex;
     gap: 1rem;
@@ -194,7 +242,6 @@ a {
     object-fit: cover;
 }
 
-/* Colores de las tarjetas de animales */
 .pet-card-dog {
     background-color: var(--dog-card-color);
 }
@@ -308,4 +355,48 @@ a {
     .discount-offers {
         padding: 0 5rem;
     }
+}
+/* Carrusel y animación de íconos */
+
+.slider-wrapper {
+    position: relative;
+    /* Los demás estilos del slider-wrapper */
+}
+
+.slider-nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.slider-nav-button:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.slider-nav-button.prev {
+    left: 10px;
+}
+
+.slider-nav-button.next {
+    right: 10px;
+}
+
+.pet-card a {
+    transition: transform 0.3s ease-in-out;
+}
+
+.pet-card a:hover {
+    transform: scale(1.05);
 }
