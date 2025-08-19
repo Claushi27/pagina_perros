@@ -355,7 +355,7 @@ a {
     .discount-offers {
         padding: 0 5rem;
     }
-    
+
     /* Ajustes para tablet */
     @media (min-width: 768px) and (max-width: 1024px) {
         .main-header {
@@ -393,5 +393,67 @@ a {
             flex-direction: column;
             align-items: center;
         }
+
+        /* Ajustes específicos para el carrusel en móvil */
+        .offer-slide-content {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .offer-slide-content img {
+            width: 100%;
+            height: auto;
+            max-width: 80%; /* Evita que la imagen sea demasiado grande */
+            margin-bottom: 1rem;
+        }
+        .offer-text {
+            width: 100%;
+            padding: 0 1rem;
+            align-items: center;
+        }
     }
+}
+/* Carrusel y animación de íconos */
+
+.slider-wrapper {
+    position: relative;
+    /* Los demás estilos del slider-wrapper */
+}
+
+.slider-nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.slider-nav-button:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.slider-nav-button.prev {
+    left: 10px;
+}
+
+.slider-nav-button.next {
+    right: 10px;
+}
+
+.pet-card a {
+    transition: transform 0.3s ease-in-out;
+}
+
+.pet-card a:hover {
+    transform: scale(1.05);
 }
