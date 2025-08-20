@@ -1,0 +1,345 @@
+.services-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem;
+    margin-top: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.service-item {
+    text-align: center;
+    flex: 1 1 45%;
+    margin-bottom: 1rem;
+}
+
+.service-item .icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.discount-offers {
+    margin-top: 1rem;
+}
+
+.offers-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1rem 0;
+    scrollbar-width: none;
+}
+
+.offers-container::-webkit-scrollbar {
+    display: none;
+}
+
+.offer-item {
+    flex: 0 0 150px;
+    text-align: center;
+    position: relative;
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow);
+    padding: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.offer-item:hover {
+    transform: translateY(-5px);
+}
+
+.offer-item img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow);
+}
+
+.discount-tag {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--primary-orange);
+    color: white;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+}
+
+.featured-vets {
+    padding-top: 1rem;
+}
+
+.vets-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.vet-map {
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem;
+    box-shadow: var(--shadow);
+}
+
+.vet-map img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.vet-card {
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow);
+}
+
+.vet-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.vet-profile img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.btn-call {
+    background-color: var(--primary-orange);
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-call:hover {
+    background-color: #e08a00;
+}
+
+.customer-stories {
+    padding-top: 1rem;
+}
+
+.stories-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    margin-top: 1rem;
+    scrollbar-width: none;
+}
+
+.stories-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* New Story Card Styles */
+.new-story-card {
+    display: flex;
+    width: 400px;
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.new-story-card:hover {
+    transform: translateY(-5px);
+}
+
+.story-card-left {
+    flex: 1;
+    overflow: hidden;
+    border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
+}
+
+.story-card-left img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.story-card-right {
+    flex: 2;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.story-card-right h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.story-details {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.story-review {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.story-button {
+    background-color: var(--primary-orange);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-sm);
+    text-align: center;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.story-button:hover {
+    background-color: #e08a00;
+}
+
+.our-brands {
+    padding-top: 1rem;
+}
+
+.brands-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.brand-item {
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.brand-item:hover {
+    transform: translateY(-5px);
+}
+
+.brand-item img {
+    max-width: 150px;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.btn-brand {
+    background-color: var(--light-bg-color);
+    color: var(--text-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn-brand:hover {
+    background-color: #f2e2d0;
+}
+
+/* Responsive adjustments for Desktop */
+@media (min-width: 768px) {
+    .main-header {
+        padding: 1rem 5rem;
+    }
+    .header-top {
+        flex-wrap: nowrap;
+    }
+    .search-bar {
+        order: initial;
+        margin: 0 2rem;
+    }
+    .header-icons {
+        order: 3;
+    }
+    .header-divider {
+        display: none;
+    }
+    .header-nav {
+        background-color: initial;
+        border-radius: 0;
+        margin-top: 0;
+    }
+    .header-nav ul {
+        justify-content: flex-start;
+        gap: 2rem;
+    }
+    .header-nav .nav-link {
+        color: var(--text-color);
+    }
+    .hero-section-combined {
+        flex-direction: row;
+        gap: 2rem;
+        padding: 0 5rem;
+        align-items: stretch;
+    }
+    .pet-spaces-container {
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+    .pet-card {
+        flex: 1;
+    }
+    .services-bar {
+        justify-content: space-between;
+        padding: 1rem 5rem;
+    }
+    .service-item {
+        flex: initial;
+        width: 22%;
+    }
+    .discount-offers {
+        padding: 0 5rem;
+    }
+    .vets-container {
+        flex-direction: row;
+        align-items: center;
+    }
+    .vet-map {
+        flex: 1;
+    }
+    .vet-card {
+        flex: 1;
+        margin-left: 2rem;
+    }
+    .stories-container {
+        justify-content: center;
+    }
+    .brands-container {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+    .brand-item {
+        flex: 1;
+        margin: 0 1rem;
+    }
+}

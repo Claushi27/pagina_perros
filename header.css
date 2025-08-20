@@ -1,0 +1,163 @@
+.main-header {
+    background-color: var(--card-bg-color);
+    box-shadow: var(--shadow);
+    padding: 1rem;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.header-logo img {
+    height: 30px;
+}
+
+.search-bar {
+    display: flex;
+    flex: 1;
+    position: relative;
+    max-width: 600px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.search-bar input {
+    width: 100%;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    background-color: #fff;
+}
+
+.search-bar .search-button {
+    background-color: var(--primary-orange);
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+}
+
+.header-icons {
+    display: flex;
+    gap: 1.5rem;
+    white-space: nowrap;
+}
+
+.header-icons .icon {
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.header-divider {
+    height: 1px;
+    background-color: var(--primary-orange);
+    opacity: 0.4;
+    margin-top: 1rem;
+}
+
+/* New styles for the navigation bar */
+.header-nav {
+    background-color: #fcefdc; /* A lighter background color to make it stand out */
+    padding: 1rem; /* More padding for a dedicated bar feel */
+    margin-top: 1rem; /* A small margin to separate from the top bar */
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow); /* A subtle shadow to give it depth */
+}
+
+.header-nav ul {
+    display: flex;
+    list-style: none;
+    justify-content: space-around;
+}
+
+.header-nav li {
+    position: relative;
+}
+
+.header-nav .nav-link {
+    color: var(--text-color);
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    transition: opacity 0.3s ease;
+    display: block;
+}
+
+.header-nav .nav-link:hover {
+    opacity: 0.8;
+}
+
+.header-nav .dropdown-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background-color: var(--card-bg-color);
+    box-shadow: var(--shadow);
+    min-width: 200px;
+    z-index: 1000;
+    list-style: none;
+    border-radius: var(--border-radius-sm);
+    padding: 0.5rem 0;
+}
+
+.header-nav .dropdown-menu li a {
+    padding: 0.75rem 1rem;
+    display: block;
+    color: var(--text-color);
+    transition: background-color 0.3s ease;
+}
+
+.header-nav .dropdown-menu li a:hover {
+    background-color: var(--bg-color);
+}
+
+.header-nav .has-dropdown:hover > .dropdown-menu {
+    display: block;
+}
+
+/* Responsive adjustments for Desktop */
+@media (min-width: 768px) {
+    .main-header {
+        padding: 1rem 5rem;
+    }
+    .header-top {
+        flex-wrap: nowrap;
+    }
+    .search-bar {
+        order: initial;
+        margin: 0 2rem;
+    }
+    .header-icons {
+        order: 3;
+    }
+    .header-divider {
+        display: none;
+    }
+    .header-nav {
+        background-color: initial;
+        border-radius: 0;
+        margin-top: 0;
+    }
+    .header-nav ul {
+        justify-content: flex-start;
+        gap: 2rem;
+    }
+    .header-nav .nav-link {
+        color: var(--text-color);
+    }
+}

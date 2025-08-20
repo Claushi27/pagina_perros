@@ -1,26 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     const sliderContainer = document.querySelector('.slider-container');
     const slides = document.querySelectorAll('.slide');
-
-    // Create navigation buttons
-    const prevButton = document.createElement('button');
-    prevButton.innerHTML = '‹';
-    prevButton.classList.add('slider-nav-button', 'prev');
-    
-    const nextButton = document.createElement('button');
-    nextButton.innerHTML = '›';
-    nextButton.classList.add('slider-nav-button', 'next');
-
-    // Insert buttons into the DOM
-    const sliderWrapper = document.querySelector('.slider-wrapper');
-    sliderWrapper.appendChild(prevButton);
-    sliderWrapper.appendChild(nextButton);
+    const prevButton = document.querySelector('.slider-nav-button.prev');
+    const nextButton = document.querySelector('.slider-nav-button.next');
 
     let currentIndex = 0;
 
     function goToSlide(index) {
-        sliderContainer.scrollLeft = slides[index].offsetLeft;
-        currentIndex = index;
+        if (slides[index]) {
+            sliderContainer.scrollLeft = slides[index].offsetLeft;
+            currentIndex = index;
+        }
     }
 
     prevButton.addEventListener('click', () => {

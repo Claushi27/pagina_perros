@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Awka</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="hero.css">
+    <link rel="stylesheet" href="sections.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="main-header">
-        <div class="header-content">
+        <div class="header-top">
             <div class="header-logo">
                 <img src="imagenes/petshop1.png" alt="Logo Awka">
                 <span>Awka Petshop</span>
@@ -25,6 +28,42 @@
                 <span class="icon">🛒</span>
             </div>
         </div>
+        <div class="header-divider"></div>
+        <nav class="header-nav">
+            <ul>
+                <li class="has-dropdown">
+                    <a href="#" class="nav-link">Categorías</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Alimento y Snacks</a></li>
+                        <li><a href="#">Salud y Bienestar</a></li>
+                        <li><a href="#">Transporte y Seguridad</a></li>
+                        <li><a href="#">Juguetes Perros y Gatos</a></li>
+                        <li><a href="#">Vestuario y Accesorios</a></li>
+                        <li><a href="#">Platos y Bebederos</a></li>
+                        <li><a href="#">Camas y Estar</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a href="#" class="nav-link">Perrunos</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Alimento para perros</a></li>
+                        <li><a href="#">Juguetes para perros</a></li>
+                        <li><a href="#">Accesorios para perros</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a href="#" class="nav-link">Gatunos</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Alimento para gatos</a></li>
+                        <li><a href="#">Juguetes para gatos</a></li>
+                        <li><a href="#">Accesorios para gatos</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" class="nav-link">Veterinarias</a></li>
+                <li><a href="#" class="nav-link">Alimento</a></li>
+                <li><a href="#" class="nav-link">Más vendidos</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main>
@@ -33,7 +72,7 @@
                 <div class="slider-container">
                     <div class="slide">
                         <div class="offer-slide-content">
-                            <img src="imagenes/oferta3.webp" alt="Ofertas marca club">
+                            <img src="imagenes/oferta3.webp" alt="Ofertas especiales">
                             <div class="offer-text">
                                 <h3>¡Ofertas Especiales!</h3>
                                 <p>Encuentra de todo para tu peludo.</p>
@@ -117,6 +156,78 @@
                     <img src="https://i.ibb.com/M9F5D21/prod-4.jpg" alt="Producto para gato">
                     <span class="discount-tag">-25% OFF</span>
                     <p>Antiparasitarios Gatos</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-vets">
+            <h2>Veterinarios destacados</h2>
+            <div class="vets-container">
+                <div class="vet-map">
+                    <img src="https://i.ibb.co/L8vTz1G/map-placeholder.png" alt="Mapa de ubicaciones de veterinarios">
+                </div>
+                <div class="vet-card">
+                    <div class="vet-info">
+                        <h3>Dra. López</h3>
+                        <p class="vet-specialty">Macul</p>
+                        <p class="vet-specialty">Urgencias y vacunas</p>
+                    </div>
+                    <div class="vet-profile">
+                        <img src="https://i.ibb.co/Y2S5c2W/vet-profile.jpg" alt="Dra. López">
+                        <a href="#" class="btn-call">📞</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="customer-stories">
+            <h2>Historias de clientes</h2>
+            <div class="stories-container">
+                <div class="story-card new-story-card">
+                    <div class="story-card-left">
+                        <img src="https://i.ibb.co/jHkM8Vb/story-rocky.jpg" alt="Perro Rocky">
+                    </div>
+                    <div class="story-card-right">
+                        <h3>Rocky, un cliente feliz</h3>
+                        <div class="story-details">
+                            <p>Raza: Golden Retriever</p>
+                            <p>Producto: Alimento Húmedo</p>
+                        </div>
+                        <p class="story-review">"Rocky ama su nuevo alimento. Desde que lo probó, su pelaje se ve más brillante y tiene más energía para jugar todo el día."</p>
+                        <a href="#" class="story-button">Ver producto</a>
+                    </div>
+                </div>
+                <div class="story-card new-story-card">
+                    <div class="story-card-left">
+                        <img src="https://i.ibb.co/k2V3y7c/story-luna.jpg" alt="Gato Luna">
+                    </div>
+                    <div class="story-card-right">
+                        <h3>Luna, una gatita tranquila</h3>
+                        <div class="story-details">
+                            <p>Raza: Siamesa</p>
+                            <p>Producto: Rascador de gatos</p>
+                        </div>
+                        <p class="story-review">"Desde que le compramos el rascador de Awka, Luna no ha dejado de usarlo. ¡Nuestros muebles están a salvo!"</p>
+                        <a href="#" class="story-button">Ver producto</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="our-brands">
+            <h2>Nuestras Marcas</h2>
+            <div class="brands-container">
+                <div class="brand-item">
+                    <img src="https://i.ibb.co/TqwYf1X/bravery-logo.png" alt="Bravery Logo">
+                    <a href="#" class="btn-brand">Ver productos Bravery</a>
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.ibb.co/b3S02R3/proplan-logo.png" alt="Proplan Logo">
+                    <a href="#" class="btn-brand">Ver productos Pro Plan</a>
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.ibb.co/s5r2W9m/agility-logo.png" alt="Agility Logo">
+                    <a href="#" class="btn-brand">Ver productos Agility</a>
                 </div>
             </div>
         </section>
