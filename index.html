@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="hero.css">
     <link rel="stylesheet" href="sections.css">
+    <link rel="stylesheet" href="responsive.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -26,6 +27,7 @@
             <div class="header-icons">
                 <span class="icon">👤 Iniciar Sesión</span>
                 <span class="icon">🛒</span>
+                <button class="menu-toggle" aria-label="Abrir menú">☰</button>
             </div>
         </div>
         <div class="header-divider"></div>
@@ -66,6 +68,59 @@
         </nav>
     </header>
 
+<div class="mobile-menu-overlay">
+    <div class="mobile-menu-top">
+        <a href="#" class="logo-mobile">Awka Petshop</a>
+        <button class="close-menu">&times;</button>
+    </div>
+    <div class="mobile-menu-content">
+        <ul>
+            <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.2rem; height: 1.2rem; margin-right: 0.5rem;"><path fill="currentColor" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4Z"/></svg>Iniciar Sesión</a></li>
+            <li><a href="#">Categorías</a></li>
+            <li><a href="#">Perrunos</a></li>
+            <li><a href="#">Gatunos</a></li>
+            <li><a href="#">Ofertas</a></li>
+            <li><a href="#">Veterinarios</a></li>
+            <li><a href="#">Marcas</a></li>
+        </ul>
+            <nav>
+                <ul>
+                    <li class="has-dropdown">
+                        <a href="#" class="nav-link">Categorías</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Alimento y Snacks</a></li>
+                            <li><a href="#">Salud y Bienestar</a></li>
+                            <li><a href="#">Transporte y Seguridad</a></li>
+                            <li><a href="#">Juguetes Perros y Gatos</a></li>
+                            <li><a href="#">Vestuario y Accesorios</a></li>
+                            <li><a href="#">Platos y Bebederos</a></li>
+                            <li><a href="#">Camas y Estar</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-dropdown">
+                        <a href="#" class="nav-link">Perrunos</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Alimento para perros</a></li>
+                            <li><a href="#">Juguetes para perros</a></li>
+                            <li><a href="#">Accesorios para perros</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-dropdown">
+                        <a href="#" class="nav-link">Gatunos</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Alimento para gatos</a></li>
+                            <li><a href="#">Juguetes para gatos</a></li>
+                            <li><a href="#">Accesorios para gatos</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#" class="nav-link">Veterinarias</a></li>
+                    <li><a href="#" class="nav-link">Alimento</a></li>
+                    <li><a href="#" class="nav-link">Más vendidos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    
     <main>
         <section class="hero-section-combined">
             <div class="slider-wrapper">
