@@ -21,18 +21,57 @@
 body {
     font-family: 'Poppins', sans-serif;
     color: var(--text-color);
-    background-color: var(--light-bg-color);
+    background: linear-gradient(135deg, #fcefdc 0%, #f8f9fa 50%, #fcefdc 100%);
+    background-attachment: fixed;
     line-height: 1.6;
+    min-height: 100vh;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 15% 85%, rgba(139, 69, 19, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 85% 15%, rgba(160, 82, 45, 0.06) 0%, transparent 60%),
+        radial-gradient(circle at 50% 50%, rgba(210, 180, 140, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
 }
 
 main {
-    padding: 1rem;
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
 }
 
 h2, h3 {
     color: #495057;
     font-weight: 700;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    position: relative;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, var(--primary-orange), #ffb74d);
+    border-radius: 2px;
 }
 
 a {

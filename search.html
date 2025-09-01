@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Búsqueda - Awka</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="sections.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-top">
+            <div class="header-logo">
+                <img src="imagenes/petshop1.png" alt="Logo Awka">
+                <span>Awka Petshop</span>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="¿Qué producto estás buscando?">
+                <button class="search-button" onclick="performSearch()">🔍</button>
+            </div>
+            <div class="header-icons">
+                <span class="icon">👤 Iniciar Sesión</span>
+                <span class="icon">🛒</span>
+                <button class="menu-toggle" aria-label="Abrir menú">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+        <div class="header-divider"></div>
+        <nav class="header-nav">
+            <ul>
+                <li class="has-dropdown">
+                    <a href="#" class="nav-link">🐕 Perros</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Alimento para perros</a></li>
+                        <li><a href="#">Juguetes para perros</a></li>
+                        <li><a href="#">Accesorios para perros</a></li>
+                        <li><a href="#">Camas y transportes</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a href="#" class="nav-link">🐱 Gatos</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Alimento para gatos</a></li>
+                        <li><a href="#">Juguetes para gatos</a></li>
+                        <li><a href="#">Accesorios para gatos</a></li>
+                        <li><a href="#">Rascadores y camas</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a href="#" class="nav-link">🏥 Salud</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Medicamentos</a></li>
+                        <li><a href="#">Vitaminas</a></li>
+                        <li><a href="#">Higiene</a></li>
+                        <li><a href="#">Antiparasitarios</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" class="nav-link">🏥 Veterinarias</a></li>
+                <li><a href="#" class="nav-link">🔥 Ofertas</a></li>
+                <li><a href="#" class="nav-link">⭐ Más vendidos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="mobile-menu-overlay">
+        <div class="mobile-menu-top">
+            <a href="#" class="logo-mobile">Awka Petshop</a>
+            <button class="close-menu">&times;</button>
+        </div>
+        <div class="mobile-menu-content">
+            <ul>
+                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.2rem; height: 1.2rem; margin-right: 0.5rem;"><path fill="currentColor" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4Z"/></svg>Iniciar Sesión</a></li>
+                <li><a href="#">Categorías</a></li>
+                <li><a href="#">Perrunos</a></li>
+                <li><a href="#">Gatunos</a></li>
+                <li><a href="#">Ofertas</a></li>
+                <li><a href="#">Veterinarios</a></li>
+                <li><a href="#">Marcas</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <main>
+        <div class="search-results-page">
+            <div class="search-results-header">
+                <h1>Resultados de Búsqueda</h1>
+                <p id="searchTerm">Buscando: <span id="searchTermValue"></span></p>
+            </div>
+            
+            <div id="searchResults" class="search-results-grid">
+                <!-- Los resultados se cargarán aquí -->
+            </div>
+            
+            <div id="noResults" class="no-results" style="display: none;">
+                <h3>No se encontraron productos</h3>
+                <p>Intenta con otros términos de búsqueda</p>
+                <a href="index.html" class="btn-back">← Volver al inicio</a>
+            </div>
+        </div>
+    </main>
+    
+    <script src="search.js"></script>
+</body>
+</html>

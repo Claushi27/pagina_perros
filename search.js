@@ -1,101 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Hero Slider
-    const sliderContainer = document.querySelector('.slider-container');
-    const slides = document.querySelectorAll('.slide');
-    const prevButton = document.querySelector('.slider-nav-button.prev');
-    const nextButton = document.querySelector('.slider-nav-button.next');
+    // Mobile Menu functionality
     const menuToggle = document.querySelector('.menu-toggle');
     const mobileMenu = document.querySelector('.mobile-menu-overlay');
     const closeMenuButton = document.querySelector('.close-menu');
 
-    let currentIndex = 0;
-
-    function goToSlide(index) {
-        if (slides[index]) {
-            sliderContainer.scrollLeft = slides[index].offsetLeft;
-            currentIndex = index;
-        }
+    if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+            menuToggle.classList.toggle('active');
+        });
     }
 
-    prevButton.addEventListener('click', () => {
-        currentIndex = (currentIndex > 0) ? currentIndex - 1 : slides.length - 1;
-        goToSlide(currentIndex);
-    });
-
-    nextButton.addEventListener('click', () => {
-        currentIndex = (currentIndex < slides.length - 1) ? currentIndex + 1 : 0;
-        goToSlide(currentIndex);
-    });
-
-    // Mobile Menu functionality
-    menuToggle.addEventListener('click', () => {
-        mobileMenu.classList.toggle('open');
-        menuToggle.classList.toggle('active');
-    });
-
-    closeMenuButton.addEventListener('click', () => {
-        mobileMenu.classList.remove('open');
-        menuToggle.classList.remove('active');
-    });
-
-    mobileMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
+    if (closeMenuButton && mobileMenu) {
+        closeMenuButton.addEventListener('click', () => {
             mobileMenu.classList.remove('open');
             menuToggle.classList.remove('active');
         });
-    });
+    }
 
-    // Brands Carousel
-    const brandsContainer = document.querySelector('.brands-container');
-    const brandItems = document.querySelectorAll('.brand-item');
-    let currentBrandIndex = 0;
-
-    function showBrand(index) {
-        brandItems.forEach((item, i) => {
-            item.style.display = i === index ? 'flex' : 'none';
+    if (mobileMenu) {
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                menuToggle.classList.remove('active');
+            });
         });
     }
 
-    function nextBrand() {
-        currentBrandIndex = (currentBrandIndex + 1) % brandItems.length;
-        showBrand(currentBrandIndex);
-    }
-
-    // Initialize brands carousel
-    if (brandItems.length > 0) {
-        showBrand(0);
-        setInterval(nextBrand, 3000); // Change every 3 seconds
-    }
-
-    // Customer Stories Carousel
-    const storiesContainer = document.querySelector('.stories-container');
-    const storyCards = document.querySelectorAll('.new-story-card');
-    let currentStoryIndex = 0;
-
-    function showStory(index) {
-        storyCards.forEach((card, i) => {
-            card.style.display = i === index ? 'flex' : 'none';
-        });
-    }
-
-    function nextStory() {
-        currentStoryIndex = (currentStoryIndex + 1) % storyCards.length;
-        showStory(currentStoryIndex);
-    }
-
-    // Initialize stories carousel
-    if (storyCards.length > 0) {
-        showStory(0);
-        setInterval(nextStory, 4000); // Change every 4 seconds
-    }
-
-    // Search Functionality
-    const searchInput = document.querySelector('.search-bar input');
-    const searchButton = document.querySelector('.search-button');
-    
-
-    
-    // Base de datos simulada de productos
+    // Base de datos simulada de productos (misma que en script.js)
     const productos = [
         {
             id: 1,
@@ -131,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             subcategoria: "salud",
             precio: 30000,
             descripcion: "Tratamiento antiparasitario para gatos",
-            imagen: "https://i.ibb.com/M9F5D21/prod-4.jpg"
+            imagen: "https://i.ibb.co/M9F5D21/prod-4.jpg"
         },
         {
             id: 5,
@@ -167,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
             subcategoria: "accesorios",
             precio: 35000,
             descripcion: "Cama suave y cómoda para gatos",
-            imagen: "https://i.ibb.com/M9F5D21/prod-4.jpg"
+            imagen: "https://i.ibb.co/M9F5D21/prod-4.jpg"
         }
     ];
 
@@ -186,44 +118,52 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
+    // Función para mostrar resultados
+    function mostrarResultados(resultados, termino) {
+        const searchResults = document.getElementById('searchResults');
+        const noResults = document.getElementById('noResults');
+        const searchTermValue = document.getElementById('searchTermValue');
+        
+        // Actualizar el término de búsqueda mostrado
+        if (searchTermValue) {
+            searchTermValue.textContent = termino;
+        }
 
+        if (resultados.length === 0) {
+            searchResults.style.display = 'none';
+            noResults.style.display = 'block';
+            return;
+        }
 
-    // Event listeners para búsqueda
-    if (searchInput) {
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const termino = e.target.value.trim();
-                if (termino.length >= 2) {
-                    // Redirigir a la página de búsqueda
-                    window.location.href = `search.html?q=${encodeURIComponent(termino)}`;
-                } else {
-                    alert('Por favor ingresa al menos 2 caracteres para buscar');
-                }
-            }
-        });
+        searchResults.style.display = 'grid';
+        noResults.style.display = 'none';
+
+        searchResults.innerHTML = `
+            <div class="search-results-header">
+                <h3>Resultados encontrados: ${resultados.length}</h3>
+            </div>
+            ${resultados.map(producto => `
+                <div class="product-card">
+                    <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
+                    <div class="product-info">
+                        <h4>${producto.nombre}</h4>
+                        <p class="product-category">${producto.categoria} - ${producto.subcategoria}</p>
+                        <p class="product-description">${producto.descripcion}</p>
+                        <div class="product-price">$${producto.precio.toLocaleString()}</div>
+                        <button class="add-to-cart-btn" onclick="agregarAlCarrito(${producto.id})">
+                            Agregar al carrito
+                        </button>
+                    </div>
+                </div>
+            `).join('')}
+        `;
     }
 
-    if (searchButton) {
-        searchButton.addEventListener('click', () => {
-            const termino = searchInput.value.trim();
-            if (termino.length >= 2) {
-                // Redirigir a la página de búsqueda
-                window.location.href = `search.html?q=${encodeURIComponent(termino)}`;
-            } else {
-                alert('Por favor ingresa al menos 2 caracteres para buscar');
-            }
-        });
-    }
-
-    // Función para agregar al carrito (básica)
+    // Función para agregar al carrito
     window.agregarAlCarrito = function(productoId) {
         const producto = productos.find(p => p.id === productoId);
         if (producto) {
-            // Obtener carrito del localStorage
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            
-            // Verificar si el producto ya está en el carrito
             const productoExistente = carrito.find(p => p.id === productoId);
             
             if (productoExistente) {
@@ -235,13 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
             
-            // Guardar en localStorage
             localStorage.setItem('carrito', JSON.stringify(carrito));
-            
-            // Mostrar confirmación
             alert(`¡${producto.nombre} agregado al carrito!`);
-            
-            // Actualizar contador del carrito si existe
             actualizarContadorCarrito();
         }
     };
@@ -251,15 +186,45 @@ document.addEventListener('DOMContentLoaded', () => {
         const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
         const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
         
-        // Buscar el ícono del carrito y actualizar
         const cartIcon = document.querySelector('.header-icons .icon:last-child');
         if (cartIcon && totalItems > 0) {
             cartIcon.innerHTML = `🛒 <span class="cart-count">${totalItems}</span>`;
         }
     }
 
-    // Inicializar contador del carrito al cargar la página
+    // Función para realizar búsqueda
+    window.performSearch = function() {
+        const searchInput = document.getElementById('searchInput');
+        const termino = searchInput.value.trim();
+        
+        if (termino.length >= 2) {
+            const resultados = buscarProductos(termino);
+            mostrarResultados(resultados, termino);
+        } else {
+            alert('Por favor ingresa al menos 2 caracteres para buscar');
+        }
+    };
+
+    // Event listeners para búsqueda
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                window.performSearch();
+            }
+        });
+    }
+
+    // Cargar búsqueda desde URL si existe
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchTerm = urlParams.get('q');
+    if (searchTerm) {
+        searchInput.value = searchTerm;
+        const resultados = buscarProductos(searchTerm);
+        mostrarResultados(resultados, searchTerm);
+    }
+
+    // Inicializar contador del carrito
     actualizarContadorCarrito();
-
-
 });
