@@ -21,6 +21,20 @@
     font-size: 1.2rem;
 }
 
+.header-logo a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+.header-logo a:hover {
+    color: var(--primary-orange);
+    transform: scale(1.05);
+}
+
 .header-logo img {
     height: 30px;
 }

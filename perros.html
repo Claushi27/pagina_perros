@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos para Perros - Awka</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="sections.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .perros-hero {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #CD853F 100%);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .perros-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🐕</text></svg>') repeat;
+            opacity: 0.1;
+            animation: float 20s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .perros-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .perros-hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        .perros-products {
+            background: linear-gradient(135deg, #F5DEB3 0%, #FFF8DC 100%);
+            padding: 2rem 1rem;
+        }
+        .perros-products h2 {
+            color: #8B4513;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        .perros-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .perro-product-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.15);
+            border: 3px solid #8B4513;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .perro-product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.25);
+        }
+        .perro-product-card::before {
+            content: '🐕';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            z-index: 1;
+        }
+        .perro-product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .perro-product-info {
+            padding: 1.5rem;
+        }
+        .perro-product-info h3 {
+            color: #8B4513;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        .perro-product-info p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        .perro-product-price {
+            color: #8B4513;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .perro-add-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #8B4513, #D2691E);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .perro-add-btn:hover {
+            background: linear-gradient(135deg, #654321, #B8860B);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-top">
+            <div class="header-logo">
+                <a href="index.html">
+                    <img src="imagenes/petshop1.png" alt="Logo Awka">
+                    <span>Awka Petshop</span>
+                </a>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="¿Qué producto estás buscando?">
+                <button class="search-button" onclick="performSearch()">🔍</button>
+            </div>
+            <div class="header-icons">
+                <span class="icon">👤 Iniciar Sesión</span>
+                <a href="cart.html" class="icon">🛒</a>
+                <button class="menu-toggle" aria-label="Abrir menú">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+        <div class="header-divider"></div>
+        <nav class="header-nav">
+            <ul>
+                <li class="has-dropdown">
+                    <a href="perros.html" class="nav-link">🐕 Perros</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Alimento para perros</a></li>
+                        <li><a href="#">Juguetes para perros</a></li>
+                        <li><a href="#">Accesorios para perros</a></li>
+                        <li><a href="#">Camas y transportes</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a href="gatos.html" class="nav-link">🐱 Gatos</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Alimento para gatos</a></li>
+                        <li><a href="#">Juguetes para gatos</a></li>
+                        <li><a href="#">Accesorios para gatos</a></li>
+                        <li><a href="#">Rascadores y camas</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a href="#" class="nav-link">🏥 Salud</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Medicamentos</a></li>
+                        <li><a href="#">Vitaminas</a></li>
+                        <li><a href="#">Higiene</a></li>
+                        <li><a href="#">Antiparasitarios</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" class="nav-link">🏥 Veterinarias</a></li>
+                <li><a href="#" class="nav-link">🔥 Ofertas</a></li>
+                <li><a href="#" class="nav-link">⭐ Más vendidos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="mobile-menu-overlay">
+        <div class="mobile-menu-top">
+            <a href="index.html" class="logo-mobile">Awka Petshop</a>
+            <button class="close-menu">&times;</button>
+        </div>
+        <div class="mobile-menu-content">
+            <ul>
+                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.2rem; height: 1.2rem; margin-right: 0.5rem;"><path fill="currentColor" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4Z"/></svg>Iniciar Sesión</a></li>
+                <li><a href="perros.html">🐕 Perros</a></li>
+                <li><a href="gatos.html">🐱 Gatos</a></li>
+                <li><a href="#">Ofertas</a></li>
+                <li><a href="#">Veterinarios</a></li>
+                <li><a href="#">Marcas</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <main>
+        <section class="perros-hero">
+            <h1>🐕 Mundo Perruno</h1>
+            <p>Todo lo que tu mejor amigo necesita para ser feliz y saludable</p>
+        </section>
+
+        <section class="perros-products">
+            <h2>Productos para Perros</h2>
+            <div class="perros-grid" id="perrosGrid">
+                <!-- Los productos se cargarán aquí -->
+            </div>
+        </section>
+    </main>
+    
+    <script src="perros.js"></script>
+</body>
+</html>
+

@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Base de datos simulada de productos (misma que en script.js)
-    const productos = [
+    // Base de datos de productos para perros
+    const productosPerros = [
         {
             id: 1,
             nombre: "Alimento Premium para Perros",
@@ -37,15 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
             precio: 25000,
             descripcion: "Alimento balanceado para perros adultos",
             imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg"
-        },
-        {
-            id: 2,
-            nombre: "Alimento Húmedo para Gatos",
-            categoria: "gatos",
-            subcategoria: "alimento",
-            precio: 15000,
-            descripcion: "Alimento húmedo premium para gatos",
-            imagen: "https://i.ibb.co/d7z1y1C/prod-2.jpg"
         },
         {
             id: 3,
@@ -57,15 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
             imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg"
         },
         {
-            id: 4,
-            nombre: "Antiparasitario para Gatos",
-            categoria: "gatos",
-            subcategoria: "salud",
-            precio: 30000,
-            descripcion: "Tratamiento antiparasitario para gatos",
-            imagen: "https://i.ibb.co/M9F5D21/prod-4.jpg"
-        },
-        {
             id: 5,
             nombre: "Juguete para Perros",
             categoria: "perros",
@@ -73,15 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
             precio: 12000,
             descripcion: "Juguete interactivo resistente",
             imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg"
-        },
-        {
-            id: 6,
-            nombre: "Rascador para Gatos",
-            categoria: "gatos",
-            subcategoria: "juguetes",
-            precio: 45000,
-            descripcion: "Rascador de múltiples niveles",
-            imagen: "https://i.ibb.co/d7z1y1C/prod-2.jpg"
         },
         {
             id: 7,
@@ -93,72 +66,47 @@ document.addEventListener('DOMContentLoaded', () => {
             imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg"
         },
         {
-            id: 8,
-            nombre: "Cama para Gatos",
-            categoria: "gatos",
+            id: 9,
+            nombre: "Correa para Perros",
+            categoria: "perros",
             subcategoria: "accesorios",
-            precio: 35000,
-            descripcion: "Cama suave y cómoda para gatos",
-            imagen: "https://i.ibb.co/M9F5D21/prod-4.jpg"
+            precio: 15000,
+            descripcion: "Correa resistente y cómoda",
+            imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg"
+        },
+        {
+            id: 10,
+            nombre: "Shampoo para Perros",
+            categoria: "perros",
+            subcategoria: "salud",
+            precio: 8000,
+            descripcion: "Shampoo hipoalergénico para perros",
+            imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg"
         }
     ];
 
-    // Función de búsqueda
-    function buscarProductos(termino) {
-        if (!termino || termino.length < 2) {
-            return [];
-        }
+    // Función para cargar productos de perros
+    function loadPerrosProducts() {
+        const perrosGrid = document.getElementById('perrosGrid');
         
-        const terminoLower = termino.toLowerCase();
-        return productos.filter(producto => 
-            producto.nombre.toLowerCase().includes(terminoLower) ||
-            producto.categoria.toLowerCase().includes(terminoLower) ||
-            producto.subcategoria.toLowerCase().includes(terminoLower) ||
-            producto.descripcion.toLowerCase().includes(terminoLower)
-        );
-    }
-
-    // Función para mostrar resultados
-    function mostrarResultados(resultados, termino) {
-        const searchResults = document.getElementById('searchResults');
-        const noResults = document.getElementById('noResults');
-        const searchTermValue = document.getElementById('searchTermValue');
-        
-        // Actualizar el término de búsqueda mostrado
-        if (searchTermValue) {
-            searchTermValue.textContent = termino;
-        }
-
-        if (resultados.length === 0) {
-            searchResults.style.display = 'none';
-            noResults.style.display = 'block';
-            return;
-        }
-
-        searchResults.style.display = 'grid';
-        noResults.style.display = 'none';
-
-        searchResults.innerHTML = `
-            ${resultados.map(producto => `
-                <div class="product-card">
-                    <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
-                    <div class="product-info">
-                        <h4>${producto.nombre}</h4>
-                        <p class="product-category">${producto.categoria} - ${producto.subcategoria}</p>
-                        <p class="product-description">${producto.descripcion}</p>
-                        <div class="product-price">$${producto.precio.toLocaleString()}</div>
-                        <button class="add-to-cart-btn" onclick="agregarAlCarrito(${producto.id})">
-                            Agregar al carrito
-                        </button>
-                    </div>
+        perrosGrid.innerHTML = productosPerros.map(producto => `
+            <div class="perro-product-card">
+                <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
+                <div class="perro-product-info">
+                    <h3>${producto.nombre}</h3>
+                    <p>${producto.descripcion}</p>
+                    <div class="perro-product-price">$${producto.precio.toLocaleString()}</div>
+                    <button class="perro-add-btn" onclick="agregarAlCarrito(${producto.id})">
+                        Agregar al carrito
+                    </button>
                 </div>
-            `).join('')}
-        `;
+            </div>
+        `).join('');
     }
 
     // Función para agregar al carrito
     window.agregarAlCarrito = function(productoId) {
-        const producto = productos.find(p => p.id === productoId);
+        const producto = productosPerros.find(p => p.id === productoId);
         if (producto) {
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             const productoExistente = carrito.find(p => p.id === productoId);
@@ -174,18 +122,20 @@ document.addEventListener('DOMContentLoaded', () => {
             
             localStorage.setItem('carrito', JSON.stringify(carrito));
             alert(`¡${producto.nombre} agregado al carrito!`);
-            actualizarContadorCarrito();
+            updateCartCounter();
         }
     };
 
     // Función para actualizar contador del carrito
-    function actualizarContadorCarrito() {
+    function updateCartCounter() {
         const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
         const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
         
         const cartIcon = document.querySelector('.header-icons .icon:last-child');
         if (cartIcon && totalItems > 0) {
             cartIcon.innerHTML = `🛒 <span class="cart-count">${totalItems}</span>`;
+        } else if (cartIcon) {
+            cartIcon.innerHTML = `🛒`;
         }
     }
 
@@ -195,8 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const termino = searchInput.value.trim();
         
         if (termino.length >= 2) {
-            const resultados = buscarProductos(termino);
-            mostrarResultados(resultados, termino);
+            window.location.href = `search.html?q=${encodeURIComponent(termino)}`;
         } else {
             alert('Por favor ingresa al menos 2 caracteres para buscar');
         }
@@ -213,15 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Cargar búsqueda desde URL si existe
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchTerm = urlParams.get('q');
-    if (searchTerm) {
-        searchInput.value = searchTerm;
-        const resultados = buscarProductos(searchTerm);
-        mostrarResultados(resultados, searchTerm);
-    }
-
-    // Inicializar contador del carrito
-    actualizarContadorCarrito();
+    // Cargar productos al inicializar
+    loadPerrosProducts();
+    updateCartCounter();
 });
+
