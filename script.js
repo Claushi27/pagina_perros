@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const slides = document.querySelectorAll('.slide');
     const prevButton = document.querySelector('.slider-nav-button.prev');
     const nextButton = document.querySelector('.slider-nav-button.next');
-    const dotsContainer = document.querySelector('.slider-dots');
     const menuToggle = document.querySelector('.menu-toggle');
     const mobileMenu = document.querySelector('.mobile-menu-overlay');
     const closeMenuButton = document.querySelector('.close-menu');
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (slides[index]) {
             sliderContainer.scrollLeft = slides[index].offsetLeft;
             currentIndex = index;
-            updateDots();
         }
     }
 
@@ -29,54 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentIndex = (currentIndex < slides.length - 1) ? currentIndex + 1 : 0;
         goToSlide(currentIndex);
     });
-
-    // Dots generation
-    function createDots() {
-        if (!dotsContainer) return;
-        dotsContainer.innerHTML = '';
-        slides.forEach((_, i) => {
-            const dot = document.createElement('button');
-            dot.className = 'slider-dot';
-            dot.setAttribute('role', 'tab');
-            dot.setAttribute('aria-label', `Ir a la diapositiva ${i + 1}`);
-            dot.setAttribute('aria-selected', i === currentIndex ? 'true' : 'false');
-            dot.addEventListener('click', () => goToSlide(i));
-            dotsContainer.appendChild(dot);
-        });
-    }
-
-    function updateDots() {
-        if (!dotsContainer) return;
-        const dots = dotsContainer.querySelectorAll('.slider-dot');
-        dots.forEach((d, i) => d.setAttribute('aria-selected', i === currentIndex ? 'true' : 'false'));
-    }
-
-    createDots();
-    updateDots();
-
-    // Keyboard for slider container
-    if (sliderContainer) {
-        sliderContainer.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') { e.preventDefault(); prevButton.click(); }
-            if (e.key === 'ArrowRight') { e.preventDefault(); nextButton.click(); }
-        });
-
-        sliderContainer.addEventListener('scroll', () => {
-            // Snap awareness: compute nearest slide
-            const offsets = Array.from(slides).map(s => s.offsetLeft);
-            const scrollLeft = sliderContainer.scrollLeft;
-            let nearest = 0;
-            let minDelta = Infinity;
-            offsets.forEach((off, i) => {
-                const delta = Math.abs(scrollLeft - off);
-                if (delta < minDelta) { minDelta = delta; nearest = i; }
-            });
-            if (nearest !== currentIndex) {
-                currentIndex = nearest;
-                updateDots();
-            }
-        }, { passive: true });
-    }
 
     // Mobile Menu functionality with ARIA and focus trap
     const getFocusableElements = (container) => {

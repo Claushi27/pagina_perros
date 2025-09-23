@@ -124,29 +124,6 @@
     right: 10px;
 }
 
-.slider-dots {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 8px;
-    z-index: 11;
-}
-
-.slider-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.3);
-    border: none;
-    cursor: pointer;
-}
-
-.slider-dot[aria-selected="true"] {
-    background: var(--primary-orange);
-}
-
 .pet-spaces-container {
     display: flex;
     gap: 1rem;
