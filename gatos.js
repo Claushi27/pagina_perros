@@ -3,87 +3,62 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.querySelector('.menu-toggle');
     const mobileMenu = document.querySelector('.mobile-menu-overlay');
     const closeMenuButton = document.querySelector('.close-menu');
+    let lastFocusedElementBeforeMenu = null;
+
+    // Accessible Mobile Menu
+    const getFocusableElements = (container) => container.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+
+    const openMobileMenu = () => {
+        if (!mobileMenu) return;
+        lastFocusedElementBeforeMenu = document.activeElement;
+        mobileMenu.classList.add('open');
+        menuToggle.classList.add('active');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        menuToggle.setAttribute('aria-expanded', 'true');
+        const focusables = getFocusableElements(mobileMenu);
+        if (focusables.length > 0) focusables[0].focus();
+        document.addEventListener('keydown', handleKeydownInMenu);
+    };
+
+    const closeMobileMenu = () => {
+        if (!mobileMenu) return;
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('active');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('keydown', handleKeydownInMenu);
+        (lastFocusedElementBeforeMenu || menuToggle).focus();
+    };
+
+    const handleKeydownInMenu = (e) => {
+        if (e.key === 'Escape') { e.preventDefault(); closeMobileMenu(); return; }
+        if (e.key === 'Tab') {
+            const focusables = Array.from(getFocusableElements(mobileMenu));
+            if (focusables.length === 0) return;
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+    };
 
     if (menuToggle && mobileMenu) {
         menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.toggle('open');
-            menuToggle.classList.toggle('active');
+            const isOpen = mobileMenu.classList.contains('open');
+            isOpen ? closeMobileMenu() : openMobileMenu();
         });
     }
 
     if (closeMenuButton && mobileMenu) {
-        closeMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            menuToggle.classList.remove('active');
-        });
+        closeMenuButton.addEventListener('click', closeMobileMenu);
     }
 
     if (mobileMenu) {
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                menuToggle.classList.remove('active');
-            });
-        });
+        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileMenu));
     }
 
-    // Base de datos de productos para gatos
-    const productosGatos = [
-        {
-            id: 2,
-            nombre: "Alimento Húmedo para Gatos",
-            categoria: "gatos",
-            subcategoria: "alimento",
-            precio: 15000,
-            descripcion: "Alimento húmedo premium para gatos",
-            imagen: "https://i.ibb.co/d7z1y1C/prod-2.jpg"
-        },
-        {
-            id: 4,
-            nombre: "Antiparasitario para Gatos",
-            categoria: "gatos",
-            subcategoria: "salud",
-            precio: 30000,
-            descripcion: "Tratamiento antiparasitario para gatos",
-            imagen: "https://i.ibb.co/M9F5D21/prod-4.jpg"
-        },
-        {
-            id: 6,
-            nombre: "Rascador para Gatos",
-            categoria: "gatos",
-            subcategoria: "juguetes",
-            precio: 45000,
-            descripcion: "Rascador de múltiples niveles",
-            imagen: "https://i.ibb.co/d7z1y1C/prod-2.jpg"
-        },
-        {
-            id: 8,
-            nombre: "Cama para Gatos",
-            categoria: "gatos",
-            subcategoria: "accesorios",
-            precio: 35000,
-            descripcion: "Cama suave y cómoda para gatos",
-            imagen: "https://i.ibb.co/M9F5D21/prod-4.jpg"
-        },
-        {
-            id: 11,
-            nombre: "Arena para Gatos",
-            categoria: "gatos",
-            subcategoria: "accesorios",
-            precio: 12000,
-            descripcion: "Arena aglomerante de alta calidad",
-            imagen: "https://i.ibb.co/d7z1y1C/prod-2.jpg"
-        },
-        {
-            id: 12,
-            nombre: "Juguete con Plumas",
-            categoria: "gatos",
-            subcategoria: "juguetes",
-            precio: 6000,
-            descripcion: "Juguete interactivo con plumas",
-            imagen: "https://i.ibb.co/M9F5D21/prod-4.jpg"
-        }
-    ];
+    // Productos filtrados desde fuente central
+    const productosGatos = (window.PRODUCTS || []).filter(p => p.categoria === 'gatos');
 
     // Función para cargar productos de gatos
     function loadGatosProducts() {
@@ -91,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         gatosGrid.innerHTML = productosGatos.map(producto => `
             <div class="gato-product-card">
-                <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
+                <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
                 <div class="gato-product-info">
                     <h3>${producto.nombre}</h3>
                     <p>${producto.descripcion}</p>

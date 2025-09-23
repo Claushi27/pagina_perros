@@ -3,33 +3,63 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.querySelector('.menu-toggle');
     const mobileMenu = document.querySelector('.mobile-menu-overlay');
     const closeMenuButton = document.querySelector('.close-menu');
+    let lastFocusedElementBeforeMenu = null;
+
+    // Accessible Mobile Menu
+    const getFocusableElements = (container) => container.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+
+    const openMobileMenu = () => {
+        if (!mobileMenu) return;
+        lastFocusedElementBeforeMenu = document.activeElement;
+        mobileMenu.classList.add('open');
+        menuToggle.classList.add('active');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        menuToggle.setAttribute('aria-expanded', 'true');
+        const focusables = getFocusableElements(mobileMenu);
+        if (focusables.length > 0) focusables[0].focus();
+        document.addEventListener('keydown', handleKeydownInMenu);
+    };
+
+    const closeMobileMenu = () => {
+        if (!mobileMenu) return;
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('active');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('keydown', handleKeydownInMenu);
+        (lastFocusedElementBeforeMenu || menuToggle).focus();
+    };
+
+    const handleKeydownInMenu = (e) => {
+        if (e.key === 'Escape') { e.preventDefault(); closeMobileMenu(); return; }
+        if (e.key === 'Tab') {
+            const focusables = Array.from(getFocusableElements(mobileMenu));
+            if (focusables.length === 0) return;
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+    };
 
     if (menuToggle && mobileMenu) {
         menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.toggle('open');
-            menuToggle.classList.toggle('active');
+            const isOpen = mobileMenu.classList.contains('open');
+            isOpen ? closeMobileMenu() : openMobileMenu();
         });
     }
 
     if (closeMenuButton && mobileMenu) {
-        closeMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            menuToggle.classList.remove('active');
-        });
+        closeMenuButton.addEventListener('click', closeMobileMenu);
     }
 
     if (mobileMenu) {
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                menuToggle.classList.remove('active');
-            });
-        });
+        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileMenu));
     }
 
     // Función para cargar el carrito
     function loadCart() {
-        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        const carrito = window.CartUtils ? window.CartUtils.getCart() : [];
         const cartItems = document.getElementById('cartItems');
         const emptyCart = document.getElementById('emptyCart');
         const cartContent = document.querySelector('.cart-content');
@@ -46,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cartItems.innerHTML = carrito.map(item => `
             <div class="cart-item" data-id="${item.id}">
                 <div class="item-image">
-                    <img src="${item.imagen}" alt="${item.nombre}" onerror="this.src='https://via.placeholder.com/100x100?text=Imagen+No+Disponible'">
+                    <img src="${item.imagen}" alt="${item.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/100x100?text=Imagen+No+Disponible'">
                 </div>
                 <div class="item-details">
                     <h4>${item.nombre}</h4>
@@ -71,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para actualizar la cantidad
     window.updateQuantity = function(productId, change) {
-        let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        let carrito = window.CartUtils ? window.CartUtils.getCart() : [];
         const item = carrito.find(p => p.id === productId);
         
         if (item) {
@@ -79,24 +109,24 @@ document.addEventListener('DOMContentLoaded', () => {
             if (item.cantidad <= 0) {
                 carrito = carrito.filter(p => p.id !== productId);
             }
-            localStorage.setItem('carrito', JSON.stringify(carrito));
+            if (window.CartUtils) window.CartUtils.setCart(carrito);
             loadCart();
-            updateCartCounter();
+            if (window.CartUtils) window.CartUtils.updateCartCounter();
         }
     };
 
     // Función para remover un item
     window.removeItem = function(productId) {
-        let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        let carrito = window.CartUtils ? window.CartUtils.getCart() : [];
         carrito = carrito.filter(p => p.id !== productId);
-        localStorage.setItem('carrito', JSON.stringify(carrito));
+        if (window.CartUtils) window.CartUtils.setCart(carrito);
         loadCart();
-        updateCartCounter();
+        if (window.CartUtils) window.CartUtils.updateCartCounter();
     };
 
     // Función para actualizar el resumen
     function updateSummary() {
-        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        const carrito = window.CartUtils ? window.CartUtils.getCart() : [];
         const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
         const shipping = subtotal >= 39990 ? 0 : 5000;
         const total = subtotal + shipping;

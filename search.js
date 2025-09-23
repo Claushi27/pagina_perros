@@ -3,105 +3,62 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.querySelector('.menu-toggle');
     const mobileMenu = document.querySelector('.mobile-menu-overlay');
     const closeMenuButton = document.querySelector('.close-menu');
+    let lastFocusedElementBeforeMenu = null;
+
+    // Accessible Mobile Menu
+    const getFocusableElements = (container) => container.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+
+    const openMobileMenu = () => {
+        if (!mobileMenu) return;
+        lastFocusedElementBeforeMenu = document.activeElement;
+        mobileMenu.classList.add('open');
+        menuToggle.classList.add('active');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        menuToggle.setAttribute('aria-expanded', 'true');
+        const focusables = getFocusableElements(mobileMenu);
+        if (focusables.length > 0) focusables[0].focus();
+        document.addEventListener('keydown', handleKeydownInMenu);
+    };
+
+    const closeMobileMenu = () => {
+        if (!mobileMenu) return;
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('active');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('keydown', handleKeydownInMenu);
+        (lastFocusedElementBeforeMenu || menuToggle).focus();
+    };
+
+    const handleKeydownInMenu = (e) => {
+        if (e.key === 'Escape') { e.preventDefault(); closeMobileMenu(); return; }
+        if (e.key === 'Tab') {
+            const focusables = Array.from(getFocusableElements(mobileMenu));
+            if (focusables.length === 0) return;
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+    };
 
     if (menuToggle && mobileMenu) {
         menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.toggle('open');
-            menuToggle.classList.toggle('active');
+            const isOpen = mobileMenu.classList.contains('open');
+            isOpen ? closeMobileMenu() : openMobileMenu();
         });
     }
 
     if (closeMenuButton && mobileMenu) {
-        closeMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            menuToggle.classList.remove('active');
-        });
+        closeMenuButton.addEventListener('click', closeMobileMenu);
     }
 
     if (mobileMenu) {
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                menuToggle.classList.remove('active');
-            });
-        });
+        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileMenu));
     }
 
-    // Base de datos simulada de productos (misma que en script.js)
-    const productos = [
-        {
-            id: 1,
-            nombre: "Alimento Premium para Perros",
-            categoria: "perros",
-            subcategoria: "alimento",
-            precio: 25000,
-            descripcion: "Alimento balanceado para perros adultos",
-            imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg"
-        },
-        {
-            id: 2,
-            nombre: "Alimento Húmedo para Gatos",
-            categoria: "gatos",
-            subcategoria: "alimento",
-            precio: 15000,
-            descripcion: "Alimento húmedo premium para gatos",
-            imagen: "https://i.ibb.co/d7z1y1C/prod-2.jpg"
-        },
-        {
-            id: 3,
-            nombre: "Antiparasitario para Perros",
-            categoria: "perros",
-            subcategoria: "salud",
-            precio: 35000,
-            descripcion: "Tratamiento antiparasitario mensual",
-            imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg"
-        },
-        {
-            id: 4,
-            nombre: "Antiparasitario para Gatos",
-            categoria: "gatos",
-            subcategoria: "salud",
-            precio: 30000,
-            descripcion: "Tratamiento antiparasitario para gatos",
-            imagen: "https://i.ibb.co/M9F5D21/prod-4.jpg"
-        },
-        {
-            id: 5,
-            nombre: "Juguete para Perros",
-            categoria: "perros",
-            subcategoria: "juguetes",
-            precio: 12000,
-            descripcion: "Juguete interactivo resistente",
-            imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg"
-        },
-        {
-            id: 6,
-            nombre: "Rascador para Gatos",
-            categoria: "gatos",
-            subcategoria: "juguetes",
-            precio: 45000,
-            descripcion: "Rascador de múltiples niveles",
-            imagen: "https://i.ibb.co/d7z1y1C/prod-2.jpg"
-        },
-        {
-            id: 7,
-            nombre: "Cama para Perros",
-            categoria: "perros",
-            subcategoria: "accesorios",
-            precio: 55000,
-            descripcion: "Cama ortopédica para perros grandes",
-            imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg"
-        },
-        {
-            id: 8,
-            nombre: "Cama para Gatos",
-            categoria: "gatos",
-            subcategoria: "accesorios",
-            precio: 35000,
-            descripcion: "Cama suave y cómoda para gatos",
-            imagen: "https://i.ibb.co/M9F5D21/prod-4.jpg"
-        }
-    ];
+    // Fuente de productos centralizada
+    const productos = window.PRODUCTS || [];
 
     // Función de búsqueda
     function buscarProductos(termino) {
@@ -141,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         searchResults.innerHTML = `
             ${resultados.map(producto => `
                 <div class="product-card">
-                    <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
+                    <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
                     <div class="product-info">
                         <h4>${producto.nombre}</h4>
                         <p class="product-category">${producto.categoria} - ${producto.subcategoria}</p>
@@ -159,35 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para agregar al carrito
     window.agregarAlCarrito = function(productoId) {
         const producto = productos.find(p => p.id === productoId);
-        if (producto) {
-            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            const productoExistente = carrito.find(p => p.id === productoId);
-            
-            if (productoExistente) {
-                productoExistente.cantidad += 1;
-            } else {
-                carrito.push({
-                    ...producto,
-                    cantidad: 1
-                });
-            }
-            
-            localStorage.setItem('carrito', JSON.stringify(carrito));
-            alert(`¡${producto.nombre} agregado al carrito!`);
-            actualizarContadorCarrito();
-        }
+        if (!producto) return;
+        if (window.CartUtils) window.CartUtils.addToCart(producto);
     };
 
     // Función para actualizar contador del carrito
-    function actualizarContadorCarrito() {
-        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-        const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-        
-        const cartIcon = document.querySelector('.header-icons .icon:last-child');
-        if (cartIcon && totalItems > 0) {
-            cartIcon.innerHTML = `🛒 <span class="cart-count">${totalItems}</span>`;
-        }
-    }
+    function actualizarContadorCarrito() { if (window.CartUtils) window.CartUtils.updateCartCounter(); }
 
     // Función para realizar búsqueda
     window.performSearch = function() {

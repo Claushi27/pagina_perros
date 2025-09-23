@@ -3,87 +3,62 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.querySelector('.menu-toggle');
     const mobileMenu = document.querySelector('.mobile-menu-overlay');
     const closeMenuButton = document.querySelector('.close-menu');
+    let lastFocusedElementBeforeMenu = null;
+
+    // Accessible Mobile Menu
+    const getFocusableElements = (container) => container.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+
+    const openMobileMenu = () => {
+        if (!mobileMenu) return;
+        lastFocusedElementBeforeMenu = document.activeElement;
+        mobileMenu.classList.add('open');
+        menuToggle.classList.add('active');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        menuToggle.setAttribute('aria-expanded', 'true');
+        const focusables = getFocusableElements(mobileMenu);
+        if (focusables.length > 0) focusables[0].focus();
+        document.addEventListener('keydown', handleKeydownInMenu);
+    };
+
+    const closeMobileMenu = () => {
+        if (!mobileMenu) return;
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('active');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('keydown', handleKeydownInMenu);
+        (lastFocusedElementBeforeMenu || menuToggle).focus();
+    };
+
+    const handleKeydownInMenu = (e) => {
+        if (e.key === 'Escape') { e.preventDefault(); closeMobileMenu(); return; }
+        if (e.key === 'Tab') {
+            const focusables = Array.from(getFocusableElements(mobileMenu));
+            if (focusables.length === 0) return;
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+    };
 
     if (menuToggle && mobileMenu) {
         menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.toggle('open');
-            menuToggle.classList.toggle('active');
+            const isOpen = mobileMenu.classList.contains('open');
+            isOpen ? closeMobileMenu() : openMobileMenu();
         });
     }
 
     if (closeMenuButton && mobileMenu) {
-        closeMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            menuToggle.classList.remove('active');
-        });
+        closeMenuButton.addEventListener('click', closeMobileMenu);
     }
 
     if (mobileMenu) {
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                menuToggle.classList.remove('active');
-            });
-        });
+        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileMenu));
     }
 
-    // Base de datos de productos para perros
-    const productosPerros = [
-        {
-            id: 1,
-            nombre: "Alimento Premium para Perros",
-            categoria: "perros",
-            subcategoria: "alimento",
-            precio: 25000,
-            descripcion: "Alimento balanceado para perros adultos",
-            imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg"
-        },
-        {
-            id: 3,
-            nombre: "Antiparasitario para Perros",
-            categoria: "perros",
-            subcategoria: "salud",
-            precio: 35000,
-            descripcion: "Tratamiento antiparasitario mensual",
-            imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg"
-        },
-        {
-            id: 5,
-            nombre: "Juguete para Perros",
-            categoria: "perros",
-            subcategoria: "juguetes",
-            precio: 12000,
-            descripcion: "Juguete interactivo resistente",
-            imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg"
-        },
-        {
-            id: 7,
-            nombre: "Cama para Perros",
-            categoria: "perros",
-            subcategoria: "accesorios",
-            precio: 55000,
-            descripcion: "Cama ortopédica para perros grandes",
-            imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg"
-        },
-        {
-            id: 9,
-            nombre: "Correa para Perros",
-            categoria: "perros",
-            subcategoria: "accesorios",
-            precio: 15000,
-            descripcion: "Correa resistente y cómoda",
-            imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg"
-        },
-        {
-            id: 10,
-            nombre: "Shampoo para Perros",
-            categoria: "perros",
-            subcategoria: "salud",
-            precio: 8000,
-            descripcion: "Shampoo hipoalergénico para perros",
-            imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg"
-        }
-    ];
+    // Productos filtrados desde fuente central
+    const productosPerros = (window.PRODUCTS || []).filter(p => p.categoria === 'perros');
 
     // Función para cargar productos de perros
     function loadPerrosProducts() {
@@ -91,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         perrosGrid.innerHTML = productosPerros.map(producto => `
             <div class="perro-product-card">
-                <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
+                <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
                 <div class="perro-product-info">
                     <h3>${producto.nombre}</h3>
                     <p>${producto.descripcion}</p>

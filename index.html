@@ -29,7 +29,7 @@
             <div class="header-icons">
                 <span class="icon">👤 Iniciar Sesión</span>
                 <a href="cart.html" class="icon">🛒</a>
-                <button class="menu-toggle" aria-label="Abrir menú">
+                <button class="menu-toggle" aria-label="Abrir menú" aria-haspopup="dialog" aria-controls="mobile-menu" aria-expanded="false">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -73,10 +73,10 @@
         </nav>
     </header>
 
-<div class="mobile-menu-overlay">
+<div class="mobile-menu-overlay" id="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="mobile-menu-top">
         <a href="#" class="logo-mobile">Awka Petshop</a>
-        <button class="close-menu">&times;</button>
+        <button class="close-menu" aria-label="Cerrar menú">&times;</button>
     </div>
     <div class="mobile-menu-content">
         <ul>
@@ -128,11 +128,11 @@
     
     <main>
         <section class="hero-section-combined">
-            <div class="slider-wrapper">
-                <div class="slider-container">
+            <div class="slider-wrapper" aria-roledescription="carousel" aria-label="Promociones destacadas">
+                <div class="slider-container" tabindex="0">
                     <div class="slide">
                         <div class="offer-slide-content">
-                            <img src="imagenes/oferta3.webp" alt="Ofertas especiales">
+                            <img src="imagenes/oferta3.webp" alt="Ofertas especiales" loading="lazy" decoding="async">
                             <div class="offer-text">
                                 <h3>¡Ofertas Especiales!</h3>
                                 <p>Encuentra de todo para tu peludo.</p>
@@ -142,7 +142,7 @@
                     </div>
                     <div class="slide">
                         <div class="offer-slide-content">
-                            <img src="imagenes/oferta1.webp" alt="Oferta en camas">
+                            <img src="imagenes/oferta1.webp" alt="Oferta en camas" loading="lazy" decoding="async">
                             <div class="offer-text">
                                 <h3>¡Ofertas Especiales en Camas!</h3>
                                 <p>Encuentra la cama perfecta para tu compañero peludo con descuentos increíbles.</p>
@@ -151,21 +151,22 @@
                         </div>
                     </div>
                 </div>
-                <button class="slider-nav-button prev">‹</button>
-                <button class="slider-nav-button next">›</button>
+                <button class="slider-nav-button prev" aria-label="Anterior">‹</button>
+                <button class="slider-nav-button next" aria-label="Siguiente">›</button>
+                <div class="slider-dots" role="tablist" aria-label="Selector de diapositivas"></div>
             </div>
             
             <div class="pet-spaces-container">
                 <div class="pet-card pet-card-dog">
                     <a href="perros.html">
                         <h3>Espacio Perruno</h3>
-                        <img src="imagenes/perro4.jfif" alt="Perro golden retriever sonriendo">
+                        <img src="imagenes/perro4.jfif" alt="Perro golden retriever sonriendo" loading="lazy" decoding="async">
                     </a>
                 </div>
                 <div class="pet-card pet-card-cat">
                     <a href="gatos.html">
                         <h3>Espacio Gatuno</h3>
-                        <img src="imagenes/gato.webp" alt="Gato con mirada atenta">
+                        <img src="imagenes/gato.webp" alt="Gato con mirada atenta" loading="lazy" decoding="async">
                     </a>
                 </div>
             </div>
@@ -198,22 +199,22 @@
             <h2>Las mejores ofertas</h2>
             <div class="offers-container">
                 <div class="offer-item">
-                    <img src="https://i.ibb.co/S7Jj4r7/prod-1.jpg" alt="Producto de gato">
+                    <img src="https://i.ibb.co/S7Jj4r7/prod-1.jpg" alt="Producto de gato" loading="lazy" decoding="async">
                     <span class="discount-tag">-30% OFF</span>
                     <p>Recién llegados</p>
                 </div>
                 <div class="offer-item">
-                    <img src="https://i.ibb.co/d7z1y1C/prod-2.jpg" alt="Producto de cuidado">
+                    <img src="https://i.ibb.co/d7z1y1C/prod-2.jpg" alt="Producto de cuidado" loading="lazy" decoding="async">
                     <span class="discount-tag">-50% OFF</span>
                     <p>Cuidado y bienestar</p>
                 </div>
                 <div class="offer-item">
-                    <img src="https://i.ibb.co/R2qJ2X4/prod-3.jpg" alt="Producto para perro">
+                    <img src="https://i.ibb.co/R2qJ2X4/prod-3.jpg" alt="Producto para perro" loading="lazy" decoding="async">
                     <span class="discount-tag">-35% OFF</span>
                     <p>Antiparasitarios Perros</p>
                 </div>
                 <div class="offer-item">
-                    <img src="https://i.ibb.com/M9F5D21/prod-4.jpg" alt="Producto para gato">
+                    <img src="https://i.ibb.co/M9F5D21/prod-4.jpg" alt="Producto para gato" loading="lazy" decoding="async">
                     <span class="discount-tag">-25% OFF</span>
                     <p>Antiparasitarios Gatos</p>
                 </div>
@@ -224,7 +225,7 @@
             <h2>Veterinarios destacados</h2>
             <div class="vets-container">
                 <div class="vet-map">
-                    <img src="https://i.ibb.co/L8vTz1G/map-placeholder.png" alt="Mapa de ubicaciones de veterinarios">
+                    <img src="https://i.ibb.co/L8vTz1G/map-placeholder.png" alt="Mapa de ubicaciones de veterinarios" loading="lazy" decoding="async">
                 </div>
                 <div class="vet-card">
                     <div class="vet-info">
@@ -245,7 +246,7 @@
             <div class="stories-container">
                 <div class="story-card new-story-card">
                     <div class="story-card-left">
-                        <img src="https://i.ibb.co/jHkM8Vb/story-rocky.jpg" alt="Perro Rocky">
+                        <img src="https://i.ibb.co/jHkM8Vb/story-rocky.jpg" alt="Perro Rocky" loading="lazy" decoding="async">
                     </div>
                     <div class="story-card-right">
                         <h3>Rocky, un cliente feliz</h3>
@@ -259,7 +260,7 @@
                 </div>
                 <div class="story-card new-story-card">
                     <div class="story-card-left">
-                        <img src="https://i.ibb.co/k2V3y7c/story-luna.jpg" alt="Gato Luna">
+                        <img src="https://i.ibb.co/k2V3y7c/story-luna.jpg" alt="Gato Luna" loading="lazy" decoding="async">
                     </div>
                     <div class="story-card-right">
                         <h3>Luna, una gatita tranquila</h3>
@@ -273,7 +274,7 @@
                 </div>
                 <div class="story-card new-story-card">
                     <div class="story-card-left">
-                        <img src="https://i.ibb.co/jHkM8Vb/story-rocky.jpg" alt="Perro Max">
+                        <img src="https://i.ibb.co/jHkM8Vb/story-rocky.jpg" alt="Perro Max" loading="lazy" decoding="async">
                     </div>
                     <div class="story-card-right">
                         <h3>Max, el más juguetón</h3>
@@ -287,7 +288,7 @@
                 </div>
                 <div class="story-card new-story-card">
                     <div class="story-card-left">
-                        <img src="https://i.ibb.co/k2V3y7c/story-luna.jpg" alt="Gato Simba">
+                        <img src="https://i.ibb.co/k2V3y7c/story-luna.jpg" alt="Gato Simba" loading="lazy" decoding="async">
                     </div>
                     <div class="story-card-right">
                         <h3>Simba, el rey de la casa</h3>
@@ -306,32 +307,34 @@
             <h2>Nuestras Marcas</h2>
             <div class="brands-container">
                 <div class="brand-item">
-                    <img src="https://i.ibb.co/TqwYf1X/bravery-logo.png" alt="Bravery Logo">
+                    <img src="https://i.ibb.co/TqwYf1X/bravery-logo.png" alt="Bravery Logo" loading="lazy" decoding="async">
                     <a href="#" class="btn-brand">Ver productos Bravery</a>
                 </div>
                 <div class="brand-item">
-                    <img src="https://i.ibb.co/b3S02R3/proplan-logo.png" alt="Proplan Logo">
+                    <img src="https://i.ibb.co/b3S02R3/proplan-logo.png" alt="Proplan Logo" loading="lazy" decoding="async">
                     <a href="#" class="btn-brand">Ver productos Pro Plan</a>
                 </div>
                 <div class="brand-item">
-                    <img src="https://i.ibb.co/s5r2W9m/agility-logo.png" alt="Agility Logo">
+                    <img src="https://i.ibb.co/s5r2W9m/agility-logo.png" alt="Agility Logo" loading="lazy" decoding="async">
                     <a href="#" class="btn-brand">Ver productos Agility</a>
                 </div>
                 <div class="brand-item">
-                    <img src="https://i.ibb.co/TqwYf1X/bravery-logo.png" alt="Royal Canin Logo">
+                    <img src="https://i.ibb.co/TqwYf1X/bravery-logo.png" alt="Royal Canin Logo" loading="lazy" decoding="async">
                     <a href="#" class="btn-brand">Ver productos Royal Canin</a>
                 </div>
                 <div class="brand-item">
-                    <img src="https://i.ibb.co/b3S02R3/proplan-logo.png" alt="Hills Logo">
+                    <img src="https://i.ibb.co/b3S02R3/proplan-logo.png" alt="Hills Logo" loading="lazy" decoding="async">
                     <a href="#" class="btn-brand">Ver productos Hills</a>
                 </div>
                 <div class="brand-item">
-                    <img src="https://i.ibb.co/s5r2W9m/agility-logo.png" alt="Whiskas Logo">
+                    <img src="https://i.ibb.co/s5r2W9m/agility-logo.png" alt="Whiskas Logo" loading="lazy" decoding="async">
                     <a href="#" class="btn-brand">Ver productos Whiskas</a>
                 </div>
             </div>
         </section>
     </main>
+    <script src="data/products.js"></script>
+    <script src="cart-utils.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

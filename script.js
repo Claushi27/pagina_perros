@@ -4,9 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const slides = document.querySelectorAll('.slide');
     const prevButton = document.querySelector('.slider-nav-button.prev');
     const nextButton = document.querySelector('.slider-nav-button.next');
+    const dotsContainer = document.querySelector('.slider-dots');
     const menuToggle = document.querySelector('.menu-toggle');
     const mobileMenu = document.querySelector('.mobile-menu-overlay');
     const closeMenuButton = document.querySelector('.close-menu');
+    let lastFocusedElementBeforeMenu = null;
 
     let currentIndex = 0;
 
@@ -14,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (slides[index]) {
             sliderContainer.scrollLeft = slides[index].offsetLeft;
             currentIndex = index;
+            updateDots();
         }
     }
 
@@ -27,23 +30,132 @@ document.addEventListener('DOMContentLoaded', () => {
         goToSlide(currentIndex);
     });
 
-    // Mobile Menu functionality
-    menuToggle.addEventListener('click', () => {
-        mobileMenu.classList.toggle('open');
-        menuToggle.classList.toggle('active');
-    });
+    // Dots generation
+    function createDots() {
+        if (!dotsContainer) return;
+        dotsContainer.innerHTML = '';
+        slides.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'slider-dot';
+            dot.setAttribute('role', 'tab');
+            dot.setAttribute('aria-label', `Ir a la diapositiva ${i + 1}`);
+            dot.setAttribute('aria-selected', i === currentIndex ? 'true' : 'false');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        });
+    }
 
-    closeMenuButton.addEventListener('click', () => {
+    function updateDots() {
+        if (!dotsContainer) return;
+        const dots = dotsContainer.querySelectorAll('.slider-dot');
+        dots.forEach((d, i) => d.setAttribute('aria-selected', i === currentIndex ? 'true' : 'false'));
+    }
+
+    createDots();
+    updateDots();
+
+    // Keyboard for slider container
+    if (sliderContainer) {
+        sliderContainer.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') { e.preventDefault(); prevButton.click(); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); nextButton.click(); }
+        });
+
+        sliderContainer.addEventListener('scroll', () => {
+            // Snap awareness: compute nearest slide
+            const offsets = Array.from(slides).map(s => s.offsetLeft);
+            const scrollLeft = sliderContainer.scrollLeft;
+            let nearest = 0;
+            let minDelta = Infinity;
+            offsets.forEach((off, i) => {
+                const delta = Math.abs(scrollLeft - off);
+                if (delta < minDelta) { minDelta = delta; nearest = i; }
+            });
+            if (nearest !== currentIndex) {
+                currentIndex = nearest;
+                updateDots();
+            }
+        }, { passive: true });
+    }
+
+    // Mobile Menu functionality with ARIA and focus trap
+    const getFocusableElements = (container) => {
+        return container.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+    };
+
+    const openMobileMenu = () => {
+        if (!mobileMenu) return;
+        lastFocusedElementBeforeMenu = document.activeElement;
+        mobileMenu.classList.add('open');
+        menuToggle.classList.add('active');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        menuToggle.setAttribute('aria-expanded', 'true');
+        const focusables = getFocusableElements(mobileMenu);
+        if (focusables.length > 0) {
+            focusables[0].focus();
+        }
+        document.addEventListener('keydown', handleKeydownInMenu);
+    };
+
+    const closeMobileMenu = () => {
+        if (!mobileMenu) return;
         mobileMenu.classList.remove('open');
         menuToggle.classList.remove('active');
-    });
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('keydown', handleKeydownInMenu);
+        if (lastFocusedElementBeforeMenu) {
+            lastFocusedElementBeforeMenu.focus();
+        } else {
+            menuToggle.focus();
+        }
+    };
 
-    mobileMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            menuToggle.classList.remove('active');
+    const handleKeydownInMenu = (e) => {
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            closeMobileMenu();
+            return;
+        }
+        if (e.key === 'Tab') {
+            const focusables = Array.from(getFocusableElements(mobileMenu));
+            if (focusables.length === 0) return;
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        }
+    };
+
+    if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.contains('open');
+            if (isOpen) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
         });
-    });
+    }
+
+    if (closeMenuButton && mobileMenu) {
+        closeMenuButton.addEventListener('click', () => {
+            closeMobileMenu();
+        });
+    }
+
+    if (mobileMenu) {
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobileMenu();
+            });
+        });
+    }
 
     // Brands Carousel
     const brandsContainer = document.querySelector('.brands-container');
@@ -95,81 +207,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
     
-    // Base de datos simulada de productos
-    const productos = [
-        {
-            id: 1,
-            nombre: "Alimento Premium para Perros",
-            categoria: "perros",
-            subcategoria: "alimento",
-            precio: 25000,
-            descripcion: "Alimento balanceado para perros adultos",
-            imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg"
-        },
-        {
-            id: 2,
-            nombre: "Alimento Húmedo para Gatos",
-            categoria: "gatos",
-            subcategoria: "alimento",
-            precio: 15000,
-            descripcion: "Alimento húmedo premium para gatos",
-            imagen: "https://i.ibb.co/d7z1y1C/prod-2.jpg"
-        },
-        {
-            id: 3,
-            nombre: "Antiparasitario para Perros",
-            categoria: "perros",
-            subcategoria: "salud",
-            precio: 35000,
-            descripcion: "Tratamiento antiparasitario mensual",
-            imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg"
-        },
-        {
-            id: 4,
-            nombre: "Antiparasitario para Gatos",
-            categoria: "gatos",
-            subcategoria: "salud",
-            precio: 30000,
-            descripcion: "Tratamiento antiparasitario para gatos",
-            imagen: "https://i.ibb.com/M9F5D21/prod-4.jpg"
-        },
-        {
-            id: 5,
-            nombre: "Juguete para Perros",
-            categoria: "perros",
-            subcategoria: "juguetes",
-            precio: 12000,
-            descripcion: "Juguete interactivo resistente",
-            imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg"
-        },
-        {
-            id: 6,
-            nombre: "Rascador para Gatos",
-            categoria: "gatos",
-            subcategoria: "juguetes",
-            precio: 45000,
-            descripcion: "Rascador de múltiples niveles",
-            imagen: "https://i.ibb.co/d7z1y1C/prod-2.jpg"
-        },
-        {
-            id: 7,
-            nombre: "Cama para Perros",
-            categoria: "perros",
-            subcategoria: "accesorios",
-            precio: 55000,
-            descripcion: "Cama ortopédica para perros grandes",
-            imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg"
-        },
-        {
-            id: 8,
-            nombre: "Cama para Gatos",
-            categoria: "gatos",
-            subcategoria: "accesorios",
-            precio: 35000,
-            descripcion: "Cama suave y cómoda para gatos",
-            imagen: "https://i.ibb.com/M9F5D21/prod-4.jpg"
-        }
-    ];
+    // Fuente de productos centralizada
+    const productos = window.PRODUCTS || [];
 
     // Función de búsqueda
     function buscarProductos(termino) {
@@ -219,44 +258,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para agregar al carrito (básica)
     window.agregarAlCarrito = function(productoId) {
         const producto = productos.find(p => p.id === productoId);
-        if (producto) {
-            // Obtener carrito del localStorage
-            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            
-            // Verificar si el producto ya está en el carrito
-            const productoExistente = carrito.find(p => p.id === productoId);
-            
-            if (productoExistente) {
-                productoExistente.cantidad += 1;
-            } else {
-                carrito.push({
-                    ...producto,
-                    cantidad: 1
-                });
-            }
-            
-            // Guardar en localStorage
-            localStorage.setItem('carrito', JSON.stringify(carrito));
-            
-            // Mostrar confirmación
-            alert(`¡${producto.nombre} agregado al carrito!`);
-            
-            // Actualizar contador del carrito si existe
-            actualizarContadorCarrito();
+        if (!producto) return;
+        if (window.CartUtils) {
+            window.CartUtils.addToCart(producto);
         }
     };
 
     // Función para actualizar contador del carrito
-    function actualizarContadorCarrito() {
-        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-        const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-        
-        // Buscar el ícono del carrito y actualizar
-        const cartIcon = document.querySelector('.header-icons .icon:last-child');
-        if (cartIcon && totalItems > 0) {
-            cartIcon.innerHTML = `🛒 <span class="cart-count">${totalItems}</span>`;
-        }
-    }
+    function actualizarContadorCarrito() { if (window.CartUtils) window.CartUtils.updateCartCounter(); }
 
     // Inicializar contador del carrito al cargar la página
     actualizarContadorCarrito();
