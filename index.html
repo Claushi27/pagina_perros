@@ -12,6 +12,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="imagenes/oferta3.webp" imagesrcset="imagenes/oferta3.webp" imagesizes="100vw">
+    <link rel="preload" as="image" href="imagenes/oferta1.webp" imagesrcset="imagenes/oferta1.webp" imagesizes="100vw">
 </head>
 <body>
     <header class="main-header">
@@ -22,9 +24,10 @@
                     <span>Awka Petshop</span>
                 </a>
             </div>
-            <div class="search-bar">
-                <input type="text" placeholder="¿Qué producto estás buscando?">
-                <button class="search-button">🔍</button>
+            <div class="search-bar" role="search">
+                <label for="searchInputHeader" class="visually-hidden">Buscar productos</label>
+                <input id="searchInputHeader" type="text" placeholder="¿Qué producto estás buscando?" aria-label="Buscar productos" autocomplete="off">
+                <button class="search-button" aria-label="Buscar">🔍</button>
             </div>
             <div class="header-icons">
                 <span class="icon">👤 Iniciar Sesión</span>
@@ -128,8 +131,8 @@
     
     <main>
         <section class="hero-section-combined">
-            <div class="slider-wrapper">
-                <div class="slider-container">
+            <div class="slider-wrapper" aria-roledescription="carousel" aria-label="Promociones destacadas">
+                <div class="slider-container" tabindex="0" aria-live="polite">
                     <div class="slide">
                         <div class="offer-slide-content">
                             <img src="imagenes/oferta3.webp" alt="Ofertas especiales" loading="lazy" decoding="async">
@@ -151,8 +154,9 @@
                         </div>
                     </div>
                 </div>
-                <button class="slider-nav-button prev">‹</button>
-                <button class="slider-nav-button next">›</button>
+                <button class="slider-nav-button prev" aria-label="Anterior">‹</button>
+                <button class="slider-nav-button next" aria-label="Siguiente">›</button>
+                <div class="slider-dots" role="tablist" aria-label="Selector de diapositivas"></div>
             </div>
             
             <div class="pet-spaces-container">

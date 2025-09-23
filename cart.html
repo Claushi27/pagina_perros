@@ -21,9 +21,10 @@
                     <span>Awka Petshop</span>
                 </a>
             </div>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="¿Qué producto estás buscando?">
-                <button class="search-button" onclick="performSearch()">🔍</button>
+            <div class="search-bar" role="search">
+                <label for="searchInput" class="visually-hidden">Buscar productos</label>
+                <input type="text" id="searchInput" placeholder="¿Qué producto estás buscando?" aria-label="Buscar productos" autocomplete="off">
+                <button class="search-button" onclick="performSearch()" aria-label="Buscar">🔍</button>
             </div>
             <div class="header-icons">
                 <span class="icon">👤 Iniciar Sesión</span>
