@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultados de Búsqueda - Awka</title>
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="header.css">
-    <link rel="stylesheet" href="sections.css">
-    <link rel="stylesheet" href="responsive.css">
+    <title>Carrito de Compras - Awka</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/responsive.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -92,39 +92,54 @@
     </div>
     
     <main>
-        <div class="search-results-page">
-            <div class="search-results-header">
-                <h1>Resultados de Búsqueda</h1>
-                <p id="searchTerm">Buscando: <span id="searchTermValue"></span></p>
+        <div class="cart-page">
+            <div class="cart-header">
+                <h1>🛒 Carrito de Compras</h1>
+                <p>Revisa tus productos antes de finalizar la compra</p>
             </div>
             
-            <div class="filters-section">
-                <h3>Filtrar por:</h3>
-                <div class="filters-container">
-                    <button class="filter-btn active" data-filter="all">Todos</button>
-                    <button class="filter-btn" data-filter="perros">🐕 Perros</button>
-                    <button class="filter-btn" data-filter="gatos">🐱 Gatos</button>
-                    <button class="filter-btn" data-filter="alimento">🍽️ Alimento</button>
-                    <button class="filter-btn" data-filter="juguetes">🎾 Juguetes</button>
-                    <button class="filter-btn" data-filter="salud">🏥 Salud</button>
-                    <button class="filter-btn" data-filter="accesorios">🛏️ Accesorios</button>
+            <div class="cart-content">
+                <div class="cart-items" id="cartItems">
+                    <!-- Los productos del carrito se cargarán aquí -->
+                </div>
+                
+                <div class="cart-summary">
+                    <div class="summary-card">
+                        <h3>Resumen de Compra</h3>
+                        <div class="summary-details">
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="subtotal">$0</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Despacho:</span>
+                                <span id="shipping">Gratis</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total:</span>
+                                <span id="total">$0</span>
+                            </div>
+                        </div>
+                        <button class="checkout-btn" onclick="proceedToCheckout()">
+                            Proceder al Pago
+                        </button>
+                        <a href="index.html" class="continue-shopping">← Seguir comprando</a>
+                    </div>
                 </div>
             </div>
             
-            <div id="searchResults" class="search-results-grid">
-                <!-- Los resultados se cargarán aquí -->
-            </div>
-            
-            <div id="noResults" class="no-results" style="display: none;">
-                <h3>No se encontraron productos</h3>
-                <p>Intenta con otros términos de búsqueda</p>
-                <a href="index.html" class="btn-back">← Volver al inicio</a>
+            <div id="emptyCart" class="empty-cart" style="display: none;">
+                <div class="empty-cart-content">
+                    <h2>🛒 Tu carrito está vacío</h2>
+                    <p>Agrega algunos productos para comenzar tu compra</p>
+                    <a href="index.html" class="btn-back">← Volver al inicio</a>
+                </div>
             </div>
         </div>
     </main>
     
     <script src="data/products.js"></script>
-    <script src="cart-utils.js"></script>
-    <script src="search.js"></script>
+    <script src="js/cart-utils.js"></script>
+    <script src="js/cart.js"></script>
 </body>
 </html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migración de Productos - Awka Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .status {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .status h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .status p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        #console {
+            background: #1e1e1e;
+            color: #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        #console.show {
+            display: block;
+        }
+
+        #console p {
+            margin: 5px 0;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+            color: #856404;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+            color: #721c24;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Migración de Datos</h1>
+        <p class="subtitle">Herramienta de configuración inicial de Awka Petshop</p>
+
+        <div class="status">
+            <h3>📋 Instrucciones</h3>
+            <p>Esta herramienta migrará los 12 productos iniciales desde el código JavaScript a Firestore (base de datos).</p>
+            <p><strong>Importante:</strong> Solo ejecuta esto UNA VEZ. Los productos quedarán permanentemente en la base de datos.</p>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-primary" onclick="ejecutarMigracion()">
+                ⬆️ Migrar Productos
+            </button>
+            <button class="btn-success" onclick="verificarProductos()">
+                ✅ Verificar Productos
+            </button>
+            <button class="btn-secondary" onclick="limpiarConsola()">
+                🧹 Limpiar Consola
+            </button>
+        </div>
+
+        <div id="console"></div>
+
+        <a href="index.html" class="back-link">← Volver al inicio</a>
+    </div>
+
+    <script type="module">
+        import { db } from './js/firebase-config.js';
+        import { collection, addDoc, getDocs, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+        const consoleDiv = document.getElementById('console');
+
+        function log(message, type = 'info') {
+            const p = document.createElement('p');
+            if (type === 'error') {
+                p.style.color = '#ff6b6b';
+            } else if (type === 'success') {
+                p.style.color = '#51cf66';
+            } else if (type === 'warning') {
+                p.style.color = '#ffd43b';
+            }
+            p.textContent = `> ${message}`;
+            consoleDiv.appendChild(p);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            consoleDiv.classList.add('show');
+        }
+
+        window.limpiarConsola = function() {
+            consoleDiv.innerHTML = '';
+            consoleDiv.classList.remove('show');
+        }
+
+        window.ejecutarMigracion = async function() {
+            log('Iniciando migración de productos...', 'info');
+
+            const PRODUCTS = [
+                { nombre: "Alimento Premium para Perros", categoria: "perros", subcategoria: "alimento", precio: 25000, descripcion: "Alimento balanceado para perros adultos", imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg", stock: 50 },
+                { nombre: "Alimento Húmedo para Gatos", categoria: "gatos", subcategoria: "alimento", precio: 15000, descripcion: "Alimento húmedo premium para gatos", imagen: "https://i.ibb.co/d7z1y1C/prod-2.jpg", stock: 30 },
+                { nombre: "Antiparasitario para Perros", categoria: "perros", subcategoria: "salud", precio: 35000, descripcion: "Tratamiento antiparasitario mensual", imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg", stock: 20 },
+                { nombre: "Antiparasitario para Gatos", categoria: "gatos", subcategoria: "salud", precio: 30000, descripcion: "Tratamiento antiparasitario para gatos", imagen: "https://i.ibb.co/M9F5D21/prod-4.jpg", stock: 25 },
+                { nombre: "Juguete para Perros", categoria: "perros", subcategoria: "juguetes", precio: 12000, descripcion: "Juguete interactivo resistente", imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg", stock: 40 },
+                { nombre: "Rascador para Gatos", categoria: "gatos", subcategoria: "juguetes", precio: 45000, descripcion: "Rascador de múltiples niveles", imagen: "https://i.ibb.co/d7z1y1C/prod-2.jpg", stock: 15 },
+                { nombre: "Cama para Perros", categoria: "perros", subcategoria: "accesorios", precio: 55000, descripcion: "Cama ortopédica para perros grandes", imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg", stock: 10 },
+                { nombre: "Cama para Gatos", categoria: "gatos", subcategoria: "accesorios", precio: 35000, descripcion: "Cama suave y cómoda para gatos", imagen: "https://i.ibb.co/M9F5D21/prod-4.jpg", stock: 12 },
+                { nombre: "Correa para Perros", categoria: "perros", subcategoria: "accesorios", precio: 15000, descripcion: "Correa resistente y cómoda", imagen: "https://i.ibb.co/S7Jj4r7/prod-1.jpg", stock: 35 },
+                { nombre: "Shampoo para Perros", categoria: "perros", subcategoria: "salud", precio: 8000, descripcion: "Shampoo hipoalergénico para perros", imagen: "https://i.ibb.co/R2qJ2X4/prod-3.jpg", stock: 50 },
+                { nombre: "Arena para Gatos", categoria: "gatos", subcategoria: "accesorios", precio: 12000, descripcion: "Arena aglomerante de alta calidad", imagen: "https://i.ibb.co/d7z1y1C/prod-2.jpg", stock: 60 },
+                { nombre: "Juguete con Plumas", categoria: "gatos", subcategoria: "juguetes", precio: 6000, descripcion: "Juguete interactivo con plumas", imagen: "https://i.ibb.co/M9F5D21/prod-4.jpg", stock: 45 }
+            ];
+
+            try {
+                // Verificar si ya existen productos
+                const productosRef = collection(db, 'productos');
+                const snapshot = await getDocs(productosRef);
+
+                if (snapshot.size > 0) {
+                    log(`⚠️ Ya existen ${snapshot.size} productos en Firestore.`, 'warning');
+                    const confirmacion = confirm('¿Deseas agregar los productos de todas formas? Esto creará duplicados.');
+                    if (!confirmacion) {
+                        log('❌ Migración cancelada por el usuario.', 'warning');
+                        return;
+                    }
+                }
+
+                log('📤 Comenzando a subir productos...', 'info');
+
+                // Migrar cada producto
+                let count = 0;
+                for (const producto of PRODUCTS) {
+                    await addDoc(collection(db, 'productos'), {
+                        ...producto,
+                        activo: true,
+                        fechaCreacion: new Date()
+                    });
+
+                    count++;
+                    log(`✓ ${count}/${PRODUCTS.length}: ${producto.nombre}`, 'success');
+                }
+
+                log(`🎉 ¡Migración completada! ${count} productos agregados.`, 'success');
+                alert('✅ ¡Migración exitosa! Los productos están ahora en Firestore.');
+
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+                console.error('Error completo:', error);
+                alert('❌ Error en la migración. Revisa la consola.');
+            }
+        }
+
+        window.verificarProductos = async function() {
+            log('🔍 Verificando productos en Firestore...', 'info');
+
+            try {
+                const productosRef = collection(db, 'productos');
+                const snapshot = await getDocs(productosRef);
+
+                log(`📦 Total de productos: ${snapshot.size}`, 'info');
+                log('', 'info');
+
+                if (snapshot.size === 0) {
+                    log('⚠️ No hay productos en la base de datos.', 'warning');
+                    log('👉 Ejecuta "Migrar Productos" primero.', 'warning');
+                } else {
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        log(`• ${data.nombre} | ${data.categoria} | Stock: ${data.stock} | $${data.precio.toLocaleString()}`, 'success');
+                    });
+                }
+
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+                console.error('Error completo:', error);
+            }
+        }
+
+        // Log inicial
+        log('✅ Herramienta de migración cargada correctamente.', 'success');
+        log('Firebase conectado al proyecto: awka-ddc36', 'info');
+        log('', 'info');
+    </script>
+</body>
+</html>

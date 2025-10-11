@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Awka</title>
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="header.css">
-    <link rel="stylesheet" href="hero.css">
-    <link rel="stylesheet" href="sections.css">
-    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/responsive.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -30,8 +30,8 @@
                 <button class="search-button" aria-label="Buscar">🔍</button>
             </div>
             <div class="header-icons">
-                <span class="icon">👤 Iniciar Sesión</span>
-                <a href="cart.html" class="icon">🛒</a>
+                <div id="userMenu" class="icon">👤 Iniciar Sesión</div>
+                <a href="cart.html" class="icon">🛒 <span id="cartCounter">0</span></a>
                 <button class="menu-toggle" aria-label="Abrir menú" aria-haspopup="dialog" aria-controls="mobile-menu" aria-expanded="false">
                     <span></span>
                     <span></span>
@@ -337,7 +337,51 @@
         </section>
     </main>
     <script src="data/products.js"></script>
-    <script src="cart-utils.js"></script>
-    <script src="script.js"></script>
+    <script src="js/cart-utils.js"></script>
+    <script src="js/script.js"></script>
+
+    <!-- Firebase Auth Script -->
+    <script type="module">
+        import { auth } from './js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+
+        const userMenu = document.getElementById('userMenu');
+
+        // Escuchar cambios en el estado de autenticación
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuario autenticado
+                const displayName = user.displayName || user.email.split('@')[0];
+                userMenu.innerHTML = `
+                    <span style="cursor: pointer;">👤 ${displayName}</span>
+                    <div style="display: none; position: absolute; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 10px; top: 40px; right: 0; min-width: 150px; z-index: 1000;" id="userDropdown">
+                        <a href="profile.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">Mi Perfil</a>
+                        <a href="#" id="logoutBtn" style="display: block; padding: 8px; text-decoration: none; color: #c33;">Cerrar Sesión</a>
+                    </div>
+                `;
+
+                // Toggle dropdown
+                userMenu.querySelector('span').addEventListener('click', () => {
+                    const dropdown = document.getElementById('userDropdown');
+                    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                });
+
+                // Logout
+                document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    try {
+                        await signOut(auth);
+                        window.location.reload();
+                    } catch (error) {
+                        console.error('Error al cerrar sesión:', error);
+                    }
+                });
+
+            } else {
+                // Usuario no autenticado
+                userMenu.innerHTML = '<a href="login.html" style="text-decoration: none; color: inherit;">👤 Iniciar Sesión</a>';
+            }
+        });
+    </script>
 </body>
 </html>
