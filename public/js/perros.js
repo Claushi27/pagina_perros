@@ -1,3 +1,6 @@
+import { db } from './firebase-config.js';
+import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     // Mobile Menu functionality
     const menuToggle = document.querySelector('.menu-toggle');
@@ -57,26 +60,52 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileMenu));
     }
 
-    // Productos filtrados desde fuente central
-    const productosPerros = (window.PRODUCTS || []).filter(p => p.categoria === 'perros');
+    // Variable para almacenar productos
+    let productosPerros = [];
 
-    // Función para cargar productos de perros
-    function loadPerrosProducts() {
+    // Función para cargar productos de perros desde Firestore
+    async function loadPerrosProducts() {
         const perrosGrid = document.getElementById('perrosGrid');
-        
-        perrosGrid.innerHTML = productosPerros.map(producto => `
-            <div class="perro-product-card">
-                <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
-                <div class="perro-product-info">
-                    <h3>${producto.nombre}</h3>
-                    <p>${producto.descripcion}</p>
-                    <div class="perro-product-price">$${producto.precio.toLocaleString()}</div>
-                    <button class="perro-add-btn" onclick="agregarAlCarrito(${producto.id})">
-                        Agregar al carrito
-                    </button>
+
+        try {
+            // Mostrar indicador de carga
+            perrosGrid.innerHTML = '<p style="text-align: center; padding: 2rem;">Cargando productos...</p>';
+
+            // Consultar productos de perros desde Firestore
+            const q = query(collection(db, 'productos'), where('categoria', '==', 'perros'));
+            const querySnapshot = await getDocs(q);
+
+            productosPerros = [];
+            querySnapshot.forEach((doc) => {
+                productosPerros.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+
+            // Mostrar productos
+            if (productosPerros.length === 0) {
+                perrosGrid.innerHTML = '<p style="text-align: center; padding: 2rem;">No hay productos disponibles</p>';
+                return;
+            }
+
+            perrosGrid.innerHTML = productosPerros.map(producto => `
+                <div class="perro-product-card">
+                    <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
+                    <div class="perro-product-info">
+                        <h3>${producto.nombre}</h3>
+                        <p>${producto.descripcion}</p>
+                        <div class="perro-product-price">$${producto.precio.toLocaleString()}</div>
+                        <button class="perro-add-btn" onclick="agregarAlCarrito('${producto.id}')">
+                            Agregar al carrito
+                        </button>
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `).join('');
+        } catch (error) {
+            console.error('Error cargando productos:', error);
+            perrosGrid.innerHTML = '<p style="text-align: center; padding: 2rem; color: red;">Error al cargar productos. Intenta recargar la página.</p>';
+        }
     }
 
     // Función para agregar al carrito
@@ -85,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (producto) {
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             const productoExistente = carrito.find(p => p.id === productoId);
-            
+
             if (productoExistente) {
                 productoExistente.cantidad += 1;
             } else {
@@ -94,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     cantidad: 1
                 });
             }
-            
+
             localStorage.setItem('carrito', JSON.stringify(carrito));
             alert(`¡${producto.nombre} agregado al carrito!`);
             updateCartCounter();

@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrativo - Awka</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+        }
+        .admin-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .admin-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: white;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #059669;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .product-card-body {
+            padding: 1rem;
+        }
+        .product-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        .product-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .product-card .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .product-actions button {
+            flex: 1;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-card h3 {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        .stat-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        .alert-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+        }
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .modal-header h2 {
+            margin: 0;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+        }
+        .close-modal:hover {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-top">
+            <div class="header-logo">
+                <a href="index.html">
+                    <img src="imagenes/petshop1.png" alt="Logo Awka">
+                    <span>Awka Petshop</span>
+                </a>
+            </div>
+            <div class="header-icons">
+                <div class="user-menu" id="userMenu">
+                    <span class="icon">👤 Admin</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>🛠️ Panel Administrativo</h1>
+            <p>Gestión de productos, pedidos y usuarios</p>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <div class="admin-tabs">
+            <button class="tab-btn active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+            <button class="tab-btn" onclick="switchTab('products')">📦 Productos</button>
+            <button class="tab-btn" onclick="switchTab('orders')">🛒 Pedidos</button>
+            <button class="tab-btn" onclick="switchTab('users')">👥 Usuarios</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard-tab" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="totalProducts">0</h3>
+                    <p>Total Productos</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalOrders">0</h3>
+                    <p>Total Pedidos</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalUsers">0</h3>
+                    <p>Total Usuarios</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalRevenue">$0</h3>
+                    <p>Ingresos Totales</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Tab -->
+        <div id="products-tab" class="tab-content">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2>Gestión de Productos</h2>
+                    <button class="btn btn-primary" onclick="openProductModal()">+ Nuevo Producto</button>
+                </div>
+                <div id="productsContainer" class="loading">Cargando productos...</div>
+            </div>
+        </div>
+
+        <!-- Orders Tab -->
+        <div id="orders-tab" class="tab-content">
+            <div class="card">
+                <h2>Pedidos Recientes</h2>
+                <div id="ordersContainer" class="loading">Cargando pedidos...</div>
+            </div>
+        </div>
+
+        <!-- Users Tab -->
+        <div id="users-tab" class="tab-content">
+            <div class="card">
+                <h2>Usuarios Registrados</h2>
+                <div id="usersContainer" class="loading">Cargando usuarios...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear/editar producto -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Nuevo Producto</h2>
+                <button class="close-modal" onclick="closeProductModal()">&times;</button>
+            </div>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label for="productName">Nombre del producto</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Descripción</label>
+                    <textarea id="productDescription" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Precio</label>
+                    <input type="number" id="productPrice" min="0" step="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Categoría</label>
+                    <select id="productCategory" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="perros">Perros</option>
+                        <option value="gatos">Gatos</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productSubcategory">Subcategoría</label>
+                    <input type="text" id="productSubcategory" placeholder="Ej: Alimento, Juguetes, Accesorios" required>
+                </div>
+                <div class="form-group">
+                    <label for="productImageFile">Imagen del producto</label>
+                    <input type="file" id="productImageFile" accept="image/*" style="margin-bottom: 0.5rem;">
+                    <div id="imagePreview" style="margin-top: 1rem; display: none;">
+                        <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #e0e0e0;">
+                    </div>
+                    <small style="color: #666; display: block; margin-top: 0.5rem;">O ingresa una URL de imagen:</small>
+                    <input type="url" id="productImageUrl" placeholder="https://..." style="margin-top: 0.5rem;">
+                    <input type="hidden" id="productImage">
+                </div>
+                <div class="form-group">
+                    <label for="productStock">Stock disponible</label>
+                    <input type="number" id="productStock" min="0" value="10" required>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-success" style="flex: 1;" id="saveProductBtn">Guardar Producto</button>
+                    <button type="button" class="btn btn-danger" onclick="closeProductModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db, storage } from './js/firebase-config.js';
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import {
+            collection,
+            getDocs,
+            addDoc,
+            updateDoc,
+            deleteDoc,
+            doc,
+            getDoc,
+            query,
+            orderBy
+        } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import {
+            ref,
+            uploadBytes,
+            getDownloadURL,
+            deleteObject
+        } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
+
+        let currentUser = null;
+        let currentProductId = null;
+        let selectedImageFile = null;
+
+        // Verificar autenticación y permisos
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const userDoc = await getDoc(doc(db, 'usuarios', user.uid));
+            const userData = userDoc.data();
+
+            if (!userData || userData.rol !== 'admin') {
+                alert('No tienes permisos para acceder al panel administrativo');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            currentUser = user;
+            loadDashboard();
+            loadProducts();
+        });
+
+        // Cambiar de pestaña
+        window.switchTab = function(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'orders') loadOrders();
+            if (tabName === 'users') loadUsers();
+        };
+
+        // Cargar dashboard
+        async function loadDashboard() {
+            try {
+                const productsSnap = await getDocs(collection(db, 'productos'));
+                const ordersSnap = await getDocs(collection(db, 'pedidos'));
+                const usersSnap = await getDocs(collection(db, 'usuarios'));
+
+                document.getElementById('totalProducts').textContent = productsSnap.size;
+                document.getElementById('totalOrders').textContent = ordersSnap.size;
+                document.getElementById('totalUsers').textContent = usersSnap.size;
+
+                let totalRevenue = 0;
+                ordersSnap.forEach(doc => {
+                    const order = doc.data();
+                    totalRevenue += order.total || 0;
+                });
+                document.getElementById('totalRevenue').textContent = `$${totalRevenue.toLocaleString()}`;
+
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        // Cargar productos
+        async function loadProducts() {
+            const container = document.getElementById('productsContainer');
+            try {
+                const querySnapshot = await getDocs(collection(db, 'productos'));
+
+                if (querySnapshot.empty) {
+                    container.innerHTML = '<p style="text-align: center; color: #666;">No hay productos registrados</p>';
+                    return;
+                }
+
+                const products = [];
+                querySnapshot.forEach((doc) => {
+                    products.push({ id: doc.id, ...doc.data() });
+                });
+
+                container.className = 'products-grid';
+                container.innerHTML = products.map(product => `
+                    <div class="product-card">
+                        <img src="${product.imagen}" alt="${product.nombre}" onerror="this.src='https://via.placeholder.com/280x180?text=Sin+Imagen'">
+                        <div class="product-card-body">
+                            <h3>${product.nombre}</h3>
+                            <p>${product.descripcion}</p>
+                            <div class="price">$${product.precio.toLocaleString()}</div>
+                            <p style="font-size: 0.8rem; color: #666;">
+                                Categoría: ${product.categoria} | Stock: ${product.stock || 0}
+                            </p>
+                            <div class="product-actions">
+                                <button class="btn btn-primary" onclick="editProduct('${product.id}')">✏️ Editar</button>
+                                <button class="btn btn-danger" onclick="deleteProduct('${product.id}', '${product.nombre}')">🗑️</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading products:', error);
+                container.innerHTML = '<p style="color: red;">Error al cargar productos</p>';
+            }
+        }
+
+        // Abrir modal de producto
+        window.openProductModal = function(productId = null) {
+            currentProductId = productId;
+            document.getElementById('productModal').classList.add('active');
+            document.getElementById('productForm').reset();
+
+            if (productId) {
+                document.getElementById('modalTitle').textContent = 'Editar Producto';
+                loadProductData(productId);
+            } else {
+                document.getElementById('modalTitle').textContent = 'Nuevo Producto';
+            }
+        };
+
+        // Cerrar modal
+        window.closeProductModal = function() {
+            document.getElementById('productModal').classList.remove('active');
+            currentProductId = null;
+        };
+
+        // Preview de imagen al seleccionar archivo
+        document.getElementById('productImageFile').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                selectedImageFile = file;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Cargar datos del producto
+        async function loadProductData(productId) {
+            try {
+                const productDoc = await getDoc(doc(db, 'productos', productId));
+                if (productDoc.exists()) {
+                    const data = productDoc.data();
+                    document.getElementById('productId').value = productId;
+                    document.getElementById('productName').value = data.nombre;
+                    document.getElementById('productDescription').value = data.descripcion;
+                    document.getElementById('productPrice').value = data.precio;
+                    document.getElementById('productCategory').value = data.categoria;
+                    document.getElementById('productSubcategory').value = data.subcategoria;
+                    document.getElementById('productImage').value = data.imagen;
+                    document.getElementById('productImageUrl').value = data.imagen;
+                    document.getElementById('productStock').value = data.stock || 10;
+
+                    // Mostrar preview de imagen existente
+                    if (data.imagen) {
+                        document.getElementById('previewImg').src = data.imagen;
+                        document.getElementById('imagePreview').style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading product:', error);
+            }
+        }
+
+        // Subir imagen a Firebase Storage
+        async function uploadProductImage(file, productName) {
+            const timestamp = Date.now();
+            const fileName = `productos/${timestamp}_${productName.replace(/\s+/g, '_')}.${file.name.split('.').pop()}`;
+            const storageRef = ref(storage, fileName);
+
+            await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            return downloadURL;
+        }
+
+        // Guardar producto
+        document.getElementById('productForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const saveBtn = document.getElementById('saveProductBtn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="loading"></span> Guardando...';
+
+            try {
+                let imageUrl = document.getElementById('productImage').value;
+
+                // Si hay un archivo seleccionado, subirlo
+                if (selectedImageFile) {
+                    const productName = document.getElementById('productName').value;
+                    imageUrl = await uploadProductImage(selectedImageFile, productName);
+                } else if (document.getElementById('productImageUrl').value) {
+                    // Si se ingresó una URL manualmente
+                    imageUrl = document.getElementById('productImageUrl').value;
+                }
+
+                if (!imageUrl) {
+                    showAlert('Debes subir una imagen o ingresar una URL', 'error');
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Guardar Producto';
+                    return;
+                }
+
+                const productData = {
+                    nombre: document.getElementById('productName').value,
+                    descripcion: document.getElementById('productDescription').value,
+                    precio: parseInt(document.getElementById('productPrice').value),
+                    categoria: document.getElementById('productCategory').value,
+                    subcategoria: document.getElementById('productSubcategory').value,
+                    imagen: imageUrl,
+                    stock: parseInt(document.getElementById('productStock').value),
+                    fechaActualizacion: new Date()
+                };
+
+                if (currentProductId) {
+                    await updateDoc(doc(db, 'productos', currentProductId), productData);
+                    showAlert('Producto actualizado exitosamente', 'success');
+                } else {
+                    productData.fechaCreacion = new Date();
+                    await addDoc(collection(db, 'productos'), productData);
+                    showAlert('Producto creado exitosamente', 'success');
+                }
+
+                selectedImageFile = null;
+                closeProductModal();
+                loadProducts();
+                loadDashboard();
+
+            } catch (error) {
+                console.error('Error saving product:', error);
+                showAlert('Error al guardar el producto: ' + error.message, 'error');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Guardar Producto';
+            }
+        });
+
+        // Editar producto
+        window.editProduct = function(productId) {
+            openProductModal(productId);
+        };
+
+        // Eliminar producto
+        window.deleteProduct = async function(productId, productName) {
+            if (!confirm(`¿Estás seguro de eliminar "${productName}"?`)) return;
+
+            try {
+                await deleteDoc(doc(db, 'productos', productId));
+                showAlert('Producto eliminado exitosamente', 'success');
+                loadProducts();
+                loadDashboard();
+            } catch (error) {
+                console.error('Error deleting product:', error);
+                showAlert('Error al eliminar el producto', 'error');
+            }
+        };
+
+        // Cargar pedidos
+        async function loadOrders() {
+            const container = document.getElementById('ordersContainer');
+            try {
+                const querySnapshot = await getDocs(query(collection(db, 'pedidos'), orderBy('fecha', 'desc')));
+
+                if (querySnapshot.empty) {
+                    container.innerHTML = '<p style="text-align: center; color: #666;">No hay pedidos registrados</p>';
+                    return;
+                }
+
+                let html = '<table style="width: 100%; border-collapse: collapse;">';
+                html += '<tr style="background: #f5f5f5; text-align: left;"><th style="padding: 1rem;">ID</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>Estado</th></tr>';
+
+                querySnapshot.forEach((doc) => {
+                    const order = doc.data();
+                    const date = order.fecha?.toDate ? order.fecha.toDate().toLocaleDateString() : 'N/A';
+                    html += `
+                        <tr style="border-bottom: 1px solid #e0e0e0;">
+                            <td style="padding: 1rem;">${doc.id.substring(0, 8)}...</td>
+                            <td>${order.clienteEmail || 'N/A'}</td>
+                            <td>${date}</td>
+                            <td>$${(order.total || 0).toLocaleString()}</td>
+                            <td><span style="background: #10b981; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem;">${order.estado || 'Pendiente'}</span></td>
+                        </tr>
+                    `;
+                });
+                html += '</table>';
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                container.innerHTML = '<p style="color: red;">Error al cargar pedidos</p>';
+            }
+        }
+
+        // Cargar usuarios
+        async function loadUsers() {
+            const container = document.getElementById('usersContainer');
+            try {
+                const querySnapshot = await getDocs(collection(db, 'usuarios'));
+
+                if (querySnapshot.empty) {
+                    container.innerHTML = '<p style="text-align: center; color: #666;">No hay usuarios registrados</p>';
+                    return;
+                }
+
+                let html = '<table style="width: 100%; border-collapse: collapse;">';
+                html += '<tr style="background: #f5f5f5; text-align: left;"><th style="padding: 1rem;">Nombre</th><th>Email</th><th>Rol</th><th>Registro</th></tr>';
+
+                querySnapshot.forEach((doc) => {
+                    const user = doc.data();
+                    const date = user.fechaRegistro?.toDate ? user.fechaRegistro.toDate().toLocaleDateString() : 'N/A';
+                    html += `
+                        <tr style="border-bottom: 1px solid #e0e0e0;">
+                            <td style="padding: 1rem;">${user.nombre || user.email.split('@')[0]}</td>
+                            <td>${user.email}</td>
+                            <td><span style="background: ${user.rol === 'admin' ? '#fbbf24' : '#60a5fa'}; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem;">${user.rol || 'cliente'}</span></td>
+                            <td>${date}</td>
+                        </tr>
+                    `;
+                });
+                html += '</table>';
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error loading users:', error);
+                container.innerHTML = '<p style="color: red;">Error al cargar usuarios</p>';
+            }
+        }
+
+        // Mostrar alerta
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        window.showAlert = showAlert;
+    </script>
+</body>
+</html>

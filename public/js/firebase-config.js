@@ -3,6 +3,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 import { getStorage } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
+import { getAnalytics, logEvent } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js';
 
 // Tu configuración de Firebase
 const firebaseConfig = {
@@ -11,7 +12,8 @@ const firebaseConfig = {
     projectId: "awka-ddc36",
     storageBucket: "awka-ddc36.firebasestorage.app",
     messagingSenderId: "378508519045",
-    appId: "1:378508519045:web:YOUR_APP_ID"
+    appId: "1:378508519045:web:8fceabb6f273a6b8f0abec",
+    measurementId: "G-6X5JD21284"
 };
 
 // Inicializar Firebase
