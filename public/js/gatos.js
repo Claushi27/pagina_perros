@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Renderizar productos con loading de ratings
             gatosGrid.innerHTML = productosGatos.map(producto => `
-                <div class="gato-product-card">
+                <div class="gato-product-card" style="cursor: pointer;" onclick="window.location.href='product-detail.html?id=${producto.id}'">
                     <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
                     <div class="gato-product-info">
                         <h3>${producto.nombre}</h3>
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div style="color: #999; font-size: 0.9rem;">Cargando...</div>
                         </div>
                         <div class="gato-product-price">$${producto.precio.toLocaleString()}</div>
-                        <button class="gato-add-btn" onclick="agregarAlCarrito('${producto.id}')">
+                        <button class="gato-add-btn" onclick="event.stopPropagation(); agregarAlCarrito('${producto.id}')">
                             Agregar al carrito
                         </button>
                     </div>

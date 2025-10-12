@@ -92,17 +92,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Renderizar productos con loading de ratings
             perrosGrid.innerHTML = productosPerros.map(producto => `
-                <div class="perro-product-card">
+                <div class="perro-product-card" style="cursor: pointer;" onclick="window.location.href='product-detail.html?id=${producto.id}'">
                     <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
                     <div class="perro-product-info">
+                        <span class="perro-product-category">PERROS</span>
                         <h3>${producto.nombre}</h3>
                         <p>${producto.descripcion}</p>
                         <div id="rating-${producto.id}" class="product-rating" style="margin: 0.5rem 0; min-height: 24px;">
                             <div style="color: #999; font-size: 0.9rem;">Cargando...</div>
                         </div>
                         <div class="perro-product-price">$${producto.precio.toLocaleString()}</div>
-                        <button class="perro-add-btn" onclick="agregarAlCarrito('${producto.id}')">
-                            Agregar al carrito
+                        <button class="perro-add-btn" onclick="event.stopPropagation(); agregarAlCarrito('${producto.id}')">
+                            🛒 Agregar al carrito
                         </button>
                     </div>
                 </div>

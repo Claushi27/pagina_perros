@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Producto - Awka</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/reviews.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .product-detail-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .breadcrumb {
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: var(--primary-orange);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .product-main {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .product-images {
+            position: relative;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .thumbnail-container {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: var(--primary-orange);
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-category-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+
+        .product-title {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .product-rating-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .product-price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-orange);
+            margin-bottom: 1rem;
+        }
+
+        .product-description {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .product-features {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .product-features h3 {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features-list li {
+            padding: 0.5rem 0;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quantity-selector label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: var(--primary-orange);
+            color: white;
+        }
+
+        .quantity-input {
+            width: 60px;
+            height: 40px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-add-cart {
+            flex: 1;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-orange), #ffb74d);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-add-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-wishlist {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border: 2px solid var(--primary-orange);
+            border-radius: 12px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-wishlist:hover {
+            background: var(--primary-orange);
+            transform: scale(1.1);
+        }
+
+        .trust-badges {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .trust-badge {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .trust-badge-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .trust-badge-text {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .product-tabs {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .tabs-header {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-orange);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-orange);
+            border-bottom-color: var(--primary-orange);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .specifications-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .specifications-table tr {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .specifications-table td {
+            padding: 1rem;
+        }
+
+        .specifications-table td:first-child {
+            font-weight: 600;
+            color: #333;
+            width: 30%;
+        }
+
+        .specifications-table td:last-child {
+            color: #666;
+        }
+
+        .reviews-summary {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .write-review-btn {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-orange), #ffb74d);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .write-review-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .related-products {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 2rem;
+        }
+
+        .related-products h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .related-products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .related-product-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .related-product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .related-product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .related-product-info {
+            padding: 1rem;
+        }
+
+        .related-product-info h3 {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .related-product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-orange);
+        }
+
+        @media (max-width: 768px) {
+            .product-main {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .main-image {
+                height: 350px;
+            }
+
+            .product-title {
+                font-size: 1.8rem;
+            }
+
+            .product-price {
+                font-size: 2rem;
+            }
+
+            .trust-badges {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs-header {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .tab-btn {
+                border-bottom: 1px solid #f0f0f0;
+                border-left: 3px solid transparent;
+                text-align: left;
+            }
+
+            .tab-btn.active {
+                border-bottom-color: #f0f0f0;
+                border-left-color: var(--primary-orange);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-top">
+            <div class="header-logo">
+                <a href="index.html">
+                    <img src="imagenes/petshop1.png" alt="Logo Awka">
+                    <span>Awka Petshop</span>
+                </a>
+            </div>
+            <div class="search-bar" role="search">
+                <label for="searchInput" class="visually-hidden">Buscar productos</label>
+                <input type="text" id="searchInput" placeholder="¿Qué producto estás buscando?" aria-label="Buscar productos" autocomplete="off">
+                <button class="search-button" onclick="performSearch()" aria-label="Buscar">🔍</button>
+            </div>
+            <div class="header-icons">
+                <div id="userMenu" class="icon">👤 Iniciar Sesión</div>
+                <a href="cart.html" class="icon">🛒 <span id="cartCounter">0</span></a>
+                <button class="menu-toggle" aria-label="Abrir menú" aria-haspopup="dialog" aria-controls="mobile-menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+        <div class="header-divider"></div>
+        <nav class="header-nav">
+            <ul>
+                <li class="has-dropdown">
+                    <a href="perros.html" class="nav-link">🐕 Perros</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Alimento para perros</a></li>
+                        <li><a href="#">Juguetes para perros</a></li>
+                        <li><a href="#">Accesorios para perros</a></li>
+                        <li><a href="#">Camas y transportes</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a href="gatos.html" class="nav-link">🐱 Gatos</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Alimento para gatos</a></li>
+                        <li><a href="#">Juguetes para gatos</a></li>
+                        <li><a href="#">Accesorios para gatos</a></li>
+                        <li><a href="#">Rascadores y camas</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a href="#" class="nav-link">🏥 Salud</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Medicamentos</a></li>
+                        <li><a href="#">Vitaminas</a></li>
+                        <li><a href="#">Higiene</a></li>
+                        <li><a href="#">Antiparasitarios</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" class="nav-link">🏥 Veterinarias</a></li>
+                <li><a href="#" class="nav-link">🔥 Ofertas</a></li>
+                <li><a href="#" class="nav-link">⭐ Más vendidos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="mobile-menu-overlay" id="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="mobile-menu-top">
+            <a href="index.html" class="logo-mobile">Awka Petshop</a>
+            <button class="close-menu" aria-label="Cerrar menú">&times;</button>
+        </div>
+        <div class="mobile-menu-content">
+            <ul>
+                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.2rem; height: 1.2rem; margin-right: 0.5rem;"><path fill="currentColor" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4Z"/></svg>Iniciar Sesión</a></li>
+                <li><a href="perros.html">🐕 Perros</a></li>
+                <li><a href="gatos.html">🐱 Gatos</a></li>
+                <li><a href="#">Ofertas</a></li>
+                <li><a href="#">Veterinarios</a></li>
+                <li><a href="#">Marcas</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <main>
+        <div class="product-detail-container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="index.html">Inicio</a> /
+                <a href="#" id="breadcrumbCategory">Categoría</a> /
+                <span id="breadcrumbProduct">Producto</span>
+            </div>
+
+            <!-- Producto Principal -->
+            <div class="product-main">
+                <div class="product-images">
+                    <img src="" alt="Producto" class="main-image" id="mainImage">
+                    <div class="thumbnail-container" id="thumbnailContainer">
+                        <!-- Thumbnails se cargarán aquí -->
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <span class="product-category-badge" id="productCategory">CATEGORÍA</span>
+                    <h1 class="product-title" id="productTitle">Nombre del Producto</h1>
+
+                    <div class="product-rating-section">
+                        <div id="productRating">
+                            <!-- Rating se cargará aquí -->
+                        </div>
+                    </div>
+
+                    <div class="product-price" id="productPrice">$0</div>
+
+                    <p class="product-description" id="productDescription">
+                        Descripción del producto
+                    </p>
+
+                    <div class="product-features">
+                        <h3>🌟 Características Principales</h3>
+                        <ul class="features-list" id="featuresList">
+                            <!-- Características se cargarán aquí -->
+                        </ul>
+                    </div>
+
+                    <div class="quantity-selector">
+                        <label for="quantity">Cantidad:</label>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="decrementQuantity()">-</button>
+                            <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="99">
+                            <button class="quantity-btn" onclick="incrementQuantity()">+</button>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-add-cart" id="addToCartBtn">
+                            <span>🛒</span>
+                            <span>Agregar al Carrito</span>
+                        </button>
+                        <button class="btn-wishlist" title="Agregar a favoritos">❤️</button>
+                    </div>
+
+                    <div class="trust-badges">
+                        <div class="trust-badge">
+                            <div class="trust-badge-icon">🚚</div>
+                            <div class="trust-badge-text">Envío Gratis<br>en compras >$30.000</div>
+                        </div>
+                        <div class="trust-badge">
+                            <div class="trust-badge-icon">🔒</div>
+                            <div class="trust-badge-text">Pago 100%<br>Seguro</div>
+                        </div>
+                        <div class="trust-badge">
+                            <div class="trust-badge-icon">↩️</div>
+                            <div class="trust-badge-text">Devolución<br>30 días</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs de información -->
+            <div class="product-tabs">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="description">📝 Descripción Detallada</button>
+                    <button class="tab-btn" data-tab="specifications">📋 Especificaciones</button>
+                    <button class="tab-btn" data-tab="reviews">⭐ Reseñas</button>
+                </div>
+
+                <div id="description" class="tab-content active">
+                    <div id="detailedDescription">
+                        <!-- Descripción detallada se cargará aquí -->
+                    </div>
+                </div>
+
+                <div id="specifications" class="tab-content">
+                    <table class="specifications-table" id="specificationsTable">
+                        <!-- Especificaciones se cargarán aquí -->
+                    </table>
+                </div>
+
+                <div id="reviews" class="tab-content">
+                    <div class="reviews-summary">
+                        <div class="reviews-header">
+                            <h3>Reseñas de Clientes</h3>
+                            <button class="write-review-btn" id="writeReviewBtn">✍️ Escribir Reseña</button>
+                        </div>
+                        <div id="ratingSummary">
+                            <!-- Rating summary se cargará aquí -->
+                        </div>
+                    </div>
+                    <div id="reviewsList">
+                        <!-- Lista de reseñas se cargará aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos Relacionados -->
+            <div class="related-products">
+                <h2>🎯 Productos Relacionados</h2>
+                <div class="related-products-grid" id="relatedProductsGrid">
+                    <!-- Productos relacionados se cargarán aquí -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section footer-about">
+                    <div class="logo-footer">
+                        <img src="imagenes/petshop1.png" alt="Awka Logo">
+                        <span>Awka Petshop</span>
+                    </div>
+                    <p>Tu tienda de confianza para todo lo que tu mascota necesita. Calidad, amor y dedicación en cada producto.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="WhatsApp">💬</a>
+                    </div>
+                </div>
+                <div class="footer-section footer-links">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="perros.html">Productos para Perros</a></li>
+                        <li><a href="gatos.html">Productos para Gatos</a></li>
+                        <li><a href="cart.html">Mi Carrito</a></li>
+                        <li><a href="profile.html">Mi Cuenta</a></li>
+                        <li><a href="#">Sobre Nosotros</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section footer-links">
+                    <h3>Atención al Cliente</h3>
+                    <ul>
+                        <li><a href="#">Preguntas Frecuentes</a></li>
+                        <li><a href="#">Política de Envíos</a></li>
+                        <li><a href="#">Cambios y Devoluciones</a></li>
+                        <li><a href="#">Términos y Condiciones</a></li>
+                        <li><a href="#">Política de Privacidad</a></li>
+                        <li><a href="#">Seguimiento de Pedido</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section footer-contact">
+                    <h3>Contáctanos</h3>
+                    <p><span class="icon">📍</span> Santiago, Chile</p>
+                    <p><span class="icon">📧</span> info@awka.cl</p>
+                    <p><span class="icon">📞</span> +56 9 1234 5678</p>
+                    <p><span class="icon">⏰</span> Lun-Vie: 9:00-18:00</p>
+                    <h3 style="margin-top: 1.5rem;">Newsletter</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Recibe ofertas exclusivas</p>
+                    <form id="newsletterForm" class="newsletter-form">
+                        <input type="email" id="newsletterEmail" placeholder="tu@email.com" required>
+                        <button type="submit">Suscribirse</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-section" style="margin-top: 2rem;">
+                <h3>Métodos de Pago</h3>
+                <div class="payment-methods">
+                    <span class="payment-method">💳 Tarjetas</span>
+                    <span class="payment-method">🏦 Transferencia</span>
+                    <span class="payment-method">💰 Mercado Pago</span>
+                    <span class="payment-method">🛒 WebPay</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2025 Awka Petshop. Todos los derechos reservados.</p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Términos de Uso</a>
+                        <a href="#">Privacidad</a>
+                        <a href="#">Cookies</a>
+                        <a href="#">Mapa del Sitio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/footer.js"></script>
+    <script src="js/cart-utils.js"></script>
+    <script src="js/script.js"></script>
+    <script type="module" src="js/product-detail.js"></script>
+
+    <!-- Firebase Auth Script -->
+    <script type="module">
+        import { auth, db } from './js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+        const userMenu = document.getElementById('userMenu');
+
+        // Escuchar cambios en el estado de autenticación
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Verificar si el usuario es admin
+                let isAdmin = false;
+                try {
+                    const userDoc = await getDoc(doc(db, 'usuarios', user.uid));
+                    if (userDoc.exists()) {
+                        isAdmin = userDoc.data().rol === 'admin';
+                    }
+                } catch (error) {
+                    console.error('Error al verificar rol:', error);
+                }
+
+                // Usuario autenticado
+                const displayName = user.displayName || user.email.split('@')[0];
+                const adminLink = isAdmin ? '<a href="admin.html" style="display: block; padding: 8px; text-decoration: none; color: #FF6B35; font-weight: 600;">⚙️ Panel Admin</a>' : '';
+                userMenu.innerHTML = `
+                    <span style="cursor: pointer;">👤 ${displayName}</span>
+                    <div style="display: none; position: absolute; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 10px; top: 40px; right: 0; min-width: 150px; z-index: 1000;" id="userDropdown">
+                        <a href="profile.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">👤 Mi Perfil</a>
+                        <a href="orders.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">📦 Mis Pedidos</a>
+                        ${adminLink}
+                        <a href="#" id="logoutBtn" style="display: block; padding: 8px; text-decoration: none; color: #c33;">🚪 Cerrar Sesión</a>
+                    </div>
+                `;
+
+                // Toggle dropdown
+                userMenu.querySelector('span').addEventListener('click', () => {
+                    const dropdown = document.getElementById('userDropdown');
+                    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                });
+
+                // Logout
+                document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    try {
+                        await signOut(auth);
+                        window.location.reload();
+                    } catch (error) {
+                        console.error('Error al cerrar sesión:', error);
+                    }
+                });
+
+            } else {
+                // Usuario no autenticado
+                userMenu.innerHTML = '<a href="login.html" style="text-decoration: none; color: inherit;">👤 Iniciar Sesión</a>';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         searchResults.innerHTML = resultadosFiltrados.map(producto => `
-            <div class="search-product-card">
+            <div class="search-product-card" style="cursor: pointer;" onclick="window.location.href='product-detail.html?id=${producto.id}'">
                 <img src="${producto.imagen}" alt="${producto.nombre}" class="search-product-image" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/300x250?text=Imagen+No+Disponible'">
                 <div class="search-product-info">
                     <span class="search-product-category">${producto.categoria.toUpperCase()}</span>
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span style="font-size: 0.85rem; color: #999;">Cargando...</span>
                     </div>
                     <div class="search-product-price">$${producto.precio.toLocaleString()}</div>
-                    <button class="search-add-btn" onclick="agregarAlCarrito(${producto.id})">
+                    <button class="search-add-btn" onclick="event.stopPropagation(); agregarAlCarrito(${producto.id})">
                         Agregar al carrito 🛒
                     </button>
                 </div>

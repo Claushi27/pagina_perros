@@ -27,35 +27,28 @@
 
         .search-results-header {
             background: white;
-            padding: 2.5rem 2rem;
-            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .search-results-header::before {
-            content: '🔍';
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            font-size: 150px;
-            opacity: 0.05;
-            transform: rotate(15deg);
-        }
-
-        .search-results-header h1 {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
             display: flex;
+            justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
             gap: 1rem;
         }
 
+        .search-header-left h1 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         #searchTerm {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             color: #666;
         }
 
@@ -66,15 +59,19 @@
 
         .filters-section {
             background: white;
-            padding: 1.5rem;
+            padding: 1rem 1.5rem;
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .filters-section h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
+            font-size: 1rem;
+            margin: 0;
             color: #333;
             display: flex;
             align-items: center;
@@ -83,7 +80,7 @@
 
         .filters-section h3::before {
             content: '🎯';
-            font-size: 1.3rem;
+            font-size: 1.1rem;
         }
 
         .filters-container {
@@ -368,13 +365,15 @@
     <main>
         <div class="search-results-page">
             <div class="search-results-header">
-                <h1>🔍 Resultados de Búsqueda</h1>
-                <p id="searchTerm">Buscando: <span id="searchTermValue"></span></p>
+                <div class="search-header-left">
+                    <h1>🔍 Resultados de Búsqueda</h1>
+                    <p id="searchTerm">Buscando: <span id="searchTermValue"></span></p>
+                </div>
                 <div id="resultsCount" class="results-count" style="display: none;"></div>
             </div>
 
             <div class="filters-section">
-                <h3>Filtrar por:</h3>
+                <h3>Filtrar:</h3>
                 <div class="filters-container">
                     <button class="filter-btn active" data-filter="all">Todos</button>
                     <button class="filter-btn" data-filter="perros">🐕 Perros</button>
@@ -476,6 +475,6 @@
     <script src="js/footer.js"></script>
     <script src="data/products.js"></script>
     <script src="js/cart-utils.js"></script>
-    <script src="js/search.js"></script>
+    <script type="module" src="js/search.js"></script>
 </body>
 </html>
