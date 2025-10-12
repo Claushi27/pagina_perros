@@ -112,31 +112,38 @@ document.addEventListener('DOMContentLoaded', () => {
     window.agregarAlCarrito = function(productoId) {
         const producto = productosGatos.find(p => p.id === productoId);
         if (producto) {
-            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            const productoExistente = carrito.find(p => p.id === productoId);
-
-            if (productoExistente) {
-                productoExistente.cantidad += 1;
+            // Usar CartUtils para agregar al carrito con notificación
+            if (window.CartUtils) {
+                window.CartUtils.addToCart(producto);
             } else {
-                carrito.push({
-                    ...producto,
-                    cantidad: 1
-                });
+                // Fallback si CartUtils no está disponible
+                let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+                const productoExistente = carrito.find(p => p.id === productoId);
+
+                if (productoExistente) {
+                    productoExistente.cantidad += 1;
+                } else {
+                    carrito.push({
+                        ...producto,
+                        cantidad: 1
+                    });
+                }
+
+                localStorage.setItem('carrito', JSON.stringify(carrito));
             }
 
-            localStorage.setItem('carrito', JSON.stringify(carrito));
-
             // Registrar evento en Analytics
-            logEvent('add_to_cart', {
-                item_id: producto.id,
-                item_name: producto.nombre,
-                item_category: producto.categoria,
-                price: producto.precio,
-                currency: 'CLP'
-            });
-
-            alert(`¡${producto.nombre} agregado al carrito!`);
-            updateCartCounter();
+            try {
+                logEvent('add_to_cart', {
+                    item_id: producto.id,
+                    item_name: producto.nombre,
+                    item_category: producto.categoria,
+                    price: producto.precio,
+                    currency: 'CLP'
+                });
+            } catch (error) {
+                console.log('Analytics no disponible:', error);
+            }
         }
     };
 

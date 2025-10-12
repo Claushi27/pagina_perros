@@ -81,17 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="item-details">
                     <h4>${item.nombre}</h4>
                     <p class="item-category">${item.categoria} - ${item.subcategoria}</p>
-                    <p class="item-description">${item.descripcion}</p>
+                    <p class="item-description">${item.descripcion || ''}</p>
                     <div class="item-price">$${item.precio.toLocaleString()}</div>
                 </div>
                 <div class="item-controls">
                     <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                        <button class="quantity-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
                         <span class="quantity">${item.cantidad}</span>
-                        <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                        <button class="quantity-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
                     </div>
                     <div class="item-total">$${(item.precio * item.cantidad).toLocaleString()}</div>
-                    <button class="remove-btn" onclick="removeItem(${item.id})">🗑️</button>
+                    <button class="remove-btn" onclick="removeItem('${item.id}')">🗑️</button>
                 </div>
             </div>
         `).join('');
@@ -102,12 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para actualizar la cantidad
     window.updateQuantity = function(productId, change) {
         let carrito = window.CartUtils ? window.CartUtils.getCart() : [];
-        const item = carrito.find(p => p.id === productId);
-        
+        // Convertir ambos IDs a string para comparación
+        const item = carrito.find(p => String(p.id) === String(productId));
+
         if (item) {
             item.cantidad += change;
             if (item.cantidad <= 0) {
-                carrito = carrito.filter(p => p.id !== productId);
+                carrito = carrito.filter(p => String(p.id) !== String(productId));
             }
             if (window.CartUtils) window.CartUtils.setCart(carrito);
             loadCart();
@@ -118,7 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para remover un item
     window.removeItem = function(productId) {
         let carrito = window.CartUtils ? window.CartUtils.getCart() : [];
-        carrito = carrito.filter(p => p.id !== productId);
+        // Convertir ambos IDs a string para comparación
+        carrito = carrito.filter(p => String(p.id) !== String(productId));
         if (window.CartUtils) window.CartUtils.setCart(carrito);
         loadCart();
         if (window.CartUtils) window.CartUtils.updateCartCounter();

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -213,8 +214,86 @@
             </div>
         </section>
     </main>
-    
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section footer-about">
+                    <div class="logo-footer">
+                        <img src="imagenes/petshop1.png" alt="Awka Logo">
+                        <span>Awka Petshop</span>
+                    </div>
+                    <p>Tu tienda de confianza para todo lo que tu mascota necesita. Calidad, amor y dedicación en cada producto.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="WhatsApp">💬</a>
+                    </div>
+                </div>
+                <div class="footer-section footer-links">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="perros.html">Productos para Perros</a></li>
+                        <li><a href="gatos.html">Productos para Gatos</a></li>
+                        <li><a href="cart.html">Mi Carrito</a></li>
+                        <li><a href="profile.html">Mi Cuenta</a></li>
+                        <li><a href="#">Sobre Nosotros</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section footer-links">
+                    <h3>Atención al Cliente</h3>
+                    <ul>
+                        <li><a href="#">Preguntas Frecuentes</a></li>
+                        <li><a href="#">Política de Envíos</a></li>
+                        <li><a href="#">Cambios y Devoluciones</a></li>
+                        <li><a href="#">Términos y Condiciones</a></li>
+                        <li><a href="#">Política de Privacidad</a></li>
+                        <li><a href="#">Seguimiento de Pedido</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section footer-contact">
+                    <h3>Contáctanos</h3>
+                    <p><span class="icon">📍</span> Santiago, Chile</p>
+                    <p><span class="icon">📧</span> info@awka.cl</p>
+                    <p><span class="icon">📞</span> +56 9 1234 5678</p>
+                    <p><span class="icon">⏰</span> Lun-Vie: 9:00-18:00</p>
+                    <h3 style="margin-top: 1.5rem;">Newsletter</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Recibe ofertas exclusivas</p>
+                    <form id="newsletterForm" class="newsletter-form">
+                        <input type="email" id="newsletterEmail" placeholder="tu@email.com" required>
+                        <button type="submit">Suscribirse</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-section" style="margin-top: 2rem;">
+                <h3>Métodos de Pago</h3>
+                <div class="payment-methods">
+                    <span class="payment-method">💳 Tarjetas</span>
+                    <span class="payment-method">🏦 Transferencia</span>
+                    <span class="payment-method">💰 Mercado Pago</span>
+                    <span class="payment-method">🛒 WebPay</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2025 Awka Petshop. Todos los derechos reservados.</p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Términos de Uso</a>
+                        <a href="#">Privacidad</a>
+                        <a href="#">Cookies</a>
+                        <a href="#">Mapa del Sitio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/footer.js"></script>
     <script src="js/cart-utils.js"></script>
+    <script src="js/script.js"></script>
     <script type="module" src="js/gatos.js"></script>
 
     <!-- Firebase Auth Script -->
@@ -245,9 +324,10 @@
                 userMenu.innerHTML = `
                     <span style="cursor: pointer;">👤 ${displayName}</span>
                     <div style="display: none; position: absolute; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 10px; top: 40px; right: 0; min-width: 150px; z-index: 1000;" id="userDropdown">
-                        <a href="profile.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">Mi Perfil</a>
+                        <a href="profile.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">👤 Mi Perfil</a>
+                        <a href="orders.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">📦 Mis Pedidos</a>
                         ${adminLink}
-                        <a href="#" id="logoutBtn" style="display: block; padding: 8px; text-decoration: none; color: #c33;">Cerrar Sesión</a>
+                        <a href="#" id="logoutBtn" style="display: block; padding: 8px; text-decoration: none; color: #c33;">🚪 Cerrar Sesión</a>
                     </div>
                 `;
 

@@ -104,6 +104,13 @@
 	};
 
 	window.CartUtils = { getCart, setCart, updateCartCounter, addToCart };
+
+	// Inicializar contador al cargar la página
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', updateCartCounter);
+	} else {
+		updateCartCounter();
+	}
 })();
 
 

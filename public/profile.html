@@ -7,41 +7,89 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
         .profile-container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 2rem auto;
-            padding: 2rem;
+            padding: 1rem;
+        }
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
         }
         .profile-card {
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             padding: 2rem;
             margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        .profile-sidebar {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
         }
         .profile-header {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 1.5rem;
+            gap: 1rem;
             margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
+            padding-bottom: 2rem;
             border-bottom: 2px solid #f0f0f0;
         }
         .profile-avatar {
-            width: 80px;
-            height: 80px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
+            font-size: 3rem;
             color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            border: 4px solid white;
         }
         .profile-info h2 {
             margin: 0 0 0.5rem 0;
@@ -111,6 +159,19 @@
             display: flex;
             gap: 1rem;
             margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .button-group .btn {
+            flex: 1;
+            min-width: 140px;
+        }
+        @media (max-width: 768px) {
+            .button-group {
+                flex-direction: column;
+            }
+            .button-group .btn {
+                width: 100%;
+            }
         }
         .alert {
             padding: 1rem;
@@ -155,6 +216,80 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        .sidebar-section {
+            margin-bottom: 1.5rem;
+        }
+        .sidebar-section h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #333;
+            font-weight: 600;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .stat-box .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+        .stat-box .stat-label {
+            font-size: 0.875rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .quick-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .quick-action-btn:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            transform: translateX(5px);
+        }
+        .quick-action-btn .icon {
+            font-size: 1.5rem;
+        }
+        .profile-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .profile-card h3::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body>
@@ -186,56 +321,183 @@
     <div class="profile-container">
         <div id="alertContainer"></div>
 
-        <div class="profile-card">
-            <div class="profile-header">
-                <div class="profile-avatar" id="userAvatar">👤</div>
-                <div class="profile-info">
-                    <h2 id="userName">Cargando...</h2>
-                    <p id="userEmail">-</p>
-                    <p><strong>Rol:</strong> <span id="userRole" class="badge">-</span></p>
+        <div class="profile-grid">
+            <!-- Sidebar -->
+            <div class="profile-sidebar">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="userAvatar">👤</div>
+                    <div class="profile-info">
+                        <h2 id="userName">Cargando...</h2>
+                        <p id="userEmail">-</p>
+                        <p><strong>Rol:</strong> <span id="userRole" class="badge">-</span></p>
+                    </div>
+                </div>
+
+                <!-- Stats Section -->
+                <div class="sidebar-section">
+                    <h3>Estadísticas</h3>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span class="stat-value" id="orderCount">-</span>
+                            <span class="stat-label">Pedidos</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-value" id="totalSpent">-</span>
+                            <span class="stat-label">Gastado</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-section">
+                    <h3>Acciones Rápidas</h3>
+                    <div class="quick-actions">
+                        <a href="orders.html" class="quick-action-btn">
+                            <span class="icon">📦</span>
+                            <span>Mis Pedidos</span>
+                        </a>
+                        <a href="index.html" class="quick-action-btn">
+                            <span class="icon">🏠</span>
+                            <span>Ir al Inicio</span>
+                        </a>
+                        <a href="perros.html" class="quick-action-btn">
+                            <span class="icon">🐕</span>
+                            <span>Ver Productos Perros</span>
+                        </a>
+                        <a href="gatos.html" class="quick-action-btn">
+                            <span class="icon">🐱</span>
+                            <span>Ver Productos Gatos</span>
+                        </a>
+                        <a href="cart.html" class="quick-action-btn">
+                            <span class="icon">🛒</span>
+                            <span>Mi Carrito</span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <form id="profileForm">
-                <div class="form-group">
-                    <label for="displayName">Nombre completo</label>
-                    <input type="text" id="displayName" name="displayName" placeholder="Tu nombre">
-                </div>
+            <!-- Main Profile Card -->
+            <div class="profile-card">
+                <h3>Información Personal</h3>
 
-                <div class="form-group">
-                    <label for="email">Correo electrónico</label>
-                    <input type="email" id="email" name="email" disabled>
-                </div>
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="displayName">Nombre completo</label>
+                        <input type="text" id="displayName" name="displayName" placeholder="Tu nombre">
+                    </div>
 
-                <div class="form-group">
-                    <label for="phone">Teléfono</label>
-                    <input type="tel" id="phone" name="phone" placeholder="+56 9 1234 5678">
-                </div>
+                    <div class="form-group">
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" id="email" name="email" disabled>
+                    </div>
 
-                <div class="form-group">
-                    <label for="address">Dirección</label>
-                    <input type="text" id="address" name="address" placeholder="Calle, número, comuna">
-                </div>
+                    <div class="form-group">
+                        <label for="phone">Teléfono</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+56 9 1234 5678">
+                    </div>
 
-                <div class="button-group">
-                    <button type="submit" class="btn btn-primary" id="saveBtn">
-                        Guardar cambios
-                    </button>
-                    <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">
-                        Cancelar
-                    </button>
-                    <button type="button" class="btn btn-danger" id="logoutBtn">
-                        Cerrar sesión
-                    </button>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label for="address">Dirección</label>
+                        <input type="text" id="address" name="address" placeholder="Calle, número, comuna">
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary" id="saveBtn">
+                            Guardar cambios
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">
+                            Cancelar
+                        </button>
+                        <button type="button" class="btn btn-danger" id="logoutBtn">
+                            Cerrar sesión
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section footer-about">
+                    <div class="logo-footer">
+                        <img src="imagenes/petshop1.png" alt="Awka Logo">
+                        <span>Awka Petshop</span>
+                    </div>
+                    <p>Tu tienda de confianza para todo lo que tu mascota necesita. Calidad, amor y dedicación en cada producto.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="WhatsApp">💬</a>
+                    </div>
+                </div>
+                <div class="footer-section footer-links">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="perros.html">Productos para Perros</a></li>
+                        <li><a href="gatos.html">Productos para Gatos</a></li>
+                        <li><a href="cart.html">Mi Carrito</a></li>
+                        <li><a href="profile.html">Mi Cuenta</a></li>
+                        <li><a href="#">Sobre Nosotros</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section footer-links">
+                    <h3>Atención al Cliente</h3>
+                    <ul>
+                        <li><a href="#">Preguntas Frecuentes</a></li>
+                        <li><a href="#">Política de Envíos</a></li>
+                        <li><a href="#">Cambios y Devoluciones</a></li>
+                        <li><a href="#">Términos y Condiciones</a></li>
+                        <li><a href="#">Política de Privacidad</a></li>
+                        <li><a href="#">Seguimiento de Pedido</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section footer-contact">
+                    <h3>Contáctanos</h3>
+                    <p><span class="icon">📍</span> Santiago, Chile</p>
+                    <p><span class="icon">📧</span> info@awka.cl</p>
+                    <p><span class="icon">📞</span> +56 9 1234 5678</p>
+                    <p><span class="icon">⏰</span> Lun-Vie: 9:00-18:00</p>
+                    <h3 style="margin-top: 1.5rem;">Newsletter</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Recibe ofertas exclusivas</p>
+                    <form id="newsletterForm" class="newsletter-form">
+                        <input type="email" id="newsletterEmail" placeholder="tu@email.com" required>
+                        <button type="submit">Suscribirse</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-section" style="margin-top: 2rem;">
+                <h3>Métodos de Pago</h3>
+                <div class="payment-methods">
+                    <span class="payment-method">💳 Tarjetas</span>
+                    <span class="payment-method">🏦 Transferencia</span>
+                    <span class="payment-method">💰 Mercado Pago</span>
+                    <span class="payment-method">🛒 WebPay</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2025 Awka Petshop. Todos los derechos reservados.</p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Términos de Uso</a>
+                        <a href="#">Privacidad</a>
+                        <a href="#">Cookies</a>
+                        <a href="#">Mapa del Sitio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/footer.js"></script>
     <script type="module">
         import { auth, db } from './js/firebase-config.js';
         import { onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-        import { doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { doc, getDoc, updateDoc, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
         const profileForm = document.getElementById('profileForm');
         const saveBtn = document.getElementById('saveBtn');
@@ -247,6 +509,29 @@
             setTimeout(() => {
                 alertContainer.innerHTML = '';
             }, 5000);
+        }
+
+        async function loadOrderStats(userId) {
+            try {
+                const ordersRef = collection(db, 'pedidos');
+                const q = query(ordersRef, where('userId', '==', userId));
+                const querySnapshot = await getDocs(q);
+
+                let totalSpent = 0;
+                let orderCount = querySnapshot.size;
+
+                querySnapshot.forEach((doc) => {
+                    const order = doc.data();
+                    totalSpent += order.total || 0;
+                });
+
+                document.getElementById('orderCount').textContent = orderCount;
+                document.getElementById('totalSpent').textContent = `$${totalSpent.toLocaleString()}`;
+            } catch (error) {
+                console.error('Error cargando estadísticas:', error);
+                document.getElementById('orderCount').textContent = '0';
+                document.getElementById('totalSpent').textContent = '$0';
+            }
         }
 
         onAuthStateChanged(auth, async (user) => {
@@ -280,6 +565,9 @@
                 document.getElementById('userMenu').innerHTML = `
                     <span style="cursor: pointer;">👤 ${userName}</span>
                 `;
+
+                // Load order statistics
+                await loadOrderStats(user.uid);
 
             } catch (error) {
                 console.error('Error cargando perfil:', error);
