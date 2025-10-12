@@ -7,11 +7,284 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/reviews.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+
+        .search-results-page {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-results-header {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-results-header::before {
+            content: '🔍';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 150px;
+            opacity: 0.05;
+            transform: rotate(15deg);
+        }
+
+        .search-results-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #searchTerm {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        #searchTermValue {
+            font-weight: 700;
+            color: var(--primary-orange);
+        }
+
+        .filters-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .filters-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filters-section h3::before {
+            content: '🎯';
+            font-size: 1.3rem;
+        }
+
+        .filters-container {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .filter-btn:hover {
+            background: #e9ecef;
+            border-color: var(--primary-orange);
+            color: #333;
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary-orange), #ffb74d);
+            color: white;
+            border-color: var(--primary-orange);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .search-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .search-product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .search-product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .search-product-card:hover .search-product-image {
+            transform: scale(1.05);
+        }
+
+        .search-product-info {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-product-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            width: fit-content;
+        }
+
+        .search-product-info h3 {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .search-product-info p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+
+        .search-product-rating {
+            margin-bottom: 1rem;
+        }
+
+        .search-product-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-orange);
+            margin-bottom: 1rem;
+        }
+
+        .search-add-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, var(--primary-orange), #ffb74d);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .no-results-icon {
+            font-size: 100px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .no-results h3 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .no-results p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .results-count {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .search-results-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .search-results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-container {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="main-header">
@@ -95,30 +368,30 @@
     <main>
         <div class="search-results-page">
             <div class="search-results-header">
-                <h1>Resultados de Búsqueda</h1>
+                <h1>🔍 Resultados de Búsqueda</h1>
                 <p id="searchTerm">Buscando: <span id="searchTermValue"></span></p>
+                <div id="resultsCount" class="results-count" style="display: none;"></div>
             </div>
-            
+
             <div class="filters-section">
                 <h3>Filtrar por:</h3>
                 <div class="filters-container">
                     <button class="filter-btn active" data-filter="all">Todos</button>
                     <button class="filter-btn" data-filter="perros">🐕 Perros</button>
                     <button class="filter-btn" data-filter="gatos">🐱 Gatos</button>
-                    <button class="filter-btn" data-filter="alimento">🍽️ Alimento</button>
-                    <button class="filter-btn" data-filter="juguetes">🎾 Juguetes</button>
-                    <button class="filter-btn" data-filter="salud">🏥 Salud</button>
-                    <button class="filter-btn" data-filter="accesorios">🛏️ Accesorios</button>
                 </div>
             </div>
-            
+
             <div id="searchResults" class="search-results-grid">
-                <!-- Los resultados se cargarán aquí -->
+                <p style="text-align: center; grid-column: 1/-1; padding: 2rem; color: #999;">
+                    Cargando resultados...
+                </p>
             </div>
-            
+
             <div id="noResults" class="no-results" style="display: none;">
+                <div class="no-results-icon">😿</div>
                 <h3>No se encontraron productos</h3>
-                <p>Intenta con otros términos de búsqueda</p>
+                <p>Intenta con otros términos de búsqueda o explora nuestras categorías</p>
                 <a href="index.html" class="btn-back">← Volver al inicio</a>
             </div>
         </div>

@@ -1,5 +1,6 @@
 import { db, logEvent } from './firebase-config.js';
 import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+import { getProductRating, generateStars } from './reviews.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Mobile Menu functionality
@@ -89,12 +90,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Renderizar productos con loading de ratings
             perrosGrid.innerHTML = productosPerros.map(producto => `
                 <div class="perro-product-card">
                     <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
                     <div class="perro-product-info">
                         <h3>${producto.nombre}</h3>
                         <p>${producto.descripcion}</p>
+                        <div id="rating-${producto.id}" class="product-rating" style="margin: 0.5rem 0; min-height: 24px;">
+                            <div style="color: #999; font-size: 0.9rem;">Cargando...</div>
+                        </div>
                         <div class="perro-product-price">$${producto.precio.toLocaleString()}</div>
                         <button class="perro-add-btn" onclick="agregarAlCarrito('${producto.id}')">
                             Agregar al carrito
@@ -102,6 +107,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `).join('');
+
+            // Cargar ratings de cada producto
+            productosPerros.forEach(async (producto) => {
+                const { average, count } = await getProductRating(producto.id);
+                const ratingContainer = document.getElementById(`rating-${producto.id}`);
+                if (ratingContainer) {
+                    if (count > 0) {
+                        ratingContainer.innerHTML = `
+                            ${generateStars(average)}
+                            <span style="font-size: 0.85rem; color: #666; margin-left: 0.5rem;">
+                                ${average.toFixed(1)} (${count})
+                            </span>
+                        `;
+                    } else {
+                        ratingContainer.innerHTML = `
+                            <span style="font-size: 0.85rem; color: #999;">Sin reseñas aún</span>
+                        `;
+                    }
+                }
+            });
         } catch (error) {
             console.error('Error cargando productos:', error);
             perrosGrid.innerHTML = '<p style="text-align: center; padding: 2rem; color: red;">Error al cargar productos. Intenta recargar la página.</p>';

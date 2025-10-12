@@ -318,20 +318,34 @@ window.viewOrderDetails = function(orderId) {
         `• ${p.nombre} - Cantidad: ${p.cantidad} - $${(p.precio * p.cantidad).toLocaleString()}`
     ).join('\n');
 
+    // Formatear fecha correctamente
+    let fechaStr = 'Fecha no disponible';
+    if (order.fechaCreacion?.toDate) {
+        fechaStr = order.fechaCreacion.toDate().toLocaleDateString('es-CL');
+    } else if (order.fecha) {
+        fechaStr = new Date(order.fecha).toLocaleDateString('es-CL');
+    }
+
     const info = `
 PEDIDO #${order.id.substring(0, 8).toUpperCase()}
-Fecha: ${new Date(order.fecha).toLocaleDateString('es-CL')}
+Número: ${order.numeroPedido || 'N/A'}
+Fecha: ${fechaStr}
 Estado: ${statusLabels[order.estado] || order.estado}
 
 PRODUCTOS:
 ${productos}
 
 INFORMACIÓN DE ENTREGA:
-Nombre: ${order.nombre}
-Email: ${order.email}
-Teléfono: ${order.telefono}
-Dirección: ${order.direccion}
+Nombre: ${order.cliente?.nombre || 'N/A'}
+Email: ${order.cliente?.email || 'N/A'}
+Teléfono: ${order.cliente?.telefono || 'N/A'}
+Dirección: ${order.direccionEnvio?.direccion || 'N/A'}
+Ciudad: ${order.direccionEnvio?.ciudad || 'N/A'}
+Región: ${order.direccionEnvio?.region || 'N/A'}
 
+MÉTODO DE PAGO: ${order.metodoPago || 'N/A'}
+SUBTOTAL: $${(order.subtotal || 0).toLocaleString()}
+ENVÍO: $${(order.envio || 0).toLocaleString()}
 TOTAL: $${order.total.toLocaleString()}
     `.trim();
 

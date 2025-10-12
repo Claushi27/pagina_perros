@@ -1,3 +1,5 @@
+import { getProductRating, generateStars } from './reviews.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     // Mobile Menu functionality
     const menuToggle = document.querySelector('.menu-toggle');
@@ -138,7 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchResults = document.getElementById('searchResults');
         const noResults = document.getElementById('noResults');
         const searchTermValue = document.getElementById('searchTermValue');
-        
+        const resultsCount = document.getElementById('resultsCount');
+
         // Actualizar el término de búsqueda mostrado
         if (searchTermValue) {
             searchTermValue.textContent = termino;
@@ -149,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resultadosFiltrados.length === 0) {
             searchResults.style.display = 'none';
             noResults.style.display = 'block';
+            if (resultsCount) resultsCount.style.display = 'none';
             const p = noResults.querySelector('p');
             if (p && termino && termino.length < 2) p.textContent = 'Ingresa al menos 2 caracteres para buscar';
             return;
@@ -157,22 +161,49 @@ document.addEventListener('DOMContentLoaded', () => {
         searchResults.style.display = 'grid';
         noResults.style.display = 'none';
 
-        searchResults.innerHTML = `
-            ${resultadosFiltrados.map(producto => `
-                <div class="product-card">
-                    <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
-                    <div class="product-info">
-                        <h4>${highlight(producto.nombre, termino)}</h4>
-                        <p class="product-category">${producto.categoria} - ${producto.subcategoria}</p>
-                        <p class="product-description">${highlight(producto.descripcion, termino)}</p>
-                        <div class="product-price">$${producto.precio.toLocaleString()}</div>
-                        <button class="add-to-cart-btn" onclick="agregarAlCarrito(${producto.id})">
-                            Agregar al carrito
-                        </button>
+        // Mostrar contador de resultados
+        if (resultsCount) {
+            resultsCount.style.display = 'inline-block';
+            resultsCount.textContent = `${resultadosFiltrados.length} ${resultadosFiltrados.length === 1 ? 'producto encontrado' : 'productos encontrados'}`;
+        }
+
+        searchResults.innerHTML = resultadosFiltrados.map(producto => `
+            <div class="search-product-card">
+                <img src="${producto.imagen}" alt="${producto.nombre}" class="search-product-image" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/300x250?text=Imagen+No+Disponible'">
+                <div class="search-product-info">
+                    <span class="search-product-category">${producto.categoria.toUpperCase()}</span>
+                    <h3>${producto.nombre}</h3>
+                    <p>${producto.descripcion}</p>
+                    <div id="search-rating-${producto.id}" class="search-product-rating">
+                        <span style="font-size: 0.85rem; color: #999;">Cargando...</span>
                     </div>
+                    <div class="search-product-price">$${producto.precio.toLocaleString()}</div>
+                    <button class="search-add-btn" onclick="agregarAlCarrito(${producto.id})">
+                        Agregar al carrito 🛒
+                    </button>
                 </div>
-            `).join('')}
-        `;
+            </div>
+        `).join('');
+
+        // Cargar ratings de cada producto
+        resultadosFiltrados.forEach(async (producto) => {
+            const { average, count } = await getProductRating(producto.id);
+            const ratingContainer = document.getElementById(`search-rating-${producto.id}`);
+            if (ratingContainer) {
+                if (count > 0) {
+                    ratingContainer.innerHTML = `
+                        ${generateStars(average)}
+                        <span style="font-size: 0.85rem; color: #666; margin-left: 0.5rem;">
+                            ${average.toFixed(1)} (${count})
+                        </span>
+                    `;
+                } else {
+                    ratingContainer.innerHTML = `
+                        <span style="font-size: 0.85rem; color: #999;">Sin reseñas aún</span>
+                    `;
+                }
+            }
+        });
     }
 
     // Función para agregar al carrito
