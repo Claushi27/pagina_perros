@@ -424,7 +424,8 @@
             doc,
             getDoc,
             query,
-            orderBy
+            orderBy,
+            serverTimestamp
         } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
         import {
             ref,
@@ -691,37 +692,130 @@
         async function loadOrders() {
             const container = document.getElementById('ordersContainer');
             try {
-                const querySnapshot = await getDocs(query(collection(db, 'pedidos'), orderBy('fecha', 'desc')));
+                const querySnapshot = await getDocs(collection(db, 'pedidos'));
 
                 if (querySnapshot.empty) {
                     container.innerHTML = '<p style="text-align: center; color: #666;">No hay pedidos registrados</p>';
                     return;
                 }
 
-                let html = '<table style="width: 100%; border-collapse: collapse;">';
-                html += '<tr style="background: #f5f5f5; text-align: left;"><th style="padding: 1rem;">ID</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>Estado</th></tr>';
-
+                // Convertir a array y ordenar por fecha
+                const orders = [];
                 querySnapshot.forEach((doc) => {
-                    const order = doc.data();
-                    const date = order.fecha?.toDate ? order.fecha.toDate().toLocaleDateString() : 'N/A';
+                    orders.push({ id: doc.id, ...doc.data() });
+                });
+                orders.sort((a, b) => {
+                    const dateA = a.fechaCreacion?.seconds || 0;
+                    const dateB = b.fechaCreacion?.seconds || 0;
+                    return dateB - dateA;
+                });
+
+                let html = '<div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; min-width: 800px;">';
+                html += '<tr style="background: #f5f5f5; text-align: left;"><th style="padding: 1rem;">Nº Pedido</th><th>Cliente</th><th>Email</th><th>Fecha</th><th>Total</th><th>Estado</th><th>Acciones</th></tr>';
+
+                orders.forEach((order) => {
+                    const date = order.fechaCreacion?.toDate ? order.fechaCreacion.toDate().toLocaleDateString('es-CL') : 'N/A';
+                    const estadoColor = {
+                        'pendiente': '#fbbf24',
+                        'procesando': '#3b82f6',
+                        'enviado': '#8b5cf6',
+                        'entregado': '#10b981',
+                        'cancelado': '#ef4444'
+                    };
+                    const color = estadoColor[order.estado] || '#6b7280';
+
                     html += `
                         <tr style="border-bottom: 1px solid #e0e0e0;">
-                            <td style="padding: 1rem;">${doc.id.substring(0, 8)}...</td>
-                            <td>${order.clienteEmail || 'N/A'}</td>
+                            <td style="padding: 1rem; font-weight: 600;">${order.numeroPedido || 'N/A'}</td>
+                            <td>${order.cliente?.nombre || 'N/A'}</td>
+                            <td>${order.cliente?.email || 'N/A'}</td>
                             <td>${date}</td>
-                            <td>$${(order.total || 0).toLocaleString()}</td>
-                            <td><span style="background: #10b981; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem;">${order.estado || 'Pendiente'}</span></td>
+                            <td style="font-weight: 600;">$${(order.total || 0).toLocaleString()}</td>
+                            <td>
+                                <select onchange="changeOrderStatus('${order.id}', this.value)" style="background: ${color}; color: white; padding: 0.5rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                                    <option value="pendiente" ${order.estado === 'pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
+                                    <option value="procesando" ${order.estado === 'procesando' ? 'selected' : ''}>🔄 Procesando</option>
+                                    <option value="enviado" ${order.estado === 'enviado' ? 'selected' : ''}>🚚 Enviado</option>
+                                    <option value="entregado" ${order.estado === 'entregado' ? 'selected' : ''}>✅ Entregado</option>
+                                    <option value="cancelado" ${order.estado === 'cancelado' ? 'selected' : ''}>❌ Cancelado</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button onclick="viewOrderDetails('${order.id}')" style="background: #3b82f6; color: white; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                                    👁️ Ver
+                                </button>
+                            </td>
                         </tr>
                     `;
                 });
-                html += '</table>';
+                html += '</table></div>';
                 container.innerHTML = html;
 
             } catch (error) {
                 console.error('Error loading orders:', error);
-                container.innerHTML = '<p style="color: red;">Error al cargar pedidos</p>';
+                container.innerHTML = '<p style="color: red;">Error al cargar pedidos: ' + error.message + '</p>';
             }
         }
+
+        // Cambiar estado del pedido
+        window.changeOrderStatus = async function(orderId, newStatus) {
+            try {
+                await updateDoc(doc(db, 'pedidos', orderId), {
+                    estado: newStatus,
+                    fechaActualizacion: serverTimestamp()
+                });
+                showAlert(`Estado del pedido actualizado a "${newStatus}"`, 'success');
+                loadOrders();
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error al actualizar el estado', 'error');
+            }
+        };
+
+        // Ver detalles del pedido
+        window.viewOrderDetails = async function(orderId) {
+            try {
+                const orderDoc = await getDoc(doc(db, 'pedidos', orderId));
+                if (!orderDoc.exists()) {
+                    alert('Pedido no encontrado');
+                    return;
+                }
+
+                const order = orderDoc.data();
+                let details = `
+📦 DETALLES DEL PEDIDO
+
+Número de Pedido: ${order.numeroPedido}
+Estado: ${order.estado}
+
+👤 CLIENTE:
+Nombre: ${order.cliente?.nombre}
+Email: ${order.cliente?.email}
+Teléfono: ${order.cliente?.telefono}
+
+📍 DIRECCIÓN DE ENVÍO:
+${order.direccionEnvio?.direccion}
+${order.direccionEnvio?.ciudad}, ${order.direccionEnvio?.region}
+${order.direccionEnvio?.referencia ? 'Ref: ' + order.direccionEnvio.referencia : ''}
+
+🛒 PRODUCTOS:
+${order.productos?.map(p => `- ${p.nombre} x${p.cantidad} = $${(p.precio * p.cantidad).toLocaleString()}`).join('\n')}
+
+💰 RESUMEN:
+Subtotal: $${order.subtotal?.toLocaleString()}
+Envío: ${order.envio === 0 ? 'Gratis' : '$' + order.envio?.toLocaleString()}
+TOTAL: $${order.total?.toLocaleString()}
+
+💳 Método de Pago: ${order.metodoPago === 'transferencia' ? 'Transferencia Bancaria' : 'Pago contra entrega'}
+${order.notas ? '\n📝 Notas: ' + order.notas : ''}
+                `;
+
+                alert(details);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al cargar detalles del pedido');
+            }
+        };
 
         // Cargar usuarios
         async function loadUsers() {

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Awka</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .checkout-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .checkout-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .checkout-header h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .checkout-steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+        }
+
+        .step.active {
+            color: #FF6B35;
+            font-weight: 600;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .step.active .step-number {
+            background: #FF6B35;
+            color: white;
+        }
+
+        .checkout-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+
+        .checkout-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #FF6B35;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .required {
+            color: red;
+        }
+
+        .order-summary {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .order-summary h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .summary-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .summary-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .summary-item-details {
+            flex: 1;
+        }
+
+        .summary-item-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-item-quantity {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .summary-item-price {
+            font-weight: 600;
+            color: #FF6B35;
+        }
+
+        .summary-totals {
+            border-top: 2px solid #eee;
+            padding-top: 1rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        .summary-row.total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #FF6B35;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #FF6B35;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background 0.3s;
+        }
+
+        .place-order-btn:hover {
+            background: #ff5722;
+        }
+
+        .place-order-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .back-to-cart {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #666;
+            text-decoration: none;
+            text-align: center;
+            width: 100%;
+        }
+
+        .back-to-cart:hover {
+            color: #FF6B35;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .payment-method {
+            border: 2px solid #ddd;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .payment-method:hover {
+            border-color: #FF6B35;
+        }
+
+        .payment-method input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+
+        .payment-method.selected {
+            border-color: #FF6B35;
+            background: #fff5f2;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .checkout-content {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .checkout-steps {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-top">
+            <div class="header-logo">
+                <a href="index.html">
+                    <img src="imagenes/petshop1.png" alt="Logo Awka">
+                    <span>Awka Petshop</span>
+                </a>
+            </div>
+            <div class="header-icons">
+                <div id="userMenu" class="icon">👤 Iniciar Sesión</div>
+                <a href="cart.html" class="icon">🛒 <span id="cartCounter">0</span></a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="checkout-container">
+            <div class="checkout-header">
+                <h1>🛒 Finalizar Compra</h1>
+                <p>Complete sus datos para procesar su pedido</p>
+            </div>
+
+            <div class="checkout-steps">
+                <div class="step">
+                    <span class="step-number">✓</span>
+                    <span>Carrito</span>
+                </div>
+                <div class="step active">
+                    <span class="step-number">2</span>
+                    <span>Datos de Envío</span>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <span>Confirmación</span>
+                </div>
+            </div>
+
+            <div class="checkout-content">
+                <div class="checkout-form">
+                    <form id="checkoutForm">
+                        <!-- Información Personal -->
+                        <div class="form-section">
+                            <h3>📋 Información Personal</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="nombre">Nombre <span class="required">*</span></label>
+                                    <input type="text" id="nombre" name="nombre" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="apellido">Apellido <span class="required">*</span></label>
+                                    <input type="text" id="apellido" name="apellido" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="email">Email <span class="required">*</span></label>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="telefono">Teléfono <span class="required">*</span></label>
+                                    <input type="tel" id="telefono" name="telefono" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dirección de Envío -->
+                        <div class="form-section">
+                            <h3>📍 Dirección de Envío</h3>
+                            <div class="form-group">
+                                <label for="direccion">Dirección <span class="required">*</span></label>
+                                <input type="text" id="direccion" name="direccion" placeholder="Calle y número" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ciudad">Ciudad <span class="required">*</span></label>
+                                    <input type="text" id="ciudad" name="ciudad" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="region">Región <span class="required">*</span></label>
+                                    <select id="region" name="region" required>
+                                        <option value="">Seleccione región</option>
+                                        <option value="Metropolitana">Región Metropolitana</option>
+                                        <option value="Valparaiso">Valparaíso</option>
+                                        <option value="Biobio">Biobío</option>
+                                        <option value="Araucania">Araucanía</option>
+                                        <option value="Los Lagos">Los Lagos</option>
+                                        <option value="Maule">Maule</option>
+                                        <option value="Antofagasta">Antofagasta</option>
+                                        <option value="Coquimbo">Coquimbo</option>
+                                        <option value="Atacama">Atacama</option>
+                                        <option value="Aysen">Aysén</option>
+                                        <option value="Magallanes">Magallanes</option>
+                                        <option value="Los Rios">Los Ríos</option>
+                                        <option value="Arica">Arica y Parinacota</option>
+                                        <option value="Tarapaca">Tarapacá</option>
+                                        <option value="Nuble">Ñuble</option>
+                                        <option value="OHiggins">O'Higgins</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="referencia">Referencia (Opcional)</label>
+                                <textarea id="referencia" name="referencia" rows="2" placeholder="Casa azul, tercer piso, etc."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Método de Pago -->
+                        <div class="form-section">
+                            <h3>💳 Método de Pago</h3>
+                            <div class="payment-methods">
+                                <label class="payment-method" for="transferencia">
+                                    <input type="radio" id="transferencia" name="metodoPago" value="transferencia" checked>
+                                    <div>💸 Transferencia</div>
+                                </label>
+                                <label class="payment-method" for="efectivo">
+                                    <input type="radio" id="efectivo" name="metodoPago" value="efectivo">
+                                    <div>💵 Pago contra entrega</div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Notas adicionales -->
+                        <div class="form-section">
+                            <h3>📝 Notas Adicionales (Opcional)</h3>
+                            <div class="form-group">
+                                <textarea id="notas" name="notas" rows="3" placeholder="Agregue cualquier nota sobre su pedido..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Resumen del Pedido -->
+                <div class="order-summary">
+                    <h3>Resumen del Pedido</h3>
+                    <div class="summary-items" id="summaryItems">
+                        <!-- Productos se cargarán aquí -->
+                    </div>
+                    <div class="summary-totals">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="summarySubtotal">$0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Envío:</span>
+                            <span id="summaryShipping">Gratis</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span id="summaryTotal">$0</span>
+                        </div>
+                    </div>
+                    <button type="submit" form="checkoutForm" class="place-order-btn" id="placeOrderBtn">
+                        Realizar Pedido
+                    </button>
+                    <a href="cart.html" class="back-to-cart">← Volver al carrito</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/cart-utils.js"></script>
+    <script type="module" src="js/checkout.js"></script>
+
+    <!-- Firebase Auth Script -->
+    <script type="module">
+        import { auth, db } from './js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+        const userMenu = document.getElementById('userMenu');
+
+        // Escuchar cambios en el estado de autenticación
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Verificar si el usuario es admin
+                let isAdmin = false;
+                try {
+                    const userDoc = await getDoc(doc(db, 'usuarios', user.uid));
+                    if (userDoc.exists()) {
+                        isAdmin = userDoc.data().rol === 'admin';
+                    }
+                } catch (error) {
+                    console.error('Error al verificar rol:', error);
+                }
+
+                // Usuario autenticado
+                const displayName = user.displayName || user.email.split('@')[0];
+                const adminLink = isAdmin ? '<a href="admin.html" style="display: block; padding: 8px; text-decoration: none; color: #FF6B35; font-weight: 600;">⚙️ Panel Admin</a>' : '';
+                userMenu.innerHTML = `
+                    <span style="cursor: pointer;">👤 ${displayName}</span>
+                    <div style="display: none; position: absolute; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 10px; top: 40px; right: 0; min-width: 150px; z-index: 1000;" id="userDropdown">
+                        <a href="profile.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">Mi Perfil</a>
+                        ${adminLink}
+                        <a href="#" id="logoutBtn" style="display: block; padding: 8px; text-decoration: none; color: #c33;">Cerrar Sesión</a>
+                    </div>
+                `;
+
+                // Toggle dropdown
+                userMenu.querySelector('span').addEventListener('click', () => {
+                    const dropdown = document.getElementById('userDropdown');
+                    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                });
+
+                // Logout
+                document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    try {
+                        await signOut(auth);
+                        window.location.href = 'login.html';
+                    } catch (error) {
+                        console.error('Error al cerrar sesión:', error);
+                    }
+                });
+
+            } else {
+                // Usuario no autenticado - mostrar botón de login
+                userMenu.innerHTML = '<a href="login.html" style="text-decoration: none; color: inherit;">👤 Iniciar Sesión</a>';
+            }
+        });
+    </script>
+</body>
+</html>

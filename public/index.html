@@ -342,20 +342,34 @@
 
     <!-- Firebase Auth Script -->
     <script type="module">
-        import { auth } from './js/firebase-config.js';
+        import { auth, db } from './js/firebase-config.js';
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
         const userMenu = document.getElementById('userMenu');
 
         // Escuchar cambios en el estado de autenticación
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
+                // Verificar si el usuario es admin
+                let isAdmin = false;
+                try {
+                    const userDoc = await getDoc(doc(db, 'usuarios', user.uid));
+                    if (userDoc.exists()) {
+                        isAdmin = userDoc.data().rol === 'admin';
+                    }
+                } catch (error) {
+                    console.error('Error al verificar rol:', error);
+                }
+
                 // Usuario autenticado
                 const displayName = user.displayName || user.email.split('@')[0];
+                const adminLink = isAdmin ? '<a href="admin.html" style="display: block; padding: 8px; text-decoration: none; color: #FF6B35; font-weight: 600;">⚙️ Panel Admin</a>' : '';
                 userMenu.innerHTML = `
                     <span style="cursor: pointer;">👤 ${displayName}</span>
                     <div style="display: none; position: absolute; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 10px; top: 40px; right: 0; min-width: 150px; z-index: 1000;" id="userDropdown">
                         <a href="profile.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">Mi Perfil</a>
+                        ${adminLink}
                         <a href="#" id="logoutBtn" style="display: block; padding: 8px; text-decoration: none; color: #c33;">Cerrar Sesión</a>
                     </div>
                 `;

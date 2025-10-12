@@ -1,4 +1,4 @@
-import { db } from './firebase-config.js';
+import { db, logEvent } from './firebase-config.js';
 import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -125,6 +125,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             localStorage.setItem('carrito', JSON.stringify(carrito));
+
+            // Registrar evento en Analytics
+            logEvent('add_to_cart', {
+                item_id: producto.id,
+                item_name: producto.nombre,
+                item_category: producto.categoria,
+                price: producto.precio,
+                currency: 'CLP'
+            });
+
             alert(`¡${producto.nombre} agregado al carrito!`);
             updateCartCounter();
         }

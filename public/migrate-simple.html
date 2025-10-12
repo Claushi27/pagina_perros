@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migrar Productos - Awka</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196F3;
+        }
+        button {
+            background: #FF6B35;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: #ff5722;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .progress {
+            margin-top: 20px;
+            display: none;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #4CAF50;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        .product-list {
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .product-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .product-item.success {
+            background: #d4edda;
+        }
+        .product-item.error {
+            background: #f8d7da;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Migrar Productos a Firestore</h1>
+
+        <div class="info">
+            <strong>Esta herramienta creará productos de ejemplo en Firestore.</strong><br>
+            Se crearán 6 productos para perros y 6 para gatos.
+        </div>
+
+        <button id="migrateBtn" onclick="startMigration()">Migrar Productos Ahora</button>
+
+        <div id="progress" class="progress">
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill">0%</div>
+            </div>
+        </div>
+
+        <div id="status" class="status"></div>
+        <div id="productList" class="product-list"></div>
+    </div>
+
+    <script type="module">
+        import { db } from './js/firebase-config.js';
+        import {
+            collection,
+            addDoc,
+            getDocs
+        } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+        // Productos de ejemplo
+        const productosEjemplo = [
+            // PERROS
+            {
+                nombre: "Dog Chow Adulto",
+                descripcion: "Alimento balanceado para perros adultos, 21kg",
+                precio: 45990,
+                categoria: "perros",
+                subcategoria: "alimento",
+                imagen: "https://http2.mlstatic.com/D_NQ_NP_961411-MLC70016668503_062023-O.webp",
+                stock: 25
+            },
+            {
+                nombre: "Pedigree Cachorro",
+                descripcion: "Alimento para cachorros, rico en proteínas, 15kg",
+                precio: 35990,
+                categoria: "perros",
+                subcategoria: "alimento",
+                imagen: "https://http2.mlstatic.com/D_NQ_NP_722405-MLC69743154330_062023-O.webp",
+                stock: 30
+            },
+            {
+                nombre: "Pelota Kong Extreme",
+                descripcion: "Juguete resistente para perros, caucho natural",
+                precio: 12990,
+                categoria: "perros",
+                subcategoria: "juguetes",
+                imagen: "https://http2.mlstatic.com/D_NQ_NP_641234-MLC45920446066_052021-O.webp",
+                stock: 50
+            },
+            {
+                nombre: "Correa Retráctil 5m",
+                descripcion: "Correa extensible para paseos, soporta hasta 50kg",
+                precio: 18990,
+                categoria: "perros",
+                subcategoria: "accesorios",
+                imagen: "https://http2.mlstatic.com/D_NQ_NP_789456-MLC46847382947_072021-O.webp",
+                stock: 40
+            },
+            {
+                nombre: "Cama Ortopédica Grande",
+                descripcion: "Cama acolchada para perros grandes, lavable",
+                precio: 39990,
+                categoria: "perros",
+                subcategoria: "camas",
+                imagen: "https://http2.mlstatic.com/D_NQ_NP_123789-MLC49238476234_032022-O.webp",
+                stock: 15
+            },
+            {
+                nombre: "Shampoo Antipulgas",
+                descripcion: "Shampoo medicado para perros, 500ml",
+                precio: 8990,
+                categoria: "perros",
+                subcategoria: "higiene",
+                imagen: "https://http2.mlstatic.com/D_NQ_NP_456123-MLC47562834567_092021-O.webp",
+                stock: 60
+            },
+            // GATOS
+            {
+                nombre: "Whiskas Adulto",
+                descripcion: "Alimento completo para gatos adultos, 10kg",
+                precio: 32990,
+                categoria: "gatos",
+                subcategoria: "alimento",
+                imagen: "https://http2.mlstatic.com/D_NQ_NP_234567-MLC70123456789_062023-O.webp",
+                stock: 35
+            },
+            {
+                nombre: "Royal Canin Kitten",
+                descripcion: "Alimento para gatitos de 4 a 12 meses, 7.5kg",
+                precio: 48990,
+                categoria: "gatos",
+                subcategoria: "alimento",
+                imagen: "https://http2.mlstatic.com/D_NQ_NP_345678-MLC69876543210_062023-O.webp",
+                stock: 20
+            },
+            {
+                nombre: "Rascador Torre",
+                descripcion: "Rascador de 5 niveles con hamaca y juguetes",
+                precio: 59990,
+                categoria: "gatos",
+                subcategoria: "rascadores",
+                imagen: "https://http2.mlstatic.com/D_NQ_NP_456789-MLC48923456712_032022-O.webp",
+                stock: 10
+            },
+            {
+                nombre: "Arena Sanitaria 10kg",
+                descripcion: "Arena aglomerante, control de olores",
+                precio: 15990,
+                categoria: "gatos",
+                subcategoria: "higiene",
+                imagen: "https://http2.mlstatic.com/D_NQ_NP_567890-MLC47234567823_092021-O.webp",
+                stock: 45
+            },
+            {
+                nombre: "Juguete Ratón con Catnip",
+                descripcion: "Set de 3 ratones con hierba gatera",
+                precio: 6990,
+                categoria: "gatos",
+                subcategoria: "juguetes",
+                imagen: "https://http2.mlstatic.com/D_NQ_NP_678901-MLC46345678934_062021-O.webp",
+                stock: 80
+            },
+            {
+                nombre: "Transportadora Premium",
+                descripcion: "Transportadora rígida para gatos, aprobada para vuelos",
+                precio: 42990,
+                categoria: "gatos",
+                subcategoria: "transporte",
+                imagen: "https://http2.mlstatic.com/D_NQ_NP_789012-MLC49456789045_032022-O.webp",
+                stock: 12
+            }
+        ];
+
+        window.startMigration = async function() {
+            const btn = document.getElementById('migrateBtn');
+            const progress = document.getElementById('progress');
+            const progressFill = document.getElementById('progressFill');
+            const status = document.getElementById('status');
+            const productList = document.getElementById('productList');
+
+            btn.disabled = true;
+            btn.textContent = 'Migrando...';
+            progress.style.display = 'block';
+            productList.innerHTML = '';
+
+            let migrados = 0;
+            let errores = 0;
+
+            try {
+                // Verificar si ya hay productos
+                const existentes = await getDocs(collection(db, 'productos'));
+                if (!existentes.empty) {
+                    if (!confirm(`Ya hay ${existentes.size} productos en Firestore. ¿Quieres agregar ${productosEjemplo.length} productos más?`)) {
+                        btn.disabled = false;
+                        btn.textContent = 'Migrar Productos Ahora';
+                        progress.style.display = 'none';
+                        return;
+                    }
+                }
+
+                // Migrar cada producto
+                for (let i = 0; i < productosEjemplo.length; i++) {
+                    const producto = productosEjemplo[i];
+
+                    try {
+                        const docRef = await addDoc(collection(db, 'productos'), {
+                            ...producto,
+                            fechaCreacion: new Date(),
+                            fechaActualizacion: new Date()
+                        });
+
+                        migrados++;
+
+                        // Actualizar UI
+                        const item = document.createElement('div');
+                        item.className = 'product-item success';
+                        item.textContent = `✓ ${producto.nombre} (${producto.categoria})`;
+                        productList.appendChild(item);
+
+                    } catch (error) {
+                        errores++;
+                        console.error('Error migrando:', producto.nombre, error);
+
+                        const item = document.createElement('div');
+                        item.className = 'product-item error';
+                        item.textContent = `✗ ${producto.nombre}: ${error.message}`;
+                        productList.appendChild(item);
+                    }
+
+                    // Actualizar progreso
+                    const porcentaje = Math.round(((i + 1) / productosEjemplo.length) * 100);
+                    progressFill.style.width = porcentaje + '%';
+                    progressFill.textContent = porcentaje + '%';
+                }
+
+                // Mostrar resultado final
+                status.className = 'status success';
+                status.textContent = `✓ Migración completa: ${migrados} productos creados, ${errores} errores`;
+                status.style.display = 'block';
+
+                if (migrados > 0) {
+                    setTimeout(() => {
+                        alert('¡Productos migrados! Ahora puedes ir a perros.html o gatos.html para verlos.');
+                    }, 500);
+                }
+
+            } catch (error) {
+                console.error('Error general:', error);
+                status.className = 'status error';
+                status.textContent = `✗ Error: ${error.message}`;
+                status.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Migrar Productos Ahora';
+            }
+        };
+    </script>
+</body>
+</html>

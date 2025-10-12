@@ -156,9 +156,9 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Tu carrito está vacío');
             return;
         }
-        
-        // Aquí iría la lógica de pago
-        alert('Funcionalidad de pago en desarrollo. Por ahora es solo una demostración.');
+
+        // Redirigir a la página de checkout
+        window.location.href = 'checkout.html';
     };
 
     // Función para realizar búsqueda

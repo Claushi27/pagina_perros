@@ -19,9 +19,13 @@ const firebaseConfig = {
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 
+// Inicializar Analytics
+const analytics = getAnalytics(app);
+
 // Exportar servicios de Firebase
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export { analytics, logEvent };
 
-console.log('Firebase inicializado correctamente');
+console.log('Firebase inicializado correctamente con Analytics');
