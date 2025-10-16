@@ -19,15 +19,19 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDots();
     }
 
-    prevButton.addEventListener('click', () => {
-        currentIndex = (currentIndex > 0) ? currentIndex - 1 : slides.length - 1;
-        goToSlide(currentIndex);
-    });
+    if (prevButton) {
+        prevButton.addEventListener('click', () => {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : slides.length - 1;
+            goToSlide(currentIndex);
+        });
+    }
 
-    nextButton.addEventListener('click', () => {
-        currentIndex = (currentIndex < slides.length - 1) ? currentIndex + 1 : 0;
-        goToSlide(currentIndex);
-    });
+    if (nextButton) {
+        nextButton.addEventListener('click', () => {
+            currentIndex = (currentIndex < slides.length - 1) ? currentIndex + 1 : 0;
+            goToSlide(currentIndex);
+        });
+    }
 
     function createDots() {
         if (!dotsContainer) return;

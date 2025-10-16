@@ -1,6 +1,8 @@
 import { getProductRating, generateStars } from './reviews.js';
+import { db } from './firebase-config.js';
+import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // Mobile Menu functionality
     const menuToggle = document.querySelector('.menu-toggle');
     const mobileMenu = document.querySelector('.mobile-menu-overlay');
@@ -59,8 +61,19 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileMenu));
     }
 
-    // Fuente de productos centralizada
-    const productos = window.PRODUCTS || [];
+    // Cargar productos desde Firestore
+    let productos = [];
+    try {
+        const querySnapshot = await getDocs(collection(db, 'productos'));
+        productos = querySnapshot.docs.map(doc => ({
+            id: doc.id,  // Usar docId como ID
+            ...doc.data()
+        }));
+        console.log('✅ Productos cargados desde Firestore:', productos.length);
+    } catch (error) {
+        console.error('❌ Error cargando productos desde Firestore:', error);
+        productos = [];
+    }
 
     // Estado de filtros y búsquedas recientes
     const selectedFilters = new Set(); // permite combinar múltiples filtros

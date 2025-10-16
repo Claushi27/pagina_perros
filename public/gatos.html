@@ -208,8 +208,57 @@
             <p>Productos especiales para la realeza felina de tu hogar</p>
         </section>
 
-        <section class="gatos-products">
-            <h2>Productos para Gatos</h2>
+        <!-- Calculadora de Alimento para Gatos - Diseño Horizontal Optimizado -->
+        <div class="food-calculator" style="max-width: 1200px; margin: 2rem auto; padding: 2rem; background: linear-gradient(135deg, #F0F8FF, #E6E6FA); border-radius: 15px; box-shadow: 0 4px 12px rgba(47, 79, 79, 0.2);">
+            <h2 style="text-align: center; color: #2F4F4F; margin-bottom: 0.5rem;">🍖 Calculadora de Alimento Diario</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 1.5rem;">Descubre cuánto alimento necesita tu gato según sus características</p>
+
+            <div class="calculator-form">
+                <!-- Grid Horizontal para los inputs -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label for="catWeight" style="display: block; margin-bottom: 0.5rem; color: #2F4F4F; font-weight: 600; font-size: 0.9rem;">Peso del gato (kg)</label>
+                        <input type="number" id="catWeight" placeholder="Ej: 4" min="0.5" max="15" step="0.1" style="width: 100%; padding: 0.75rem; border: 2px solid #2F4F4F; border-radius: 8px; font-size: 1rem;">
+                    </div>
+
+                    <div>
+                        <label for="catAge" style="display: block; margin-bottom: 0.5rem; color: #2F4F4F; font-weight: 600; font-size: 0.9rem;">Edad del gato</label>
+                        <select id="catAge" style="width: 100%; padding: 0.75rem; border: 2px solid #2F4F4F; border-radius: 8px; font-size: 1rem;">
+                            <option value="kitten">Gatito (0-12 meses)</option>
+                            <option value="adult" selected>Adulto (1-7 años)</option>
+                            <option value="senior">Senior (7+ años)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="catActivity" style="display: block; margin-bottom: 0.5rem; color: #2F4F4F; font-weight: 600; font-size: 0.9rem;">Nivel de actividad</label>
+                        <select id="catActivity" style="width: 100%; padding: 0.75rem; border: 2px solid #2F4F4F; border-radius: 8px; font-size: 1rem;">
+                            <option value="low">Baja (interior tranquilo)</option>
+                            <option value="moderate" selected>Moderada (juega ocasionalmente)</option>
+                            <option value="high">Alta (muy juguetón)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="catBody" style="display: block; margin-bottom: 0.5rem; color: #2F4F4F; font-weight: 600; font-size: 0.9rem;">Condición corporal</label>
+                        <select id="catBody" style="width: 100%; padding: 0.75rem; border: 2px solid #2F4F4F; border-radius: 8px; font-size: 1rem;">
+                            <option value="thin">Delgado</option>
+                            <option value="ideal" selected>Ideal</option>
+                            <option value="overweight">Sobrepeso</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="calculateCatFood()" style="width: 100%; max-width: 300px; display: block; margin: 0 auto; padding: 0.85rem 2rem; background: linear-gradient(135deg, #2F4F4F, #708090); color: white; border: none; border-radius: 10px; font-size: 1.05rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                    Calcular Cantidad 📊
+                </button>
+
+                <div id="catResult" style="margin-top: 1.5rem; display: none;"></div>
+            </div>
+        </div>
+
+        <section class="gatos-products" style="margin-top: 2rem;">
+            <h2>🛍️ Nuestros Productos para Gatos</h2>
             <div class="gatos-grid" id="gatosGrid">
                 <!-- Los productos se cargarán aquí -->
             </div>
@@ -296,6 +345,181 @@
     <script src="js/cart-utils.js"></script>
     <script src="js/script.js"></script>
     <script type="module" src="js/gatos.js"></script>
+
+    <!-- Calculadora de Alimento para Gatos con Recomendaciones de Productos -->
+    <script type="module">
+        import { db } from './js/firebase-config.js';
+        import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+        window.calculateCatFood = async function() {
+            const weight = parseFloat(document.getElementById('catWeight').value);
+            const age = document.getElementById('catAge').value;
+            const activity = document.getElementById('catActivity').value;
+            const body = document.getElementById('catBody').value;
+            const resultDiv = document.getElementById('catResult');
+
+            // Validar entrada
+            if (!weight || weight < 0.5 || weight > 15) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.background = '#ffe0e0';
+                resultDiv.style.padding = '1rem';
+                resultDiv.style.borderRadius = '8px';
+                resultDiv.innerHTML = '<p style="color: #c00; text-align: center; margin: 0;">⚠️ Por favor ingresa un peso válido entre 0.5 y 15 kg</p>';
+                return;
+            }
+
+            // Calcular RER (Requerimiento Energético en Reposo) para gatos
+            // RER = 70 * (peso en kg)^0.75
+            const RER = 70 * Math.pow(weight, 0.75);
+
+            // Factores multiplicadores según características del gato
+            let multiplier = 1.0;
+
+            // Ajustar por edad
+            if (age === 'kitten') {
+                multiplier = 2.5; // Gatitos necesitan mucha más energía
+            } else if (age === 'senior') {
+                multiplier = 1.1; // Gatos senior necesitan un poco menos
+            } else {
+                multiplier = 1.4; // Adultos activos
+            }
+
+            // Ajustar por actividad
+            if (activity === 'low') {
+                multiplier *= 0.9;
+            } else if (activity === 'high') {
+                multiplier *= 1.1;
+            }
+
+            // Ajustar por condición corporal
+            if (body === 'thin') {
+                multiplier *= 1.2;
+            } else if (body === 'overweight') {
+                multiplier *= 0.8;
+            }
+
+            // Calcular necesidad energética diaria (DER)
+            const DER = RER * multiplier;
+
+            // Convertir a gramos de alimento (asumiendo ~350 kcal por 100g de alimento seco para gatos)
+            const gramsPerDay = Math.round((DER / 350) * 100);
+
+            // Calcular porciones (gatos generalmente comen 2-3 veces al día)
+            const portions = 3;
+            const gramsPerPortion = Math.round(gramsPerDay / portions);
+
+            // ALGORITMO DE RECOMENDACIÓN DE PRODUCTOS
+            let productosRecomendados = [];
+            try {
+                const productosRef = collection(db, 'productos');
+                const q = query(productosRef, where('categoria', '==', 'gatos'));
+                const querySnapshot = await getDocs(q);
+
+                let productos = [];
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    productos.push({
+                        id: data.id,
+                        nombre: data.nombre,
+                        precio: data.precio,
+                        imagen: data.imagen,
+                        descripcion: data.descripcion
+                    });
+                });
+
+                // Filtrar productos por tipo basado en respuestas del usuario
+                productosRecomendados = productos.filter(p => {
+                    const nombreLower = p.nombre.toLowerCase();
+                    const descLower = p.descripcion.toLowerCase();
+
+                    // Filtrar por edad
+                    if (age === 'kitten' && (nombreLower.includes('gatito') || nombreLower.includes('kitten') || descLower.includes('gatito'))) {
+                        return true;
+                    }
+                    if (age === 'senior' && (nombreLower.includes('senior') || nombreLower.includes('mayor') || descLower.includes('senior'))) {
+                        return true;
+                    }
+                    if (age === 'adult' && !nombreLower.includes('gatito') && !nombreLower.includes('senior')) {
+                        return true;
+                    }
+
+                    // Si es alimento en general para gatos
+                    if (nombreLower.includes('alimento') || nombreLower.includes('comida') || nombreLower.includes('food')) {
+                        return true;
+                    }
+
+                    return false;
+                });
+
+                // Si no hay productos específicos, mostrar los primeros 3
+                if (productosRecomendados.length === 0) {
+                    productosRecomendados = productos.slice(0, 3);
+                } else if (productosRecomendados.length > 3) {
+                    productosRecomendados = productosRecomendados.slice(0, 3);
+                }
+
+            } catch (error) {
+                console.error('Error al cargar productos:', error);
+                productosRecomendados = [];
+            }
+
+            // Mostrar resultados
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = 'white';
+            resultDiv.style.padding = '1.5rem';
+            resultDiv.style.borderRadius = '10px';
+            resultDiv.style.boxShadow = '0 2px 8px rgba(47, 79, 79, 0.15)';
+
+            resultDiv.innerHTML = `
+                <h3 style="color: #2F4F4F; text-align: center; margin-bottom: 1rem;">📊 Resultados para tu Gato</h3>
+                <div style="background: linear-gradient(135deg, #F0F8FF, #E6E6FA); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <p style="margin: 0.5rem 0;"><strong>Peso:</strong> ${weight} kg</p>
+                    <p style="margin: 0.5rem 0;"><strong>Edad:</strong> ${age === 'kitten' ? 'Gatito' : age === 'senior' ? 'Senior' : 'Adulto'}</p>
+                    <p style="margin: 0.5rem 0;"><strong>Actividad:</strong> ${activity === 'low' ? 'Baja' : activity === 'high' ? 'Alta' : 'Moderada'}</p>
+                    <p style="margin: 0.5rem 0;"><strong>Condición corporal:</strong> ${body === 'thin' ? 'Delgado' : body === 'overweight' ? 'Sobrepeso' : 'Ideal'}</p>
+                </div>
+
+                <div style="background: #2F4F4F; color: white; padding: 1.5rem; border-radius: 8px; text-align: center; margin-bottom: 1rem;">
+                    <h4 style="margin-top: 0;">🍖 Cantidad Diaria Recomendada</h4>
+                    <p style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">${gramsPerDay}g</p>
+                    <p style="margin-bottom: 0;">Dividido en ${portions} porciones de ${gramsPerPortion}g cada una</p>
+                </div>
+
+                <div style="background: #F0F8FF; padding: 1rem; border-radius: 8px; border-left: 4px solid #2F4F4F;">
+                    <p style="margin: 0.5rem 0; font-size: 0.95rem;"><strong>💡 Consejos:</strong></p>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                        <li>Los gatos prefieren comidas pequeñas y frecuentes</li>
+                        <li>Siempre debe haber agua fresca disponible</li>
+                        <li>Ajusta la cantidad según el peso y condición de tu gato</li>
+                        <li>Consulta con tu veterinario para necesidades específicas</li>
+                    </ul>
+                </div>
+
+                ${productosRecomendados.length > 0 ? `
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #2F4F4F;">
+                        <h3 style="text-align: center; color: #2F4F4F; margin-bottom: 1.5rem;">🎯 Productos Recomendados Para Tu Gato</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                            ${productosRecomendados.map(prod => `
+                                <div style="background: white; border: 2px solid #2F4F4F; border-radius: 10px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease;" onclick="window.location.href='product-detail.html?id=${prod.id}'">
+                                    <img src="${prod.imagen}" alt="${prod.nombre}" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/200x150?text=Producto+Gato'">
+                                    <div style="padding: 1rem;">
+                                        <h4 style="color: #2F4F4F; font-size: 1rem; margin-bottom: 0.5rem;">${prod.nombre}</h4>
+                                        <p style="color: #2F4F4F; font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem;">$${prod.precio.toLocaleString()}</p>
+                                        <button style="width: 100%; padding: 0.5rem; background: linear-gradient(135deg, #2F4F4F, #708090); color: white; border: none; border-radius: 5px; cursor: pointer;">Ver Detalles</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div style="text-align: center; margin-top: 1.5rem;">
+                            <button onclick="document.getElementById('gatosGrid').scrollIntoView({ behavior: 'smooth' })" style="padding: 0.75rem 1.5rem; background: white; color: #2F4F4F; border: 2px solid #2F4F4F; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                                Ver Todos los Productos 🐱
+                            </button>
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+        }
+    </script>
 
     <!-- Firebase Auth Script -->
     <script type="module">

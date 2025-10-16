@@ -1,6 +1,8 @@
 import { db, logEvent } from './firebase-config.js';
 import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 import { getProductRating, generateStars } from './reviews.js';
+import { applyFilters, createFilterPanel, updateFilter, clearFilters } from './filters.js';
+import { toggleFavorite, checkIfFavorite, updateFavoriteButton, initializeFavoriteButtons } from './favorites.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Mobile Menu functionality
@@ -63,76 +65,157 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Variable para almacenar productos
     let productosPerros = [];
+    let allProductosPerros = [];
 
     // Función para cargar productos de perros desde Firestore
     async function loadPerrosProducts() {
         const perrosGrid = document.getElementById('perrosGrid');
+        const filtersContainer = document.getElementById('filtersContainer');
 
         try {
             // Mostrar indicador de carga
-            perrosGrid.innerHTML = '<p style="text-align: center; padding: 2rem;">Cargando productos...</p>';
+            if (perrosGrid) perrosGrid.innerHTML = '<p style="text-align: center; padding: 2rem;">Cargando productos...</p>';
 
             // Consultar productos de perros desde Firestore
             const q = query(collection(db, 'productos'), where('categoria', '==', 'perros'));
             const querySnapshot = await getDocs(q);
 
-            productosPerros = [];
+            allProductosPerros = [];
             querySnapshot.forEach((doc) => {
-                productosPerros.push({
-                    id: doc.id,
+                allProductosPerros.push({
+                    id: doc.id,  // Usar docId de Firestore como ID
                     ...doc.data()
                 });
             });
 
             // Mostrar productos
-            if (productosPerros.length === 0) {
-                perrosGrid.innerHTML = '<p style="text-align: center; padding: 2rem;">No hay productos disponibles</p>';
+            if (allProductosPerros.length === 0) {
+                if (perrosGrid) perrosGrid.innerHTML = '<p style="text-align: center; padding: 2rem;">No hay productos disponibles</p>';
                 return;
             }
 
-            // Renderizar productos con loading de ratings
-            perrosGrid.innerHTML = productosPerros.map(producto => `
-                <div class="perro-product-card" style="cursor: pointer;" onclick="window.location.href='product-detail.html?id=${producto.id}'">
-                    <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
-                    <div class="perro-product-info">
-                        <span class="perro-product-category">PERROS</span>
-                        <h3>${producto.nombre}</h3>
-                        <p>${producto.descripcion}</p>
-                        <div id="rating-${producto.id}" class="product-rating" style="margin: 0.5rem 0; min-height: 24px;">
-                            <div style="color: #999; font-size: 0.9rem;">Cargando...</div>
-                        </div>
-                        <div class="perro-product-price">$${producto.precio.toLocaleString()}</div>
-                        <button class="perro-add-btn" onclick="event.stopPropagation(); agregarAlCarrito('${producto.id}')">
-                            🛒 Agregar al carrito
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+            // Crear panel de filtros si existe el contenedor
+            if (filtersContainer) {
+                filtersContainer.innerHTML = createFilterPanel(allProductosPerros, 'perros');
+            }
 
-            // Cargar ratings de cada producto
-            productosPerros.forEach(async (producto) => {
-                const { average, count } = await getProductRating(producto.id);
-                const ratingContainer = document.getElementById(`rating-${producto.id}`);
-                if (ratingContainer) {
-                    if (count > 0) {
-                        ratingContainer.innerHTML = `
-                            ${generateStars(average)}
-                            <span style="font-size: 0.85rem; color: #666; margin-left: 0.5rem;">
-                                ${average.toFixed(1)} (${count})
-                            </span>
-                        `;
-                    } else {
-                        ratingContainer.innerHTML = `
-                            <span style="font-size: 0.85rem; color: #999;">Sin reseñas aún</span>
-                        `;
-                    }
-                }
-            });
+            // Aplicar filtros y renderizar
+            renderProducts(allProductosPerros);
+
         } catch (error) {
             console.error('Error cargando productos:', error);
-            perrosGrid.innerHTML = '<p style="text-align: center; padding: 2rem; color: red;">Error al cargar productos. Intenta recargar la página.</p>';
+            if (perrosGrid) perrosGrid.innerHTML = '<p style="text-align: center; padding: 2rem; color: red;">Error al cargar productos. Intenta recargar la página.</p>';
         }
     }
+
+    // Función para renderizar productos
+    async function renderProducts(productos) {
+        const perrosGrid = document.getElementById('perrosGrid');
+        if (!perrosGrid) return;
+
+        // Aplicar filtros
+        const filteredProducts = applyFilters(productos);
+        productosPerros = filteredProducts;
+
+        // Actualizar contador de resultados
+        const filterResultCount = document.getElementById('filterResultCount');
+        if (filterResultCount) {
+            filterResultCount.textContent = `Mostrando ${filteredProducts.length} de ${allProductosPerros.length} productos`;
+        }
+
+        if (filteredProducts.length === 0) {
+            perrosGrid.innerHTML = '<p style="text-align: center; padding: 2rem;">No se encontraron productos con los filtros seleccionados</p>';
+            return;
+        }
+
+        // Renderizar productos con loading de ratings y botón de favoritos
+        perrosGrid.innerHTML = filteredProducts.map(producto => `
+            <div class="perro-product-card" style="cursor: pointer; position: relative;" onclick="window.location.href='product-detail.html?id=${producto.id}'">
+                <button class="favorite-btn" data-product-id="${producto.id}" onclick="event.stopPropagation(); handleFavoriteClick('${producto.id}')"
+                        style="position: absolute; top: 10px; right: 10px; background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 10; transition: transform 0.2s;">
+                    🤍
+                </button>
+                <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
+                <div class="perro-product-info">
+                    <span class="perro-product-category">PERROS</span>
+                    <h3>${producto.nombre}</h3>
+                    <p>${producto.descripcion}</p>
+                    <div id="rating-${producto.id}" class="product-rating" style="margin: 0.5rem 0; min-height: 24px;">
+                        <div style="color: #999; font-size: 0.9rem;">Cargando...</div>
+                    </div>
+                    <div class="perro-product-price">$${producto.precio.toLocaleString()}</div>
+                    <button class="perro-add-btn" onclick="event.stopPropagation(); agregarAlCarrito('${producto.id}')">
+                        🛒 Agregar al carrito
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        // Cargar ratings de cada producto
+        filteredProducts.forEach(async (producto) => {
+            const { average, count } = await getProductRating(producto.id);
+            const ratingContainer = document.getElementById(`rating-${producto.id}`);
+            if (ratingContainer) {
+                if (count > 0) {
+                    ratingContainer.innerHTML = `
+                        ${generateStars(average)}
+                        <span style="font-size: 0.85rem; color: #666; margin-left: 0.5rem;">
+                            ${average.toFixed(1)} (${count})
+                        </span>
+                    `;
+                } else {
+                    ratingContainer.innerHTML = `
+                        <span style="font-size: 0.85rem; color: #999;">Sin reseñas aún</span>
+                    `;
+                }
+            }
+        });
+
+        // Inicializar botones de favoritos
+        await initializeFavoriteButtons();
+    }
+
+    // Manejar click en favoritos
+    window.handleFavoriteClick = async function(productId) {
+        const button = document.querySelector(`.favorite-btn[data-product-id="${productId}"]`);
+        if (button) {
+            const newState = await toggleFavorite(productId);
+            if (newState !== null) {
+                updateFavoriteButton(button, newState);
+            }
+        }
+    };
+
+    // Funciones globales para filtros
+    window.updatePriceFilter = function(value) {
+        updateFilter('priceMax', value);
+        renderProducts(allProductosPerros);
+    };
+
+    window.updateBrandFilter = function(brand) {
+        updateFilter('brand', brand);
+        renderProducts(allProductosPerros);
+    };
+
+    window.updateAgeFilter = function(age) {
+        updateFilter('age', age);
+        renderProducts(allProductosPerros);
+    };
+
+    window.updateSortFilter = function(sortBy) {
+        updateFilter('sortBy', sortBy);
+        renderProducts(allProductosPerros);
+    };
+
+    window.clearAllFilters = function() {
+        clearFilters();
+        // Reset UI
+        document.getElementById('priceMin').value = 0;
+        document.getElementById('priceMax').value = '';
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.querySelector('select').value = 'default';
+        renderProducts(allProductosPerros);
+    };
 
     // Función para agregar al carrito
     window.agregarAlCarrito = function(productoId) {

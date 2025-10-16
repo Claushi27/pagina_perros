@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             productosGatos = [];
             querySnapshot.forEach((doc) => {
                 productosGatos.push({
-                    id: doc.id,
+                    id: doc.id,  // Usar docId de Firestore como ID
                     ...doc.data()
                 });
             });
@@ -95,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="gato-product-card" style="cursor: pointer;" onclick="window.location.href='product-detail.html?id=${producto.id}'">
                     <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
                     <div class="gato-product-info">
+                        <span class="gato-product-category">GATOS</span>
                         <h3>${producto.nombre}</h3>
                         <p>${producto.descripcion}</p>
                         <div id="rating-${producto.id}" class="product-rating" style="margin: 0.5rem 0; min-height: 24px;">
@@ -102,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <div class="gato-product-price">$${producto.precio.toLocaleString()}</div>
                         <button class="gato-add-btn" onclick="event.stopPropagation(); agregarAlCarrito('${producto.id}')">
-                            Agregar al carrito
+                            🛒 Agregar al carrito
                         </button>
                     </div>
                 </div>

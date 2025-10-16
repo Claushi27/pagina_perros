@@ -1,51 +1,64 @@
 import { auth, db } from './firebase-config.js';
-import { collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+import { collection, getDocs, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 import { getProductRating, generateStars, renderRatingSummary, renderReviewsList, openReviewModal } from './reviews.js';
 
 // Obtener el ID del producto de la URL
 const urlParams = new URLSearchParams(window.location.search);
-const productIdParam = urlParams.get('id');
-const productId = isNaN(productIdParam) ? productIdParam : parseInt(productIdParam);
+const productId = urlParams.get('id');  // Ahora es el docId (string)
 
 let currentProduct = null;
 let allProducts = [];
 
 // Cargar producto desde Firestore
 async function loadProduct() {
-    if (!productId && productId !== 0) {
-        console.error('No hay ID de producto en la URL');
-        window.location.href = 'index.html';
+    // Verificar que tengamos un productId válido
+    if (!productId || productId === '') {
+        console.error('❌ No hay ID de producto en la URL. ID recibido:', productId);
+        alert('⚠️ No se especificó un producto válido. Redirigiendo al inicio en 5 segundos...');
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 5000);
         return;
     }
 
     try {
-        const productRef = collection(db, 'productos');
-        const q = query(productRef, where('id', '==', productId));
-        const querySnapshot = await getDocs(q);
+        console.log('🔍 Cargando producto con docId:', productId);
 
-        if (querySnapshot.empty) {
-            console.error('Producto no encontrado');
-            window.location.href = 'index.html';
+        // Buscar directamente por docId
+        const productDocRef = doc(db, 'productos', productId);
+        const productDoc = await getDoc(productDocRef);
+
+        if (!productDoc.exists()) {
+            console.error('❌ Producto no encontrado con docId:', productId);
+            alert('⚠️ Producto no encontrado (ID: ' + productId + '). Redirigiendo al inicio en 5 segundos...');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 5000);
             return;
         }
 
-        querySnapshot.forEach((doc) => {
-            currentProduct = { ...doc.data(), docId: doc.id };
-        });
+        currentProduct = { id: productDoc.id, ...productDoc.data() };
+        console.log('✅ Producto cargado:', currentProduct);
 
         // Cargar todos los productos para relacionados
         const allProductsSnapshot = await getDocs(collection(db, 'productos'));
-        allProducts = allProductsSnapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id }));
+        allProducts = allProductsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
+        console.log('🎨 Renderizando producto...');
         renderProduct();
         loadRelatedProducts();
         setupTabs();
         setupQuantityControls();
         setupAddToCart();
+        console.log('✅ Producto renderizado correctamente');
 
     } catch (error) {
-        console.error('Error al cargar producto:', error);
-        alert('Error al cargar el producto');
+        console.error('❌ Error al cargar producto:', error);
+        console.error('Stack trace:', error.stack);
+        alert('⚠️ Error al cargar el producto: ' + error.message + '. Redirigiendo al inicio en 5 segundos...');
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 5000);
     }
 }
 
@@ -75,16 +88,14 @@ function renderProduct() {
     mainImage.src = currentProduct.imagen;
     mainImage.alt = currentProduct.nombre;
 
-    // Thumbnails (simulando múltiples imágenes - en producción vendrían de la BD)
+    // Thumbnails - solo mostrar la imagen principal (sin duplicados)
     const thumbnailContainer = document.getElementById('thumbnailContainer');
-    const images = [currentProduct.imagen, currentProduct.imagen, currentProduct.imagen];
-
-    thumbnailContainer.innerHTML = images.map((img, index) => `
-        <img src="${img}"
+    thumbnailContainer.innerHTML = `
+        <img src="${currentProduct.imagen}"
              alt="${currentProduct.nombre}"
-             class="thumbnail ${index === 0 ? 'active' : ''}"
-             onclick="changeMainImage('${img}', this)">
-    `).join('');
+             class="thumbnail active"
+             onclick="changeMainImage('${currentProduct.imagen}', this)">
+    `;
 
     // Características
     const features = [

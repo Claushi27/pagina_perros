@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Favoritos - Awka</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+
+        .favorites-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .favorites-header {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .favorites-header h1 {
+            font-size: 2.5rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .favorites-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .favorite-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 2px solid #f0f0f0;
+            position: relative;
+        }
+
+        .favorite-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(255, 107, 107, 0.15);
+            border-color: #FF6B6B;
+        }
+
+        .favorite-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .favorite-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .favorite-info {
+            padding: 1.5rem;
+        }
+
+        .favorite-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .remove-favorite {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .remove-favorite:hover {
+            transform: scale(1.1);
+            background: #fee;
+        }
+
+        .favorite-info h3 {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .favorite-price {
+            color: #FF6B6B;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        .price-alert {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .view-product-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-product-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .empty-favorites {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .empty-favorites h2 {
+            font-size: 2rem;
+            color: #999;
+            margin-bottom: 1rem;
+        }
+
+        .empty-favorites p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .browse-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .browse-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .favorites-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #FF6B6B;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-top">
+            <div class="header-logo">
+                <a href="index.html">
+                    <img src="imagenes/petshop1.png" alt="Logo Awka">
+                    <span>Awka Petshop</span>
+                </a>
+            </div>
+            <div class="search-bar" role="search">
+                <input type="text" id="searchInput" placeholder="¿Qué producto estás buscando?" autocomplete="off">
+                <button class="search-button" onclick="performSearch()">🔍</button>
+            </div>
+            <div class="header-icons">
+                <div id="userMenu" class="icon">👤 Iniciar Sesión</div>
+                <a href="cart.html" class="icon">🛒 <span id="cartCounter">0</span></a>
+            </div>
+        </div>
+        <div class="header-divider"></div>
+        <nav class="header-nav">
+            <ul>
+                <li><a href="perros.html" class="nav-link">🐕 Perros</a></li>
+                <li><a href="gatos.html" class="nav-link">🐱 Gatos</a></li>
+                <li><a href="favorites.html" class="nav-link" style="color: #FF6B6B; font-weight: 600;">❤️ Favoritos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="favorites-container">
+            <div class="favorites-header">
+                <h1>❤️ Mis Productos Favoritos</h1>
+                <p>Tus productos preferidos, siempre a mano</p>
+            </div>
+
+            <div class="favorites-stats" id="favoritesStats" style="display: none;">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalFavorites">0</div>
+                    <div class="stat-label">Productos Favoritos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="priceAlerts">0</div>
+                    <div class="stat-label">Ofertas Detectadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalValue">$0</div>
+                    <div class="stat-label">Valor Total</div>
+                </div>
+            </div>
+
+            <div id="favoritesContent">
+                <div style="text-align: center; padding: 4rem 2rem;">
+                    <p style="font-size: 1.2rem; color: #999;">Cargando tus favoritos...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+
+    <script src="js/cart-utils.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/footer.js"></script>
+    <script type="module">
+        import { auth, db } from './js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { getUserFavorites, toggleFavorite, watchFavoritePriceChanges } from './js/favorites.js';
+
+        const userMenu = document.getElementById('userMenu');
+
+        // Escuchar cambios en autenticación
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Usuario autenticado
+                let isAdmin = false;
+                try {
+                    const userDoc = await getDoc(doc(db, 'usuarios', user.uid));
+                    if (userDoc.exists()) {
+                        isAdmin = userDoc.data().rol === 'admin';
+                    }
+                } catch (error) {
+                    console.error('Error al verificar rol:', error);
+                }
+
+                const displayName = user.displayName || user.email.split('@')[0];
+                const adminLink = isAdmin ? '<a href="admin.html" style="display: block; padding: 8px; text-decoration: none; color: #FF6B35; font-weight: 600;">⚙️ Panel Admin</a>' : '';
+                userMenu.innerHTML = `
+                    <span style="cursor: pointer;">👤 ${displayName}</span>
+                    <div style="display: none; position: absolute; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 10px; top: 40px; right: 0; min-width: 150px; z-index: 1000;" id="userDropdown">
+                        <a href="profile.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">👤 Mi Perfil</a>
+                        <a href="orders.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">📦 Mis Pedidos</a>
+                        <a href="favorites.html" style="display: block; padding: 8px; text-decoration: none; color: #FF6B6B; font-weight: 600;">❤️ Favoritos</a>
+                        ${adminLink}
+                        <a href="#" id="logoutBtn" style="display: block; padding: 8px; text-decoration: none; color: #c33;">🚪 Cerrar Sesión</a>
+                    </div>
+                `;
+
+                userMenu.querySelector('span').addEventListener('click', () => {
+                    const dropdown = document.getElementById('userDropdown');
+                    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                });
+
+                document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    try {
+                        await signOut(auth);
+                        window.location.reload();
+                    } catch (error) {
+                        console.error('Error al cerrar sesión:', error);
+                    }
+                });
+
+                // Cargar favoritos
+                loadFavorites();
+
+                // Escuchar cambios de precio
+                watchFavoritePriceChanges((priceChange) => {
+                    showPriceAlert(priceChange);
+                });
+
+            } else {
+                // Usuario no autenticado
+                userMenu.innerHTML = '<a href="login.html" style="text-decoration: none; color: inherit;">👤 Iniciar Sesión</a>';
+                document.getElementById('favoritesContent').innerHTML = `
+                    <div class="empty-favorites">
+                        <h2>🔒 Inicia sesión para ver tus favoritos</h2>
+                        <p>Guarda tus productos favoritos y recibe alertas de cambios de precio</p>
+                        <a href="login.html" class="browse-btn">Iniciar Sesión</a>
+                    </div>
+                `;
+            }
+        });
+
+        // Cargar favoritos
+        async function loadFavorites() {
+            try {
+                const favorites = await getUserFavorites();
+
+                if (favorites.length === 0) {
+                    document.getElementById('favoritesContent').innerHTML = `
+                        <div class="empty-favorites">
+                            <h2>💔 No tienes favoritos aún</h2>
+                            <p>Explora nuestros productos y agrega tus favoritos con el botón ❤️</p>
+                            <a href="perros.html" class="browse-btn">Explorar Productos</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Mostrar estadísticas
+                document.getElementById('favoritesStats').style.display = 'grid';
+                document.getElementById('totalFavorites').textContent = favorites.length;
+                const totalValue = favorites.reduce((sum, fav) => sum + fav.precio, 0);
+                document.getElementById('totalValue').textContent = `$${totalValue.toLocaleString()}`;
+
+                // Contar ofertas (productos con precio diferente al original)
+                const priceAlerts = favorites.filter(fav => fav.precio < fav.precioOriginal).length;
+                document.getElementById('priceAlerts').textContent = priceAlerts;
+
+                // Mostrar productos
+                const favoritesHTML = favorites.map(fav => {
+                    const hasPriceAlert = fav.precio < fav.precioOriginal;
+                    const discount = hasPriceAlert ? Math.round(((fav.precioOriginal - fav.precio) / fav.precioOriginal) * 100) : 0;
+
+                    return `
+                        <div class="favorite-card">
+                            <span class="favorite-badge">${fav.categoria}</span>
+                            <button class="remove-favorite" onclick="removeFavorite('${fav.productId}')" title="Quitar de favoritos">❌</button>
+                            <img src="${fav.imagen}" alt="${fav.nombre}" onerror="this.src='https://via.placeholder.com/280x250?text=Producto'">
+                            <div class="favorite-info">
+                                ${hasPriceAlert ? `
+                                    <div class="price-alert">
+                                        🎉 ¡Bajó ${discount}%! Antes $${fav.precioOriginal.toLocaleString()}
+                                    </div>
+                                ` : ''}
+                                <h3>${fav.nombre}</h3>
+                                <div class="favorite-price">$${fav.precio.toLocaleString()}</div>
+                                <button class="view-product-btn" onclick="window.location.href='product-detail.html?id=${fav.productId}'">
+                                    Ver Producto
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('favoritesContent').innerHTML = `
+                    <div class="favorites-grid">
+                        ${favoritesHTML}
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Error al cargar favoritos:', error);
+                document.getElementById('favoritesContent').innerHTML = `
+                    <div class="empty-favorites">
+                        <h2>⚠️ Error al cargar favoritos</h2>
+                        <p>Intenta recargar la página</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Remover favorito
+        window.removeFavorite = async function(productId) {
+            if (confirm('¿Quitar este producto de favoritos?')) {
+                await toggleFavorite(productId);
+                loadFavorites();
+            }
+        };
+
+        // Mostrar alerta de cambio de precio
+        function showPriceAlert(priceChange) {
+            const alert = document.createElement('div');
+            alert.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: linear-gradient(135deg, #4ade80, #22c55e);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+            `;
+            alert.innerHTML = `
+                <strong>🎉 ¡Bajó de precio!</strong><br>
+                <span style="font-size: 0.9rem;">${priceChange.nombre}</span><br>
+                <span style="font-size: 0.85rem;">Ahora $${priceChange.precioNuevo.toLocaleString()} (-${priceChange.descuento}%)</span>
+            `;
+            document.body.appendChild(alert);
+
+            setTimeout(() => {
+                alert.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        }
+    </script>
+
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    </style>
+</body>
+</html>

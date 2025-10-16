@@ -365,57 +365,60 @@
                 </div>
             </div>
 
-            <!-- Calculadora de Alimento -->
-            <div class="food-calculator">
-                <h2>🍖 Calculadora de Alimento Diario</h2>
-                <p style="color: #666; margin-bottom: 1.5rem;">Calcula la cantidad exacta de alimento que tu perro necesita según su peso, edad y nivel de actividad</p>
+            <!-- Calculadora de Alimento para Perros - Diseño Horizontal Optimizado -->
+            <div class="food-calculator" style="max-width: 1200px; margin: 2rem auto; padding: 2rem; background: linear-gradient(135deg, #FFF8DC, #FFE4B5); border-radius: 15px; box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);">
+                <h2 style="text-align: center; color: #8B4513; margin-bottom: 0.5rem;">🍖 Calculadora de Alimento Diario</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 1.5rem;">Descubre cuánto alimento necesita tu perro según sus características</p>
 
-                <div class="calculator-grid">
-                    <div class="calc-input-group">
-                        <label for="dogWeight">Peso del perro (kg)</label>
-                        <input type="number" id="dogWeight" placeholder="Ej: 15" min="0.5" max="100" step="0.1">
+                <div class="calculator-form">
+                    <!-- Grid Horizontal para los inputs -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <label for="dogWeight" style="display: block; margin-bottom: 0.5rem; color: #8B4513; font-weight: 600; font-size: 0.9rem;">Peso del perro (kg)</label>
+                            <input type="number" id="dogWeight" placeholder="Ej: 15" min="0.5" max="100" step="0.1" style="width: 100%; padding: 0.75rem; border: 2px solid #8B4513; border-radius: 8px; font-size: 1rem;">
+                        </div>
+
+                        <div>
+                            <label for="dogAge" style="display: block; margin-bottom: 0.5rem; color: #8B4513; font-weight: 600; font-size: 0.9rem;">Edad del perro</label>
+                            <select id="dogAge" style="width: 100%; padding: 0.75rem; border: 2px solid #8B4513; border-radius: 8px; font-size: 1rem;">
+                                <option value="puppy">Cachorro (2-12 meses)</option>
+                                <option value="adult" selected>Adulto (1-7 años)</option>
+                                <option value="senior">Senior (7+ años)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="activityLevel" style="display: block; margin-bottom: 0.5rem; color: #8B4513; font-weight: 600; font-size: 0.9rem;">Nivel de actividad</label>
+                            <select id="activityLevel" style="width: 100%; padding: 0.75rem; border: 2px solid #8B4513; border-radius: 8px; font-size: 1rem;">
+                                <option value="low">Baja (paseos cortos)</option>
+                                <option value="moderate" selected>Moderada (1-2 horas/día)</option>
+                                <option value="high">Alta (>2 horas/día)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="dogSize" style="display: block; margin-bottom: 0.5rem; color: #8B4513; font-weight: 600; font-size: 0.9rem;">Tamaño</label>
+                            <select id="dogSize" style="width: 100%; padding: 0.75rem; border: 2px solid #8B4513; border-radius: 8px; font-size: 1rem;">
+                                <option value="small">Pequeño (<10kg)</option>
+                                <option value="medium" selected>Mediano (10-25kg)</option>
+                                <option value="large">Grande (>25kg)</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="calc-input-group">
-                        <label for="dogAge">Edad</label>
-                        <select id="dogAge">
-                            <option value="">Selecciona edad</option>
-                            <option value="puppy">Cachorro (2-12 meses)</option>
-                            <option value="adult">Adulto (1-7 años)</option>
-                            <option value="senior">Senior (7+ años)</option>
-                        </select>
-                    </div>
+                    <button onclick="calculateDogFood()" style="width: 100%; max-width: 300px; display: block; margin: 0 auto; padding: 0.85rem 2rem; background: linear-gradient(135deg, #8B4513, #D2691E); color: white; border: none; border-radius: 10px; font-size: 1.05rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        Calcular Cantidad 📊
+                    </button>
 
-                    <div class="calc-input-group">
-                        <label for="activityLevel">Nivel de actividad</label>
-                        <select id="activityLevel">
-                            <option value="">Selecciona actividad</option>
-                            <option value="low">Baja (paseos cortos)</option>
-                            <option value="moderate">Moderada (1-2 horas/día)</option>
-                            <option value="high">Alta (>2 horas/día)</option>
-                        </select>
-                    </div>
-
-                    <div class="calc-input-group">
-                        <label for="dogSize">Tamaño</label>
-                        <select id="dogSize">
-                            <option value="">Selecciona tamaño</option>
-                            <option value="small">Pequeño (<10kg)</option>
-                            <option value="medium">Mediano (10-25kg)</option>
-                            <option value="large">Grande (>25kg)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button class="calc-button" onclick="calculateFood()">Calcular Porción Diaria</button>
-
-                <div class="calc-result" id="calcResult">
-                    <!-- Resultado se mostrará aquí -->
+                    <div id="dogResult" style="margin-top: 1.5rem; display: none;"></div>
                 </div>
             </div>
 
+            <!-- Filtros Avanzados -->
+            <div id="filtersContainer"></div>
+
             <!-- Productos -->
-            <div class="perros-products">
+            <div class="perros-products" style="margin-top: 2rem;">
                 <h2>🛍️ Nuestros Productos</h2>
                 <div class="perros-grid" id="perrosGrid">
                     <!-- Los productos se cargarán aquí -->
@@ -505,23 +508,25 @@
     <script src="js/footer.js"></script>
     <script type="module" src="js/perros.js"></script>
 
-    <!-- Calculadora de Alimento Script -->
-    <script>
-        function calculateFood() {
+    <!-- Calculadora de Alimento para Perros con Recomendaciones de Productos -->
+    <script type="module">
+        import { db } from './js/firebase-config.js';
+        import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+        window.calculateDogFood = async function() {
             const weight = parseFloat(document.getElementById('dogWeight').value);
             const age = document.getElementById('dogAge').value;
             const activity = document.getElementById('activityLevel').value;
             const size = document.getElementById('dogSize').value;
-            const resultDiv = document.getElementById('calcResult');
+            const resultDiv = document.getElementById('dogResult');
 
-            // Validar inputs
-            if (!weight || !age || !activity || !size) {
-                alert('Por favor completa todos los campos');
-                return;
-            }
-
-            if (weight <= 0 || weight > 100) {
-                alert('El peso debe estar entre 0.5 y 100 kg');
+            // Validar entrada
+            if (!weight || weight < 0.5 || weight > 100) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.background = '#ffe0e0';
+                resultDiv.style.padding = '1rem';
+                resultDiv.style.borderRadius = '8px';
+                resultDiv.innerHTML = '<p style="color: #c00; text-align: center; margin: 0;">⚠️ Por favor ingresa un peso válido entre 0.5 y 100 kg</p>';
                 return;
             }
 
@@ -577,30 +582,115 @@
                 recommendations.push('Razas grandes necesitan control de peso para cuidar articulaciones');
             }
 
-            // Mostrar resultado
-            resultDiv.innerHTML = `
-                <h3>📊 Resultado para tu perro:</h3>
-                <p><strong>Peso:</strong> ${weight} kg | <strong>Edad:</strong> ${age === 'puppy' ? 'Cachorro' : age === 'adult' ? 'Adulto' : 'Senior'} | <strong>Actividad:</strong> ${activity === 'low' ? 'Baja' : activity === 'moderate' ? 'Moderada' : 'Alta'}</p>
+            // ALGORITMO DE RECOMENDACIÓN DE PRODUCTOS
+            let productosRecomendados = [];
+            try {
+                const productosRef = collection(db, 'productos');
+                const q = query(productosRef, where('categoria', '==', 'perros'));
+                const querySnapshot = await getDocs(q);
 
-                <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0; border: 2px dashed #8B4513;">
-                    <p style="margin: 0;"><strong style="font-size: 1.3rem;">🍖 ${gramsPerDay}g de alimento por día</strong></p>
-                    <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Aproximadamente ${cupsPerDay} tazas (≈${dailyCalories} kcal/día)</p>
+                let productos = [];
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    productos.push({
+                        id: doc.id,  // Usar docId de Firestore
+                        nombre: data.nombre,
+                        precio: data.precio,
+                        imagen: data.imagen,
+                        descripcion: data.descripcion
+                    });
+                });
+
+                // Filtrar productos por tipo basado en respuestas
+                let productosRecomendados = productos.filter(p => {
+                    const nombreLower = p.nombre.toLowerCase();
+                    const descLower = p.descripcion.toLowerCase();
+
+                    // Filtrar por edad
+                    if (age === 'puppy' && (nombreLower.includes('cachorro') || nombreLower.includes('puppy') || descLower.includes('cachorro'))) {
+                        return true;
+                    }
+                    if (age === 'senior' && (nombreLower.includes('senior') || nombreLower.includes('adulto mayor') || descLower.includes('senior'))) {
+                        return true;
+                    }
+                    if (age === 'adult' && !nombreLower.includes('cachorro') && !nombreLower.includes('senior')) {
+                        return true;
+                    }
+
+                    // Si es alimento en general
+                    if (nombreLower.includes('alimento') || nombreLower.includes('comida') || nombreLower.includes('food')) {
+                        return true;
+                    }
+
+                    return false;
+                });
+
+                // Si no hay productos específicos, mostrar los primeros 3
+                if (productosRecomendados.length === 0) {
+                    productosRecomendados = productos.slice(0, 3);
+                } else if (productosRecomendados.length > 3) {
+                    productosRecomendados = productosRecomendados.slice(0, 3);
+                }
+
+            } catch (error) {
+                console.error('Error al cargar productos:', error);
+                productosRecomendados = [];
+            }
+
+            // Mostrar resultados
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = 'white';
+            resultDiv.style.padding = '1.5rem';
+            resultDiv.style.borderRadius = '10px';
+            resultDiv.style.boxShadow = '0 2px 8px rgba(139, 69, 19, 0.15)';
+
+            resultDiv.innerHTML = `
+                <h3 style="color: #8B4513; text-align: center; margin-bottom: 1rem;">📊 Resultados para tu Perro</h3>
+                <div style="background: linear-gradient(135deg, #FFF8DC, #FFE4B5); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <p style="margin: 0.5rem 0;"><strong>Peso:</strong> ${weight} kg</p>
+                    <p style="margin: 0.5rem 0;"><strong>Edad:</strong> ${age === 'puppy' ? 'Cachorro' : age === 'senior' ? 'Senior' : 'Adulto'}</p>
+                    <p style="margin: 0.5rem 0;"><strong>Actividad:</strong> ${activity === 'low' ? 'Baja' : activity === 'high' ? 'Alta' : 'Moderada'}</p>
+                    <p style="margin: 0.5rem 0;"><strong>Tamaño:</strong> ${size === 'small' ? 'Pequeño' : size === 'large' ? 'Grande' : 'Mediano'}</p>
                 </div>
 
-                <p><strong>💡 Recomendaciones:</strong></p>
-                <ul style="margin: 0; padding-left: 1.5rem;">
-                    ${recommendations.map(rec => `<li style="margin-bottom: 0.5rem;">${rec}</li>`).join('')}
-                    <li style="margin-bottom: 0.5rem;">Ajusta según condición corporal y nivel de energía</li>
-                    <li>Consulta con tu veterinario para necesidades especiales</li>
-                </ul>
+                <div style="background: #8B4513; color: white; padding: 1.5rem; border-radius: 8px; text-align: center; margin-bottom: 1rem;">
+                    <h4 style="margin-top: 0;">🍖 Cantidad Diaria Recomendada</h4>
+                    <p style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">${gramsPerDay}g</p>
+                    <p style="margin-bottom: 0;">Aproximadamente ${cupsPerDay} tazas (≈${dailyCalories} kcal/día)</p>
+                </div>
 
-                <p style="margin-top: 1rem; font-size: 0.85rem; color: #999; font-style: italic;">
-                    * Esta es una estimación general. Cada perro es único y puede tener necesidades diferentes.
-                </p>
+                <div style="background: #FFF8DC; padding: 1rem; border-radius: 8px; border-left: 4px solid #8B4513;">
+                    <p style="margin: 0.5rem 0; font-size: 0.95rem;"><strong>💡 Consejos:</strong></p>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                        ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                        <li>Ajusta según condición corporal y nivel de energía</li>
+                        <li>Consulta con tu veterinario para necesidades específicas</li>
+                    </ul>
+                </div>
+
+                ${productosRecomendados.length > 0 ? `
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #8B4513;">
+                        <h3 style="text-align: center; color: #8B4513; margin-bottom: 1.5rem;">🎯 Productos Recomendados Para Tu Perro</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                            ${productosRecomendados.map(prod => `
+                                <div style="background: white; border: 2px solid #8B4513; border-radius: 10px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease;" onclick="window.location.href='product-detail.html?id=${prod.id}'">
+                                    <img src="${prod.imagen}" alt="${prod.nombre}" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/200x150?text=Producto+Perro'">
+                                    <div style="padding: 1rem;">
+                                        <h4 style="color: #8B4513; font-size: 1rem; margin-bottom: 0.5rem;">${prod.nombre}</h4>
+                                        <p style="color: #8B4513; font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem;">$${prod.precio.toLocaleString()}</p>
+                                        <button style="width: 100%; padding: 0.5rem; background: linear-gradient(135deg, #8B4513, #D2691E); color: white; border: none; border-radius: 5px; cursor: pointer;">Ver Detalles</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div style="text-align: center; margin-top: 1.5rem;">
+                            <button onclick="document.getElementById('perrosGrid').scrollIntoView({ behavior: 'smooth' })" style="padding: 0.75rem 1.5rem; background: white; color: #8B4513; border: 2px solid #8B4513; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                                Ver Todos los Productos 🐕
+                            </button>
+                        </div>
+                    </div>
+                ` : ''}
             `;
-
-            resultDiv.classList.add('show');
-            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     </script>
 
