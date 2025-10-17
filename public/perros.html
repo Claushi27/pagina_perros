@@ -602,7 +602,7 @@
                 });
 
                 // Filtrar productos por tipo basado en respuestas
-                let productosRecomendados = productos.filter(p => {
+                productosRecomendados = productos.filter(p => {
                     const nombreLower = p.nombre.toLowerCase();
                     const descLower = p.descripcion.toLowerCase();
 

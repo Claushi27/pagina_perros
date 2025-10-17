@@ -392,7 +392,8 @@
                 </div>
                 <div class="form-group">
                     <label for="productImageFile">Imagen del producto</label>
-                    <input type="file" id="productImageFile" accept="image/*" style="margin-bottom: 0.5rem;">
+                    <input type="file" id="productImageFile" accept="image/jpeg,image/jpg,image/png,image/webp" style="margin-bottom: 0.5rem;">
+                    <small style="color: #666; display: block;">Formatos: JPEG, JPG, PNG, WEBP - Máx: 5MB</small>
                     <div id="imagePreview" style="margin-top: 1rem; display: none;">
                         <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #e0e0e0;">
                     </div>
@@ -555,17 +556,99 @@
             currentProductId = null;
         };
 
-        // Preview de imagen al seleccionar archivo
-        document.getElementById('productImageFile').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                selectedImageFile = file;
+        // Función para redimensionar imagen (sin comprimir calidad)
+        async function resizeImage(file, targetWidth = 800, targetHeight = 800) {
+            return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    document.getElementById('previewImg').src = e.target.result;
-                    document.getElementById('imagePreview').style.display = 'block';
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = targetWidth;
+                        canvas.height = targetHeight;
+
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Fondo blanco
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.fillRect(0, 0, targetWidth, targetHeight);
+
+                        // Calcular dimensiones para centrar manteniendo proporción
+                        const scale = Math.min(targetWidth / img.width, targetHeight / img.height);
+                        const scaledWidth = img.width * scale;
+                        const scaledHeight = img.height * scale;
+                        const x = (targetWidth - scaledWidth) / 2;
+                        const y = (targetHeight - scaledHeight) / 2;
+
+                        // Dibujar imagen centrada
+                        ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
+
+                        // Convertir a blob con calidad máxima
+                        canvas.toBlob((blob) => {
+                            resolve(new File([blob], file.name, {
+                                type: 'image/jpeg',
+                                lastModified: Date.now()
+                            }));
+                        }, 'image/jpeg', 0.95); // 95% calidad = casi sin pérdida
+                    };
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
+            });
+        }
+
+        // Preview de imagen al seleccionar archivo con redimensión uniforme
+        document.getElementById('productImageFile').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Validar tipo de archivo
+                const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+                if (!validTypes.includes(file.type)) {
+                    showAlert('Tipo de archivo no válido. Solo se permiten imágenes JPEG, JPG, PNG y WEBP', 'error');
+                    e.target.value = '';
+                    return;
+                }
+
+                // Validar tamaño original
+                const maxSize = 5 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    showAlert('La imagen es demasiado grande. Tamaño máximo: 5MB', 'error');
+                    e.target.value = '';
+                    return;
+                }
+
+                // Mostrar mensaje de procesamiento
+                showAlert('Procesando imagen a formato estándar 800x800px...', 'warning');
+
+                try {
+                    // Redimensionar a formato uniforme
+                    const resizedFile = await resizeImage(file, 800, 800);
+                    const originalSize = (file.size / 1024).toFixed(0);
+                    const finalSize = (resizedFile.size / 1024).toFixed(0);
+
+                    selectedImageFile = resizedFile;
+
+                    // Preview
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        document.getElementById('previewImg').src = e.target.result;
+                        document.getElementById('imagePreview').style.display = 'block';
+                    };
+                    reader.readAsDataURL(resizedFile);
+
+                    showAlert(`✓ Imagen ajustada a 800x800px (${originalSize}KB → ${finalSize}KB)`, 'success');
+                } catch (error) {
+                    console.error('Error al procesar:', error);
+                    selectedImageFile = file;
+                    showAlert('No se pudo procesar, se usará imagen original', 'warning');
+                    
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        document.getElementById('previewImg').src = e.target.result;
+                        document.getElementById('imagePreview').style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
             }
         });
 
@@ -598,11 +681,31 @@
 
         // Subir imagen a Firebase Storage
         async function uploadProductImage(file, productName) {
+            // Validar tipo de archivo
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            if (!validTypes.includes(file.type)) {
+                throw new Error('Tipo de archivo no válido. Solo se permiten imágenes JPEG, JPG, PNG y WEBP');
+            }
+
+            // Validar tamaño (máximo 5MB)
+            const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+            if (file.size > maxSize) {
+                throw new Error('La imagen es demasiado grande. Tamaño máximo: 5MB');
+            }
+
             const timestamp = Date.now();
-            const fileName = `productos/${timestamp}_${productName.replace(/\s+/g, '_')}.${file.name.split('.').pop()}`;
+            const sanitizedName = productName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            const fileName = `productos/${timestamp}_${sanitizedName}.${fileExtension}`;
             const storageRef = ref(storage, fileName);
 
-            await uploadBytes(storageRef, file);
+            // Metadata para mejorar el manejo de CORS
+            const metadata = {
+                contentType: file.type,
+                cacheControl: 'public, max-age=31536000'
+            };
+
+            await uploadBytes(storageRef, file, metadata);
             const downloadURL = await getDownloadURL(storageRef);
             return downloadURL;
         }
