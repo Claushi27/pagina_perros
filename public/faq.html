@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas Frecuentes - Awka Petshop</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .policy-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .policy-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #FF6B35;
+        }
+        .policy-header h1 {
+            color: #2F4F4F;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #FF6B35;
+        }
+        .faq-question {
+            color: #2F4F4F;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        .faq-answer {
+            color: #555;
+            line-height: 1.7;
+        }
+        .faq-answer ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        .faq-answer li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-top">
+            <div class="header-logo">
+                <a href="index.html">
+                    <img src="imagenes/petshop1.png" alt="Logo Awka">
+                    <span>Awka Petshop</span>
+                </a>
+            </div>
+            <div class="search-bar" role="search">
+                <label for="searchInputHeader" class="visually-hidden">Buscar productos</label>
+                <input id="searchInputHeader" type="text" placeholder="¿Qué producto estás buscando?" aria-label="Buscar productos" autocomplete="off">
+                <button class="search-button" aria-label="Buscar">🔍</button>
+            </div>
+            <div class="header-icons">
+                <div id="userMenu" class="icon">👤 Iniciar Sesión</div>
+                <a href="cart.html" class="icon">🛒 <span id="cartCounter">0</span></a>
+                <button class="menu-toggle" aria-label="Abrir menú" aria-haspopup="dialog" aria-controls="mobile-menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+        <div class="header-divider"></div>
+        <nav class="header-nav">
+            <ul>
+                <li><a href="index.html" class="nav-link">🏠 Inicio</a></li>
+                <li><a href="perros.html" class="nav-link">🐕 Perros</a></li>
+                <li><a href="gatos.html" class="nav-link">🐱 Gatos</a></li>
+                <li><a href="cart.html" class="nav-link">🛒 Carrito</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="mobile-menu-overlay" id="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="mobile-menu-top">
+            <a href="index.html" class="logo-mobile">Awka Petshop</a>
+            <button class="close-menu" aria-label="Cerrar menú">&times;</button>
+        </div>
+        <div class="mobile-menu-content">
+            <ul>
+                <li><a href="index.html">🏠 Inicio</a></li>
+                <li><a href="perros.html">🐕 Perros</a></li>
+                <li><a href="gatos.html">🐱 Gatos</a></li>
+                <li><a href="cart.html">🛒 Carrito</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <main>
+        <div class="policy-container">
+            <div class="policy-header">
+                <h1>❓ Preguntas Frecuentes</h1>
+                <p>Encuentra respuestas a las consultas más comunes</p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">1. ¿Qué tipo de productos ofrecen?</div>
+                <div class="faq-answer">
+                    Nos especializamos en la venta de alimentos secos, húmedos y snacks para perros y gatos, además de suplementos y accesorios seleccionados por su calidad y respaldo nutricional. Trabajamos únicamente con marcas reconocidas y distribuidores oficiales.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">2. ¿Los productos son originales?</div>
+                <div class="faq-answer">
+                    Sí. Todos nuestros productos son 100% originales y provienen directamente de marcas o distribuidores certificados. No comercializamos productos de imitación ni de procedencia desconocida.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">3. ¿Cómo puedo realizar una compra?</div>
+                <div class="faq-answer">
+                    Puede realizar su pedido directamente a través de nuestro sitio web:
+                    <ul>
+                        <li>Seleccione los productos de su interés.</li>
+                        <li>Agréguelos al carrito de compras.</li>
+                        <li>Complete los datos solicitados para envío y pago.</li>
+                        <li>Recibirá un correo de confirmación con los detalles de su pedido.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">4. ¿Cuáles son las zonas de despacho disponibles?</div>
+                <div class="faq-answer">
+                    Actualmente realizamos despachos en las comunas de:
+                    <ul>
+                        <li><strong>Zona Centro:</strong> Santiago Centro, Estación Central, Quinta Normal, Independencia, Recoleta.</li>
+                        <li><strong>Zona Norte:</strong> Conchalí, Huechuraba, Quilicura, Renca.</li>
+                        <li><strong>Zona Oriente:</strong> Providencia, Ñuñoa, La Reina, Las Condes, Vitacura, Lo Barnechea, Peñalolén.</li>
+                        <li><strong>Zona Sur:</strong> La Florida, San Joaquín, Macul, San Miguel, La Cisterna, San Ramón, El Bosque, La Granja, Pedro Aguirre Cerda, Lo Espejo, La Pintana, Puente Alto, San Bernardo.</li>
+                        <li><strong>Zona Poniente:</strong> Maipú, Cerrillos, Lo Prado, Pudahuel, Cerro Navia.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">5. ¿Cuál es el costo de despacho?</div>
+                <div class="faq-answer">
+                    El costo de envío varía según la comuna de destino y el monto total de la compra. Este valor se calculará automáticamente antes de finalizar su pedido. En algunos casos, los envíos pueden ser gratuitos por compras superiores a un monto determinado.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">6. ¿En cuánto tiempo recibiré mi pedido?</div>
+                <div class="faq-answer">
+                    El tiempo de entrega dependerá de su ubicación:
+                    <ul>
+                        <li><strong>Región Metropolitana:</strong> Entre 1 a 2 días hábiles.</li>
+                    </ul>
+                    El plazo comienza a contarse una vez confirmada la compra y el pago. Posteriormente se enviará un correo electrónico con el número de seguimiento correspondiente.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">7. ¿Qué medios de pago aceptan?</div>
+                <div class="faq-answer">
+                    Aceptamos pagos en efectivo, transferencia bancaria y tarjetas de crédito o débito, todos procesados a través de plataformas de pago seguras, como Mercado Pago.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">8. ¿Puedo retirar mi pedido en tienda física?</div>
+                <div class="faq-answer">
+                    Contamos con retiro en tienda en María Luisa Santander 468, Oficina 203, Providencia.
+                    <br><br>
+                    Para optar por esta modalidad, deberá seleccionar la opción "Retiro en tienda" al momento de realizar su compra.
+                    <br>
+                    Una vez que su pedido esté listo, le enviaremos una notificación confirmando su disponibilidad para retiro.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">9. ¿Realizan envíos a regiones?</div>
+                <div class="faq-answer">
+                    No, actualmente realizamos envíos únicamente en comunas seleccionadas de la Región Metropolitana.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">10. ¿Puedo cambiar o devolver un producto?</div>
+                <div class="faq-answer">
+                    Sí, aceptamos cambios y devoluciones, los cuales deben ser notificados el mismo día de la recepción del producto.
+                    <br><br>
+                    El producto deberá encontrarse sellado, sin uso y en su empaque original, salvo en los casos en que presente deterioro interno o externo.
+                    <br>
+                    Para más detalles, puede consultar nuestras <a href="cambios-devoluciones.html" style="color: #FF6B35; font-weight: 600;">Políticas de Cambios y Devoluciones</a>.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">11. ¿Qué debo hacer si mi pedido llega dañado o incompleto?</div>
+                <div class="faq-answer">
+                    Si al recibir su pedido nota algún inconveniente, comuníquese con nosotros dentro de las primeras 24 horas posteriores a la entrega, adjuntando fotografías del producto y su empaque. Nuestro equipo evaluará el caso y ofrecerá una solución adecuada.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">12. ¿Qué sucede si no hay nadie disponible para recibir el pedido?</div>
+                <div class="faq-answer">
+                    En caso de ausencia del destinatario, se reagendará la entrega o se coordinará el retiro del pedido en nuestro centro de retiro.
+                    <br>
+                    *En algunos casos, podría aplicarse un costo adicional por reenvío.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section footer-about">
+                    <div class="logo-footer">
+                        <img src="imagenes/petshop1.png" alt="Awka Logo">
+                        <span>Awka Petshop</span>
+                    </div>
+                    <p>Tu tienda de confianza para todo lo que tu mascota necesita. Calidad, amor y dedicación en cada producto.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="https://www.instagram.com/awkapet.cl/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="WhatsApp">💬</a>
+                    </div>
+                </div>
+
+                <div class="footer-section footer-links">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="perros.html">Productos para Perros</a></li>
+                        <li><a href="gatos.html">Productos para Gatos</a></li>
+                        <li><a href="cart.html">Mi Carrito</a></li>
+                        <li><a href="profile.html">Mi Cuenta</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section footer-links">
+                    <h3>Atención al Cliente</h3>
+                    <ul>
+                        <li><a href="faq.html">Preguntas Frecuentes</a></li>
+                        <li><a href="politica-envios.html">Política de Envíos</a></li>
+                        <li><a href="cambios-devoluciones.html">Cambios y Devoluciones</a></li>
+                        <li><a href="terminos-condiciones.html">Términos y Condiciones</a></li>
+                        <li><a href="politica-privacidad.html">Política de Privacidad</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section footer-contact">
+                    <h3>Contáctanos</h3>
+                    <p><span class="icon">📍</span> María Luisa Santander 468, Oficina 203, Providencia</p>
+                    <p><span class="icon">📧</span> awkapetshop@gmail.com</p>
+                    <p><span class="icon">📞</span> +56 9 4877 5370</p>
+                    <p><span class="icon">⏰</span> Lun - Sáb: 9:00 - 20:00</p>
+                </div>
+            </div>
+
+            <div class="footer-section" style="margin-top: 2rem;">
+                <h3>Métodos de Pago</h3>
+                <div class="payment-methods">
+                    <span class="payment-method">💰 Efectivo</span>
+                    <span class="payment-method">🏦 Transferencia Bancaria</span>
+                    <span class="payment-method">💳 Tarjetas Débito/Crédito</span>
+                    <span class="payment-method">🛒 Mercado Pago</span>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2025 Awka Petshop. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/cart-utils.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/footer.js"></script>
+
+    <script type="module">
+        import { auth, db } from './js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+        const userMenu = document.getElementById('userMenu');
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                let isAdmin = false;
+                try {
+                    const userDoc = await getDoc(doc(db, 'usuarios', user.uid));
+                    if (userDoc.exists()) {
+                        isAdmin = userDoc.data().rol === 'admin';
+                    }
+                } catch (error) {
+                    console.error('Error al verificar rol:', error);
+                }
+
+                const displayName = user.displayName || user.email.split('@')[0];
+                const adminLink = isAdmin ? '<a href="admin.html" style="display: block; padding: 8px; text-decoration: none; color: #FF6B35; font-weight: 600;">⚙️ Panel Admin</a>' : '';
+                userMenu.innerHTML = `
+                    <span style="cursor: pointer;">👤 ${displayName}</span>
+                    <div style="display: none; position: absolute; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 10px; top: 40px; right: 0; min-width: 150px; z-index: 1000;" id="userDropdown">
+                        <a href="profile.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">👤 Mi Perfil</a>
+                        <a href="orders.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">📦 Mis Pedidos</a>
+                        ${adminLink}
+                        <a href="#" id="logoutBtn" style="display: block; padding: 8px; text-decoration: none; color: #c33;">🚪 Cerrar Sesión</a>
+                    </div>
+                `;
+
+                userMenu.querySelector('span').addEventListener('click', () => {
+                    const dropdown = document.getElementById('userDropdown');
+                    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                });
+
+                document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    try {
+                        await signOut(auth);
+                        window.location.reload();
+                    } catch (error) {
+                        console.error('Error al cerrar sesión:', error);
+                    }
+                });
+
+            } else {
+                userMenu.innerHTML = '<a href="login.html" style="text-decoration: none; color: inherit;">👤 Iniciar Sesión</a>';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -20,35 +20,30 @@
         }
 
         .search-results-page {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
 
         .search-results-header {
             background: white;
-            padding: 1.5rem 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin-bottom: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+            margin-bottom: 1.25rem;
         }
 
         .search-header-left h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: #333;
-            margin-bottom: 0.25rem;
+            margin: 0 0 0.25rem 0;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
         #searchTerm {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #666;
         }
 
@@ -59,86 +54,77 @@
 
         .filters-section {
             background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            margin-bottom: 1.5rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            margin-bottom: 1.25rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .filters-section h3 {
-            font-size: 1rem;
-            margin: 0;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .filters-section h3::before {
-            content: '🎯';
-            font-size: 1.1rem;
-        }
-
-        .filters-container {
-            display: flex;
             gap: 0.75rem;
             flex-wrap: wrap;
         }
 
+        .filters-section h3 {
+            font-size: 0.9rem;
+            margin: 0;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .filters-container {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
         .filter-btn {
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1rem;
             background: #f8f9fa;
             border: 2px solid #e9ecef;
-            border-radius: 25px;
+            border-radius: 20px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             color: #666;
+            font-size: 0.85rem;
         }
 
         .filter-btn:hover {
             background: #e9ecef;
             border-color: var(--primary-orange);
             color: #333;
-            transform: translateY(-2px);
         }
 
         .filter-btn.active {
             background: linear-gradient(135deg, var(--primary-orange), #ffb74d);
             color: white;
             border-color: var(--primary-orange);
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
 
         .search-results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 1.25rem;
         }
 
         .search-product-card {
             background: white;
-            border-radius: 20px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
+            border: 2px solid #f0f0f0;
         }
 
         .search-product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            border-color: var(--primary-orange);
         }
 
         .search-product-image {
             width: 100%;
-            height: 250px;
+            height: 180px;
             object-fit: cover;
             transition: transform 0.3s ease;
         }
@@ -148,66 +134,61 @@
         }
 
         .search-product-info {
-            padding: 1.5rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+            padding: 1rem;
         }
 
         .search-product-category {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
+            padding: 0.2rem 0.6rem;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            border-radius: 12px;
-            font-size: 0.75rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
             font-weight: 600;
-            margin-bottom: 0.75rem;
-            width: fit-content;
+            margin-bottom: 0.5rem;
         }
 
         .search-product-info h3 {
-            font-size: 1.2rem;
             color: #333;
-            margin-bottom: 0.5rem;
-            line-height: 1.4;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+            line-height: 1.3;
         }
 
-        .search-product-info p {
+        .search-product-description {
             color: #666;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            flex: 1;
-        }
-
-        .search-product-rating {
-            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .search-product-price {
-            font-size: 1.8rem;
-            font-weight: 700;
             color: var(--primary-orange);
-            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
         }
 
         .search-add-btn {
             width: 100%;
-            padding: 0.75rem;
             background: linear-gradient(135deg, var(--primary-orange), #ffb74d);
             color: white;
             border: none;
-            border-radius: 10px;
+            padding: 0.6rem;
+            border-radius: 8px;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .search-add-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
 
         .no-results {
@@ -269,16 +250,60 @@
         }
 
         @media (max-width: 768px) {
+            .search-results-header {
+                padding: 1rem;
+            }
+            
             .search-results-header h1 {
-                font-size: 1.8rem;
+                font-size: 1.3rem;
+            }
+            
+            .filters-section {
+                padding: 0.75rem;
             }
 
             .search-results-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
             }
-
-            .filters-container {
-                justify-content: center;
+            
+            .search-product-card {
+                padding: 0;
+            }
+            
+            .search-product-image {
+                height: 110px !important;
+            }
+            
+            .search-product-info {
+                padding: 0.4rem !important;
+            }
+            
+            .search-product-info h3 {
+                font-size: 0.8rem !important;
+                margin-bottom: 0.2rem !important;
+                line-height: 1.2 !important;
+            }
+            
+            .search-product-category,
+            .search-product-description {
+                font-size: 0.7rem !important;
+                margin-bottom: 0.2rem !important;
+            }
+            
+            .search-product-description {
+                display: none;
+            }
+            
+            .search-product-price {
+                font-size: 0.9rem !important;
+                margin-bottom: 0.3rem !important;
+            }
+            
+            .search-add-btn {
+                padding: 0.4rem !important;
+                font-size: 0.75rem !important;
+                min-height: 32px !important;
             }
         }
     </style>
@@ -310,54 +335,25 @@
         <div class="header-divider"></div>
         <nav class="header-nav">
             <ul>
-                <li class="has-dropdown">
-                    <a href="#" class="nav-link">🐕 Perros</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Alimento para perros</a></li>
-                        <li><a href="#">Juguetes para perros</a></li>
-                        <li><a href="#">Accesorios para perros</a></li>
-                        <li><a href="#">Camas y transportes</a></li>
-                    </ul>
-                </li>
-                <li class="has-dropdown">
-                    <a href="#" class="nav-link">🐱 Gatos</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Alimento para gatos</a></li>
-                        <li><a href="#">Juguetes para gatos</a></li>
-                        <li><a href="#">Accesorios para gatos</a></li>
-                        <li><a href="#">Rascadores y camas</a></li>
-                    </ul>
-                </li>
-                <li class="has-dropdown">
-                    <a href="#" class="nav-link">🏥 Salud</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Medicamentos</a></li>
-                        <li><a href="#">Vitaminas</a></li>
-                        <li><a href="#">Higiene</a></li>
-                        <li><a href="#">Antiparasitarios</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" class="nav-link">🏥 Veterinarias</a></li>
-                <li><a href="#" class="nav-link">🔥 Ofertas</a></li>
-                <li><a href="#" class="nav-link">⭐ Más vendidos</a></li>
+                <li><a href="index.html" class="nav-link">🏠 Inicio</a></li>
+                <li><a href="perros.html" class="nav-link">🐕 Perros</a></li>
+                <li><a href="gatos.html" class="nav-link">🐱 Gatos</a></li>
+                <li><a href="cart.html" class="nav-link">🛒 Carrito</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="mobile-menu-overlay" id="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true">
         <div class="mobile-menu-top">
-            <a href="#" class="logo-mobile">Awka Petshop</a>
+            <a href="index.html" class="logo-mobile">Awka Petshop</a>
             <button class="close-menu" aria-label="Cerrar menú">&times;</button>
         </div>
         <div class="mobile-menu-content">
             <ul>
-                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.2rem; height: 1.2rem; margin-right: 0.5rem;"><path fill="currentColor" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4Z"/></svg>Iniciar Sesión</a></li>
-                <li><a href="#">Categorías</a></li>
-                <li><a href="#">Perrunos</a></li>
-                <li><a href="#">Gatunos</a></li>
-                <li><a href="#">Ofertas</a></li>
-                <li><a href="#">Veterinarios</a></li>
-                <li><a href="#">Marcas</a></li>
+                <li><a href="index.html">🏠 Inicio</a></li>
+                <li><a href="perros.html">🐕 Perros</a></li>
+                <li><a href="gatos.html">🐱 Gatos</a></li>
+                <li><a href="cart.html">🛒 Carrito</a></li>
             </ul>
         </div>
     </div>
@@ -372,20 +368,40 @@
                 <div id="resultsCount" class="results-count" style="display: none;"></div>
             </div>
 
-            <div class="filters-section">
-                <h3>Filtrar:</h3>
-                <div class="filters-container">
-                    <button class="filter-btn active" data-filter="all">Todos</button>
-                    <button class="filter-btn" data-filter="perros">🐕 Perros</button>
-                    <button class="filter-btn" data-filter="gatos">🐱 Gatos</button>
+            <!-- Layout: Filtros Lateral + Resultados -->
+            <div style="display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem;">
+                <!-- Filtros Lateral -->
+                <aside id="filtersContainer"></aside>
+
+                <!-- Resultados -->
+                <div>
+                    <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06);">
+                        <h2 style="margin-bottom: 1.5rem; color: var(--primary-orange);">🛍️ Productos Encontrados</h2>
+                        <div id="searchResults" class="search-results-grid">
+                            <p style="text-align: center; grid-column: 1/-1; padding: 2rem; color: #999;">
+                                Cargando resultados...
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div id="searchResults" class="search-results-grid">
-                <p style="text-align: center; grid-column: 1/-1; padding: 2rem; color: #999;">
-                    Cargando resultados...
-                </p>
-            </div>
+            <style>
+                /* Responsive: En móvil los filtros van arriba */
+                @media (max-width: 968px) {
+                    .search-results-page > div[style*="grid-template-columns"] {
+                        grid-template-columns: 1fr !important;
+                    }
+
+                    #filtersContainer {
+                        order: -1;
+                    }
+
+                    .filters-sidebar {
+                        position: static !important;
+                    }
+                }
+            </style>
 
             <div id="noResults" class="no-results" style="display: none;">
                 <div class="no-results-icon">😿</div>
@@ -408,7 +424,7 @@
                     <p>Tu tienda de confianza para todo lo que tu mascota necesita. Calidad, amor y dedicación en cada producto.</p>
                     <div class="social-links">
                         <a href="#" aria-label="Facebook">📘</a>
-                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="https://www.instagram.com/awkapet.cl/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
                         <a href="#" aria-label="Twitter">🐦</a>
                         <a href="#" aria-label="WhatsApp">💬</a>
                     </div>
@@ -427,20 +443,19 @@
                 <div class="footer-section footer-links">
                     <h3>Atención al Cliente</h3>
                     <ul>
-                        <li><a href="#">Preguntas Frecuentes</a></li>
-                        <li><a href="#">Política de Envíos</a></li>
-                        <li><a href="#">Cambios y Devoluciones</a></li>
-                        <li><a href="#">Términos y Condiciones</a></li>
-                        <li><a href="#">Política de Privacidad</a></li>
-                        <li><a href="#">Seguimiento de Pedido</a></li>
+                        <li><a href="faq.html">Preguntas Frecuentes</a></li>
+                        <li><a href="politica-envios.html">Política de Envíos</a></li>
+                        <li><a href="cambios-devoluciones.html">Cambios y Devoluciones</a></li>
+                        <li><a href="terminos-condiciones.html">Términos y Condiciones</a></li>
+                        <li><a href="politica-privacidad.html">Política de Privacidad</a></li>
                     </ul>
                 </div>
                 <div class="footer-section footer-contact">
                     <h3>Contáctanos</h3>
-                    <p><span class="icon">📍</span> Santiago, Chile</p>
-                    <p><span class="icon">📧</span> info@awka.cl</p>
-                    <p><span class="icon">📞</span> +56 9 1234 5678</p>
-                    <p><span class="icon">⏰</span> Lun-Vie: 9:00-18:00</p>
+                    <p><span class="icon">📍</span> María Luisa Santander 468, Oficina 203, Providencia</p>
+                    <p><span class="icon">📧</span> awkapetshop@gmail.com</p>
+                    <p><span class="icon">📞</span> +56 9 4877 5370</p>
+                    <p><span class="icon">⏰</span> Lun - Sáb: 9:00 - 20:00</p>
                     <h3 style="margin-top: 1.5rem;">Newsletter</h3>
                     <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Recibe ofertas exclusivas</p>
                     <form id="newsletterForm" class="newsletter-form">
@@ -452,10 +467,10 @@
             <div class="footer-section" style="margin-top: 2rem;">
                 <h3>Métodos de Pago</h3>
                 <div class="payment-methods">
-                    <span class="payment-method">💳 Tarjetas</span>
-                    <span class="payment-method">🏦 Transferencia</span>
-                    <span class="payment-method">💰 Mercado Pago</span>
-                    <span class="payment-method">🛒 WebPay</span>
+                    <span class="payment-method">💰 Efectivo</span>
+                    <span class="payment-method">🏦 Transferencia Bancaria</span>
+                    <span class="payment-method">💳 Tarjetas Débito/Crédito</span>
+                    <span class="payment-method">🛒 Mercado Pago</span>
                 </div>
             </div>
             <div class="footer-bottom">

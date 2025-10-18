@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(firebase deploy:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npm init:*)",
+      "Bash(if [ ! -d \"functions\" ])",
+      "Bash(then mkdir functions)",
+      "Bash(fi)",
+      "Read(//e//**)"
     ],
     "deny": [],
     "ask": []

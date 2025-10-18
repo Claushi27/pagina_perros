@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Pendiente - Awka</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .payment-result-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 1rem;
+            text-align: center;
+        }
+
+        .pending-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .pending-card {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .pending-card h1 {
+            color: #ffc107;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .pending-card p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .order-details {
+            background: #fff9e6;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            text-align: left;
+            border-left: 4px solid #ffc107;
+        }
+
+        .order-details h3 {
+            color: #856404;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0e5c5;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #856404;
+        }
+
+        .detail-value {
+            color: #333;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #ffc107;
+            color: #333;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .info-section {
+            background: #e3f2fd;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            border-left: 4px solid #2196F3;
+        }
+
+        .info-section h4 {
+            color: #1976d2;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .info-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .info-section li {
+            color: #555;
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .info-section li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2196F3;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #FF6B35;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #ff5722;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #FF6B35;
+            border: 2px solid #FF6B35;
+        }
+
+        .btn-secondary:hover {
+            background: #fff5f2;
+            transform: translateY(-2px);
+        }
+
+        .timeline {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .timeline h4 {
+            color: #333;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: white;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .timeline-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .pending-card {
+                padding: 2rem 1rem;
+            }
+
+            .pending-card h1 {
+                font-size: 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-top">
+            <div class="header-logo">
+                <a href="index.html">
+                    <img src="imagenes/petshop1.png" alt="Logo Awka">
+                    <span>Awka Petshop</span>
+                </a>
+            </div>
+            <div class="header-icons">
+                <div id="userMenu" class="icon">👤 Iniciar Sesión</div>
+                <a href="cart.html" class="icon">🛒</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="payment-result-container">
+            <div class="pending-icon">⏳</div>
+            <div class="pending-card">
+                <h1>Pago Pendiente</h1>
+                <p>
+                    Tu pago está siendo procesado. Esto puede tomar algunos minutos
+                    dependiendo del método de pago utilizado.
+                </p>
+
+                <div class="order-details">
+                    <h3>📋 Detalles del Pedido</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Número de Pedido:</span>
+                        <span class="detail-value" id="orderId">Cargando...</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Estado de Pago:</span>
+                        <span class="detail-value">
+                            <span class="status-badge">⏳ En Proceso</span>
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">ID de Pago:</span>
+                        <span class="detail-value" id="paymentId">-</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h4>ℹ️ ¿Qué significa esto?</h4>
+                    <ul>
+                        <li>Tu orden ha sido registrada correctamente</li>
+                        <li>El pago está siendo verificado por Mercado Pago</li>
+                        <li>Recibirás un email cuando se confirme el pago</li>
+                        <li>Puedes revisar el estado en "Mis Pedidos"</li>
+                    </ul>
+                </div>
+
+                <div class="timeline">
+                    <h4>📅 ¿Qué sigue ahora?</h4>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">✅</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Pedido Registrado</div>
+                            <div class="timeline-desc">Tu orden ha sido guardada exitosamente</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">⏳</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Verificando Pago</div>
+                            <div class="timeline-desc">Esperando confirmación del banco (puede tomar minutos u horas)</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item" style="opacity: 0.5;">
+                        <div class="timeline-icon">📧</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Confirmación por Email</div>
+                            <div class="timeline-desc">Te notificaremos cuando el pago sea confirmado</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item" style="opacity: 0.5;">
+                        <div class="timeline-icon">📦</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Preparando Envío</div>
+                            <div class="timeline-desc">Procesaremos tu pedido una vez confirmado el pago</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="orders.html" class="btn btn-primary">📦 Ver Estado del Pedido</a>
+                    <a href="index.html" class="btn btn-secondary">🏠 Volver al Inicio</a>
+                </div>
+
+                <p style="margin-top: 2rem; color: #999; font-size: 0.9rem;">
+                    💡 <strong>Tip:</strong> Los pagos con transferencia bancaria o efectivo pueden
+                    tardar más en confirmarse. Te notificaremos por email cuando tu pago sea aprobado.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Awka Petshop. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { auth, db, analytics } from './js/firebase-config.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { logEvent } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js';
+
+        // Obtener parámetros de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentId = urlParams.get('payment_id');
+        const externalReference = urlParams.get('external_reference');
+
+        console.log('⏳ Pago pendiente:', { paymentId, externalReference });
+
+        // Limpiar carrito (aunque esté pendiente, el pedido ya está registrado)
+        localStorage.removeItem('carrito');
+
+        // Buscar el pedido guardado en localStorage
+        const pendingOrder = localStorage.getItem('pending_order');
+        let pedidoId = null;
+
+        if (pendingOrder) {
+            const orderData = JSON.parse(pendingOrder);
+            pedidoId = orderData.pedidoId;
+        }
+
+        // Si tenemos el pedidoId, obtener detalles del pedido
+        if (pedidoId) {
+            try {
+                const pedidoRef = doc(db, 'pedidos', pedidoId);
+                const pedidoSnap = await getDoc(pedidoRef);
+
+                if (pedidoSnap.exists()) {
+                    const pedidoData = pedidoSnap.data();
+
+                    // Actualizar UI con datos del pedido
+                    document.getElementById('orderId').textContent = pedidoId;
+                    document.getElementById('paymentId').textContent = paymentId || pedidoData.mercadoPagoPreferenceId || '-';
+                }
+            } catch (error) {
+                console.error('Error al obtener detalles del pedido:', error);
+                document.getElementById('orderId').textContent = externalReference || 'Ver en Mis Pedidos';
+            }
+        } else {
+            document.getElementById('orderId').textContent = externalReference || 'Ver en Mis Pedidos';
+            document.getElementById('paymentId').textContent = paymentId || '-';
+        }
+
+        // Registrar evento en Analytics
+        try {
+            if (analytics) {
+                logEvent(analytics, 'payment_pending', {
+                    payment_id: paymentId || 'unknown',
+                    order_id: pedidoId || externalReference || 'unknown'
+                });
+            }
+        } catch (error) {
+            console.warn('Analytics no disponible:', error);
+        }
+
+        // Auth state para el menú de usuario
+        const userMenu = document.getElementById('userMenu');
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const displayName = user.displayName || user.email.split('@')[0];
+                userMenu.innerHTML = `<span>👤 ${displayName}</span>`;
+            } else {
+                userMenu.innerHTML = '<a href="login.html" style="text-decoration: none; color: inherit;">👤 Iniciar Sesión</a>';
+            }
+        });
+    </script>
+</body>
+</html>

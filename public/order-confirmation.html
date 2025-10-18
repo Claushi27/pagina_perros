@@ -6,6 +6,7 @@
     <title>Pedido Confirmado - Awka</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -219,6 +220,37 @@
             margin-bottom: 0.5rem;
         }
 
+        .payment-method-badge {
+            display: inline-block;
+            background: #ffc107;
+            color: #333;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .info-section {
+            background: #fff3cd;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border-left: 4px solid #ffc107;
+            text-align: left;
+        }
+
+        .info-section h4 {
+            color: #856404;
+            margin-bottom: 1rem;
+        }
+
+        .info-section p {
+            color: #856404;
+            font-size: 0.95rem;
+            margin: 0.5rem 0;
+            line-height: 1.6;
+        }
+
         .loading {
             text-align: center;
             padding: 3rem;
@@ -267,6 +299,10 @@
                     <span>Awka Petshop</span>
                 </a>
             </div>
+            <div class="header-icons">
+                <div id="userMenu" class="icon">👤 Iniciar Sesión</div>
+                <a href="cart.html" class="icon">🛒</a>
+            </div>
         </div>
     </header>
 
@@ -308,12 +344,25 @@
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Método de Pago:</span>
-                        <span class="detail-value" id="paymentMethod">...</span>
+                        <span class="detail-value">
+                            <span class="payment-method-badge">💵 Pago Contra Entrega</span>
+                        </span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Estado:</span>
                         <span class="detail-value" style="color: #FF9800;">⏳ Pendiente</span>
                     </div>
+                </div>
+
+                <div class="info-section">
+                    <h4>💵 Importante - Pago Contra Entrega</h4>
+                    <p>
+                        <strong>Pagarás en efectivo al momento de recibir tu pedido.</strong>
+                        Por favor, ten el monto exacto o cercano al total para facilitar la entrega.
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        El repartidor llevará tu pedido y podrás revisar los productos antes de realizar el pago.
+                    </p>
                 </div>
 
                 <div class="order-items">
@@ -338,13 +387,118 @@
                 </div>
 
                 <div class="action-buttons">
-                    <a href="index.html" class="btn btn-primary">🏠 Volver al Inicio</a>
-                    <a href="mis-pedidos.html" class="btn btn-secondary">📋 Ver Mis Pedidos</a>
+                    <a href="orders.html" class="btn btn-primary">📦 Ver Mis Pedidos</a>
+                    <a href="index.html" class="btn btn-secondary">🏠 Volver al Inicio</a>
                 </div>
             </div>
         </div>
     </main>
 
-    <script type="module" src="js/order-confirmation.js"></script>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Awka Petshop. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { auth, db, analytics } from './js/firebase-config.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { logEvent } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js';
+
+        // Obtener parámetros de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const pedidoId = urlParams.get('pedido');
+        const metodo = urlParams.get('metodo');
+
+        console.log('📦 Cargando confirmación de pedido:', { pedidoId, metodo });
+
+        async function loadOrderConfirmation() {
+            try {
+                if (!pedidoId) {
+                    throw new Error('No se encontró el ID del pedido');
+                }
+
+                // Obtener detalles del pedido desde Firestore
+                const pedidoRef = doc(db, 'pedidos', pedidoId);
+                const pedidoSnap = await getDoc(pedidoRef);
+
+                if (!pedidoSnap.exists()) {
+                    throw new Error('Pedido no encontrado');
+                }
+
+                const pedidoData = pedidoSnap.data();
+
+                // Actualizar UI con datos del pedido
+                document.getElementById('orderNumber').textContent = pedidoId;
+                document.getElementById('customerName').textContent = pedidoData.payer?.nombre || '-';
+                document.getElementById('customerEmail').textContent = pedidoData.payer?.email || '-';
+                document.getElementById('customerPhone').textContent = pedidoData.payer?.telefono || '-';
+                document.getElementById('shippingAddress').textContent =
+                    `${pedidoData.shipment?.direccion || '-'}, ${pedidoData.shipment?.ciudad || '-'}, ${pedidoData.shipment?.region || '-'}`;
+                document.getElementById('totalAmount').textContent = `$${pedidoData.total.toLocaleString()}`;
+
+                // Mostrar items del pedido si existen
+                if (pedidoData.items && pedidoData.items.length > 0) {
+                    const itemsList = document.getElementById('orderItemsList');
+                    itemsList.innerHTML = pedidoData.items.map(item => `
+                        <div class="order-item">
+                            <img src="${item.imagen || 'https://via.placeholder.com/60'}" alt="${item.nombre}">
+                            <div class="order-item-details">
+                                <div class="order-item-name">${item.nombre}</div>
+                                <div class="order-item-quantity">Cantidad: ${item.cantidad}</div>
+                            </div>
+                            <div class="order-item-price">$${(item.precio * item.cantidad).toLocaleString()}</div>
+                        </div>
+                    `).join('');
+                }
+
+                // Registrar evento en Analytics
+                try {
+                    if (analytics) {
+                        logEvent(analytics, 'purchase', {
+                            transaction_id: pedidoId,
+                            value: pedidoData.total,
+                            currency: 'CLP',
+                            payment_type: 'cash',
+                            items: pedidoData.items.map(item => ({
+                                item_id: String(item.id),
+                                item_name: item.nombre,
+                                price: item.precio,
+                                quantity: item.cantidad
+                            }))
+                        });
+                    }
+                } catch (error) {
+                    console.warn('Analytics no disponible:', error);
+                }
+
+                // Ocultar loading y mostrar confirmación
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('confirmationContent').style.display = 'block';
+
+            } catch (error) {
+                console.error('Error cargando confirmación:', error);
+                alert('Error al cargar los detalles del pedido. Por favor verifica en "Mis Pedidos".');
+                window.location.href = 'orders.html';
+            }
+        }
+
+        // Cargar confirmación
+        loadOrderConfirmation();
+
+        // Auth state para el menú de usuario
+        const userMenu = document.getElementById('userMenu');
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const displayName = user.displayName || user.email.split('@')[0];
+                userMenu.innerHTML = `<span>👤 ${displayName}</span>`;
+            } else {
+                userMenu.innerHTML = '<a href="login.html" style="text-decoration: none; color: inherit;">👤 Iniciar Sesión</a>';
+            }
+        });
+    </script>
 </body>
 </html>

@@ -3,15 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito de Compras - Awka</title>
+    <title>Política de Privacidad - Awka Petshop</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/sections.css">
     <link rel="stylesheet" href="css/footer.css">
-    <link rel="stylesheet" href="css/responsive.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .policy-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .policy-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #FF6B35;
+        }
+        .policy-header h1 {
+            color: #2F4F4F;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #FF6B35;
+        }
+        .faq-question {
+            color: #2F4F4F;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        .faq-answer {
+            color: #555;
+            line-height: 1.7;
+        }
+        .faq-answer ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        .faq-answer li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <header class="main-header">
@@ -23,13 +66,13 @@
                 </a>
             </div>
             <div class="search-bar" role="search">
-                <label for="searchInput" class="visually-hidden">Buscar productos</label>
-                <input type="text" id="searchInput" placeholder="¿Qué producto estás buscando?" aria-label="Buscar productos" autocomplete="off">
-                <button class="search-button" onclick="performSearch()" aria-label="Buscar">🔍</button>
+                <label for="searchInputHeader" class="visually-hidden">Buscar productos</label>
+                <input id="searchInputHeader" type="text" placeholder="¿Qué producto estás buscando?" aria-label="Buscar productos" autocomplete="off">
+                <button class="search-button" aria-label="Buscar">🔍</button>
             </div>
             <div class="header-icons">
-                <span class="icon">👤 Iniciar Sesión</span>
-                <a href="cart.html" class="icon">🛒</a>
+                <div id="userMenu" class="icon">👤 Iniciar Sesión</div>
+                <a href="cart.html" class="icon">🛒 <span id="cartCounter">0</span></a>
                 <button class="menu-toggle" aria-label="Abrir menú" aria-haspopup="dialog" aria-controls="mobile-menu" aria-expanded="false">
                     <span></span>
                     <span></span>
@@ -62,55 +105,113 @@
             </ul>
         </div>
     </div>
-    
+
     <main>
-        <div class="cart-page">
-            <div class="cart-header">
-                <h1>🛒 Carrito de Compras</h1>
-                <p>Revisa tus productos antes de finalizar la compra</p>
+        <div class="policy-container">
+            <div class="policy-header">
+                <h1>🔒 Política de Privacidad</h1>
+                <p>Protección de datos personales</p>
             </div>
-            
-            <div class="cart-content">
-                <div class="cart-items" id="cartItems">
-                    <!-- Los productos del carrito se cargarán aquí -->
-                </div>
-                
-                <div class="cart-summary">
-                    <div class="summary-card">
-                        <h3>Resumen de Compra</h3>
-                        <div class="summary-details">
-                            <div class="summary-row">
-                                <span>Subtotal:</span>
-                                <span id="subtotal">$0</span>
-                            </div>
-                            <div class="summary-row">
-                                <span>Despacho:</span>
-                                <span id="shipping">Gratis</span>
-                            </div>
-                            <div class="summary-row total">
-                                <span>Total:</span>
-                                <span id="total">$0</span>
-                            </div>
-                        </div>
-                        <button class="checkout-btn" onclick="proceedToCheckout()">
-                            Proceder al Pago
-                        </button>
-                        <a href="index.html" class="continue-shopping">← Seguir comprando</a>
-                    </div>
+
+            <div class="faq-item">
+                <div class="faq-question">1. Introducción</div>
+                <div class="faq-answer">
+                    En AwkaPet, nos comprometemos a proteger la privacidad y seguridad de los datos personales de nuestros clientes y usuarios. La presente Política de Privacidad describe cómo recopilamos, utilizamos, almacenamos y protegemos la información que usted nos proporciona al utilizar nuestro sitio web.
+                    <br><br>
+                    El uso de este sitio implica la aceptación de esta política en su totalidad. En caso de no estar de acuerdo con sus términos, le recomendamos abstenerse de utilizar nuestros servicios.
                 </div>
             </div>
-            
-            <div id="emptyCart" class="empty-cart" style="display: none;">
-                <div class="empty-cart-content">
-                    <h2>🛒 Tu carrito está vacío</h2>
-                    <p>Agrega algunos productos para comenzar tu compra</p>
-                    <a href="index.html" class="btn-back">← Volver al inicio</a>
+
+            <div class="faq-item">
+                <div class="faq-question">2. Información que recopilamos</div>
+                <div class="faq-answer">
+                    Podemos recopilar los siguientes tipos de información personal:
+                    <ul>
+                        <li>Nombre completo.</li>
+                        <li>Dirección de correo electrónico.</li>
+                        <li>Número telefónico de contacto.</li>
+                        <li>Dirección de envío y facturación.</li>
+                        <li>Datos de pago (procesados mediante plataformas seguras externas).</li>
+                        <li>Información relacionada con sus compras, preferencias y navegación en el sitio web.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">3. Uso de la información</div>
+                <div class="faq-answer">
+                    La información recopilada se utiliza exclusivamente para los siguientes fines:
+                    <ul>
+                        <li>Procesar, gestionar y despachar pedidos realizados a través del sitio.</li>
+                        <li>Enviar confirmaciones, actualizaciones y notificaciones sobre el estado de su compra.</li>
+                        <li>Mejorar la experiencia del usuario en nuestro sitio web.</li>
+                        <li>Responder consultas, solicitudes o reclamos.</li>
+                        <li>Enviar promociones, ofertas y novedades (solo si el usuario ha autorizado expresamente la recepción de comunicaciones comerciales).</li>
+                    </ul>
+                    AwkaPet no venderá, arrendará ni compartirá su información personal con terceros, salvo en los casos estrictamente necesarios para la correcta prestación del servicio (por ejemplo, empresas de despacho o plataformas de pago).
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">4. Protección de los datos personales</div>
+                <div class="faq-answer">
+                    Adoptamos las medidas técnicas y administrativas necesarias para garantizar la seguridad, integridad y confidencialidad de los datos personales que tratamos.
+                    <br><br>
+                    Toda la información sensible (como datos de pago) se transmite de forma cifrada a través de canales seguros y nunca se almacena en nuestros servidores.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">5. Uso de cookies</div>
+                <div class="faq-answer">
+                    Nuestro sitio web utiliza cookies para mejorar la experiencia de navegación, analizar el tráfico y ofrecer contenido personalizado.
+                    <br><br>
+                    El usuario puede configurar su navegador para rechazar el uso de cookies, aunque esto podría afectar algunas funcionalidades del sitio.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">6. Acceso, modificación y eliminación de datos</div>
+                <div class="faq-answer">
+                    El usuario tiene derecho a acceder, rectificar, actualizar o eliminar sus datos personales almacenados en nuestro sistema.
+                    <br><br>
+                    Para ejercer estos derechos, deberá enviar una solicitud al correo electrónico <strong>awkapetshop@gmail.com</strong>, indicando su nombre completo y el motivo de la solicitud.
+                    <br><br>
+                    Responderemos a su requerimiento dentro de un plazo razonable, conforme a la legislación vigente.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">7. Enlaces a sitios externos</div>
+                <div class="faq-answer">
+                    Nuestro sitio puede contener enlaces a páginas web de terceros (por ejemplo, plataformas de pago o redes sociales). AwkaPet no se hace responsable de las políticas de privacidad, prácticas o contenidos de dichos sitios externos.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">8. Actualización de la política</div>
+                <div class="faq-answer">
+                    Nos reservamos el derecho de modificar o actualizar esta Política de Privacidad en cualquier momento, sin previo aviso.
+                    <br><br>
+                    Cualquier cambio será publicado en este mismo apartado, indicando la fecha de la última actualización.
+                    <br><br>
+                    Le recomendamos revisar esta política periódicamente para mantenerse informado sobre cómo protegemos su información.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">9. Contacto</div>
+                <div class="faq-answer">
+                    Si tiene preguntas, comentarios o solicitudes relacionadas con esta Política de Privacidad, puede comunicarse con nosotros a través del correo electrónico:
+                    <br><br>
+                    <strong>📧 awkapetshop@gmail.com</strong>
+                    <br><br>
+                    o mediante el formulario de contacto disponible en nuestro sitio web.
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-grid">
@@ -127,6 +228,7 @@
                         <a href="#" aria-label="WhatsApp">💬</a>
                     </div>
                 </div>
+
                 <div class="footer-section footer-links">
                     <h3>Enlaces Rápidos</h3>
                     <ul>
@@ -135,9 +237,9 @@
                         <li><a href="gatos.html">Productos para Gatos</a></li>
                         <li><a href="cart.html">Mi Carrito</a></li>
                         <li><a href="profile.html">Mi Cuenta</a></li>
-                        <li><a href="#">Sobre Nosotros</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-section footer-links">
                     <h3>Atención al Cliente</h3>
                     <ul>
@@ -148,20 +250,16 @@
                         <li><a href="politica-privacidad.html">Política de Privacidad</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-section footer-contact">
                     <h3>Contáctanos</h3>
                     <p><span class="icon">📍</span> María Luisa Santander 468, Oficina 203, Providencia</p>
                     <p><span class="icon">📧</span> awkapetshop@gmail.com</p>
                     <p><span class="icon">📞</span> +56 9 4877 5370</p>
                     <p><span class="icon">⏰</span> Lun - Sáb: 9:00 - 20:00</p>
-                    <h3 style="margin-top: 1.5rem;">Newsletter</h3>
-                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Recibe ofertas exclusivas</p>
-                    <form id="newsletterForm" class="newsletter-form">
-                        <input type="email" id="newsletterEmail" placeholder="tu@email.com" required>
-                        <button type="submit">Suscribirse</button>
-                    </form>
                 </div>
             </div>
+
             <div class="footer-section" style="margin-top: 2rem;">
                 <h3>Métodos de Pago</h3>
                 <div class="payment-methods">
@@ -171,40 +269,28 @@
                     <span class="payment-method">🛒 Mercado Pago</span>
                 </div>
             </div>
+
             <div class="footer-bottom">
                 <div class="footer-bottom-content">
                     <p>&copy; 2025 Awka Petshop. Todos los derechos reservados.</p>
-                    <div class="footer-bottom-links">
-                        <a href="#">Términos de Uso</a>
-                        <a href="#">Privacidad</a>
-                        <a href="#">Cookies</a>
-                        <a href="#">Mapa del Sitio</a>
-                    </div>
                 </div>
             </div>
         </div>
     </footer>
 
-    <script src="js/footer.js"></script>
-    <script src="data/products.js"></script>
     <script src="js/cart-utils.js"></script>
-    <script src="js/cart.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/footer.js"></script>
 
-    <!-- Firebase Auth Script -->
     <script type="module">
         import { auth, db } from './js/firebase-config.js';
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
         import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
-        const userMenu = document.querySelector('.header-icons .icon:first-child');
-        if (!userMenu) {
-            console.error('User menu element not found');
-        }
+        const userMenu = document.getElementById('userMenu');
 
-        // Escuchar cambios en el estado de autenticación
         onAuthStateChanged(auth, async (user) => {
-            if (user && userMenu) {
-                // Verificar si el usuario es admin
+            if (user) {
                 let isAdmin = false;
                 try {
                     const userDoc = await getDoc(doc(db, 'usuarios', user.uid));
@@ -215,16 +301,9 @@
                     console.error('Error al verificar rol:', error);
                 }
 
-                // Usuario autenticado
                 const displayName = user.displayName || user.email.split('@')[0];
                 const adminLink = isAdmin ? '<a href="admin.html" style="display: block; padding: 8px; text-decoration: none; color: #FF6B35; font-weight: 600;">⚙️ Panel Admin</a>' : '';
-
-                // Crear el menú de usuario como un div en lugar de un span
-                const userMenuDiv = document.createElement('div');
-                userMenuDiv.className = 'icon';
-                userMenuDiv.id = 'userMenu';
-                userMenuDiv.style.position = 'relative';
-                userMenuDiv.innerHTML = `
+                userMenu.innerHTML = `
                     <span style="cursor: pointer;">👤 ${displayName}</span>
                     <div style="display: none; position: absolute; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 10px; top: 40px; right: 0; min-width: 150px; z-index: 1000;" id="userDropdown">
                         <a href="profile.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">👤 Mi Perfil</a>
@@ -234,16 +313,11 @@
                     </div>
                 `;
 
-                // Reemplazar el elemento actual
-                userMenu.replaceWith(userMenuDiv);
-
-                // Toggle dropdown
-                userMenuDiv.querySelector('span').addEventListener('click', () => {
+                userMenu.querySelector('span').addEventListener('click', () => {
                     const dropdown = document.getElementById('userDropdown');
                     dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
                 });
 
-                // Logout
                 document.getElementById('logoutBtn').addEventListener('click', async (e) => {
                     e.preventDefault();
                     try {
@@ -254,8 +328,7 @@
                     }
                 });
 
-            } else if (userMenu) {
-                // Usuario no autenticado
+            } else {
                 userMenu.innerHTML = '<a href="login.html" style="text-decoration: none; color: inherit;">👤 Iniciar Sesión</a>';
             }
         });

@@ -3,15 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito de Compras - Awka</title>
+    <title>Cambios y Devoluciones - Awka Petshop</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/sections.css">
     <link rel="stylesheet" href="css/footer.css">
-    <link rel="stylesheet" href="css/responsive.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .policy-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .policy-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #FF6B35;
+        }
+        .policy-header h1 {
+            color: #2F4F4F;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #FF6B35;
+        }
+        .faq-question {
+            color: #2F4F4F;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        .faq-answer {
+            color: #555;
+            line-height: 1.7;
+        }
+        .faq-answer ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        .faq-answer li {
+            margin-bottom: 0.5rem;
+        }
+        .faq-answer ol {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        .faq-answer ol li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <header class="main-header">
@@ -23,13 +73,13 @@
                 </a>
             </div>
             <div class="search-bar" role="search">
-                <label for="searchInput" class="visually-hidden">Buscar productos</label>
-                <input type="text" id="searchInput" placeholder="¿Qué producto estás buscando?" aria-label="Buscar productos" autocomplete="off">
-                <button class="search-button" onclick="performSearch()" aria-label="Buscar">🔍</button>
+                <label for="searchInputHeader" class="visually-hidden">Buscar productos</label>
+                <input id="searchInputHeader" type="text" placeholder="¿Qué producto estás buscando?" aria-label="Buscar productos" autocomplete="off">
+                <button class="search-button" aria-label="Buscar">🔍</button>
             </div>
             <div class="header-icons">
-                <span class="icon">👤 Iniciar Sesión</span>
-                <a href="cart.html" class="icon">🛒</a>
+                <div id="userMenu" class="icon">👤 Iniciar Sesión</div>
+                <a href="cart.html" class="icon">🛒 <span id="cartCounter">0</span></a>
                 <button class="menu-toggle" aria-label="Abrir menú" aria-haspopup="dialog" aria-controls="mobile-menu" aria-expanded="false">
                     <span></span>
                     <span></span>
@@ -62,55 +112,90 @@
             </ul>
         </div>
     </div>
-    
+
     <main>
-        <div class="cart-page">
-            <div class="cart-header">
-                <h1>🛒 Carrito de Compras</h1>
-                <p>Revisa tus productos antes de finalizar la compra</p>
+        <div class="policy-container">
+            <div class="policy-header">
+                <h1>🔄 Cambios y Devoluciones</h1>
+                <p>Política de garantía y devoluciones</p>
             </div>
-            
-            <div class="cart-content">
-                <div class="cart-items" id="cartItems">
-                    <!-- Los productos del carrito se cargarán aquí -->
-                </div>
-                
-                <div class="cart-summary">
-                    <div class="summary-card">
-                        <h3>Resumen de Compra</h3>
-                        <div class="summary-details">
-                            <div class="summary-row">
-                                <span>Subtotal:</span>
-                                <span id="subtotal">$0</span>
-                            </div>
-                            <div class="summary-row">
-                                <span>Despacho:</span>
-                                <span id="shipping">Gratis</span>
-                            </div>
-                            <div class="summary-row total">
-                                <span>Total:</span>
-                                <span id="total">$0</span>
-                            </div>
-                        </div>
-                        <button class="checkout-btn" onclick="proceedToCheckout()">
-                            Proceder al Pago
-                        </button>
-                        <a href="index.html" class="continue-shopping">← Seguir comprando</a>
-                    </div>
+
+            <div class="faq-item">
+                <div class="faq-question">1. Introducción</div>
+                <div class="faq-answer">
+                    En AwkaPet, nos preocupamos por ofrecer productos de la más alta calidad y garantizar la satisfacción de nuestros clientes. No obstante, comprendemos que pueden presentarse situaciones en las que sea necesario realizar un cambio o devolución. A continuación, se detallan las condiciones, plazos y procedimientos aplicables a estos casos.
                 </div>
             </div>
-            
-            <div id="emptyCart" class="empty-cart" style="display: none;">
-                <div class="empty-cart-content">
-                    <h2>🛒 Tu carrito está vacío</h2>
-                    <p>Agrega algunos productos para comenzar tu compra</p>
-                    <a href="index.html" class="btn-back">← Volver al inicio</a>
+
+            <div class="faq-item">
+                <div class="faq-question">2. Condiciones generales</div>
+                <div class="faq-answer">
+                    Para solicitar un cambio o devolución, el producto debe cumplir con las siguientes condiciones:
+                    <ul>
+                        <li>Estar sin uso, cerrado y en su empaque original.</li>
+                        <li>Mantener todas sus etiquetas, sellos y accesorios completos.</li>
+                        <li>Presentar comprobante de compra o número de pedido emitido por Awkapet.</li>
+                    </ul>
+                    No se aceptarán cambios ni devoluciones de productos:
+                    <ul>
+                        <li>Que presenten signos de uso o manipulación.</li>
+                        <li>Que hayan sido abiertos, especialmente alimentos o suplementos, por razones de higiene y seguridad.</li>
+                        <li>Adquiridos en liquidaciones o promociones especiales, salvo que presenten fallas de fábrica.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">3. Plazos para realizar cambios o devoluciones</div>
+                <div class="faq-answer">
+                    El cliente podrá solicitar un cambio o devolución dentro de los <strong>10 días hábiles</strong> posteriores a la recepción del pedido, conforme a lo establecido en la Ley N.º 19.496 sobre Protección de los Derechos de los Consumidores. Transcurrido dicho plazo, Awkapet no podrá garantizar la aceptación del reclamo.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">4. Productos con fallas o daños</div>
+                <div class="faq-answer">
+                    Si un producto presenta fallas de fabricación, daños durante el transporte o errores en el despacho, el cliente deberá comunicarlo dentro de las <strong>24 horas posteriores a la entrega</strong>, enviando evidencia fotográfica al correo <strong>awkapetshop@gmail.com</strong> o a través del formulario de contacto del sitio web.
+                    <br><br>
+                    Nuestro equipo evaluará el caso y ofrecerá una de las siguientes soluciones, según corresponda:
+                    <ul>
+                        <li>Reemplazo del producto por uno nuevo.</li>
+                        <li>Devolución del monto pagado.</li>
+                        <li>Envío de un producto alternativo de igual valor (previa aceptación del cliente).</li>
+                    </ul>
+                    En estos casos, AwkaPet asumirá los costos asociados al retiro y reemplazo del producto.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">5. Procedimiento para cambios o devoluciones</div>
+                <div class="faq-answer">
+                    Para iniciar un proceso de cambio o devolución, el cliente deberá:
+                    <ol>
+                        <li>Enviar un correo electrónico a <strong>awkapetshop@gmail.com</strong>, indicando el número de pedido y el motivo de la solicitud.</li>
+                        <li>Adjuntar fotografías que acrediten el estado del producto y su empaque.</li>
+                        <li>Esperar la confirmación del equipo de atención al cliente, quien informará los pasos a seguir y coordinará el retiro o entrega del nuevo producto.</li>
+                    </ol>
+                    AwkaPet se reserva el derecho de rechazar solicitudes que no cumplan con las condiciones descritas en esta política.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">6. Devolución de dinero</div>
+                <div class="faq-answer">
+                    En caso de devolución aprobada, el reembolso se realizará por medio de transferencia hacia el comprador. El plazo de restitución dependerá de la cantidad de trabajo que haya en ese día, pero AwkaPet gestionará la solicitud dentro de los <strong>5 días hábiles</strong> posteriores a la aprobación del caso.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">7. Responsabilidad del cliente</div>
+                <div class="faq-answer">
+                    Es responsabilidad del cliente revisar los productos al momento de recibirlos y verificar que correspondan a lo solicitado. Awkapet no se hace responsable por daños ocasionados por almacenamiento inadecuado, exposición a calor, humedad, manipulación indebida o uso incorrecto de los productos una vez entregados.
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-grid">
@@ -127,6 +212,7 @@
                         <a href="#" aria-label="WhatsApp">💬</a>
                     </div>
                 </div>
+
                 <div class="footer-section footer-links">
                     <h3>Enlaces Rápidos</h3>
                     <ul>
@@ -135,9 +221,9 @@
                         <li><a href="gatos.html">Productos para Gatos</a></li>
                         <li><a href="cart.html">Mi Carrito</a></li>
                         <li><a href="profile.html">Mi Cuenta</a></li>
-                        <li><a href="#">Sobre Nosotros</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-section footer-links">
                     <h3>Atención al Cliente</h3>
                     <ul>
@@ -148,20 +234,16 @@
                         <li><a href="politica-privacidad.html">Política de Privacidad</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-section footer-contact">
                     <h3>Contáctanos</h3>
                     <p><span class="icon">📍</span> María Luisa Santander 468, Oficina 203, Providencia</p>
                     <p><span class="icon">📧</span> awkapetshop@gmail.com</p>
                     <p><span class="icon">📞</span> +56 9 4877 5370</p>
                     <p><span class="icon">⏰</span> Lun - Sáb: 9:00 - 20:00</p>
-                    <h3 style="margin-top: 1.5rem;">Newsletter</h3>
-                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Recibe ofertas exclusivas</p>
-                    <form id="newsletterForm" class="newsletter-form">
-                        <input type="email" id="newsletterEmail" placeholder="tu@email.com" required>
-                        <button type="submit">Suscribirse</button>
-                    </form>
                 </div>
             </div>
+
             <div class="footer-section" style="margin-top: 2rem;">
                 <h3>Métodos de Pago</h3>
                 <div class="payment-methods">
@@ -171,40 +253,28 @@
                     <span class="payment-method">🛒 Mercado Pago</span>
                 </div>
             </div>
+
             <div class="footer-bottom">
                 <div class="footer-bottom-content">
                     <p>&copy; 2025 Awka Petshop. Todos los derechos reservados.</p>
-                    <div class="footer-bottom-links">
-                        <a href="#">Términos de Uso</a>
-                        <a href="#">Privacidad</a>
-                        <a href="#">Cookies</a>
-                        <a href="#">Mapa del Sitio</a>
-                    </div>
                 </div>
             </div>
         </div>
     </footer>
 
-    <script src="js/footer.js"></script>
-    <script src="data/products.js"></script>
     <script src="js/cart-utils.js"></script>
-    <script src="js/cart.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/footer.js"></script>
 
-    <!-- Firebase Auth Script -->
     <script type="module">
         import { auth, db } from './js/firebase-config.js';
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
         import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
-        const userMenu = document.querySelector('.header-icons .icon:first-child');
-        if (!userMenu) {
-            console.error('User menu element not found');
-        }
+        const userMenu = document.getElementById('userMenu');
 
-        // Escuchar cambios en el estado de autenticación
         onAuthStateChanged(auth, async (user) => {
-            if (user && userMenu) {
-                // Verificar si el usuario es admin
+            if (user) {
                 let isAdmin = false;
                 try {
                     const userDoc = await getDoc(doc(db, 'usuarios', user.uid));
@@ -215,16 +285,9 @@
                     console.error('Error al verificar rol:', error);
                 }
 
-                // Usuario autenticado
                 const displayName = user.displayName || user.email.split('@')[0];
                 const adminLink = isAdmin ? '<a href="admin.html" style="display: block; padding: 8px; text-decoration: none; color: #FF6B35; font-weight: 600;">⚙️ Panel Admin</a>' : '';
-
-                // Crear el menú de usuario como un div en lugar de un span
-                const userMenuDiv = document.createElement('div');
-                userMenuDiv.className = 'icon';
-                userMenuDiv.id = 'userMenu';
-                userMenuDiv.style.position = 'relative';
-                userMenuDiv.innerHTML = `
+                userMenu.innerHTML = `
                     <span style="cursor: pointer;">👤 ${displayName}</span>
                     <div style="display: none; position: absolute; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 10px; top: 40px; right: 0; min-width: 150px; z-index: 1000;" id="userDropdown">
                         <a href="profile.html" style="display: block; padding: 8px; text-decoration: none; color: #333;">👤 Mi Perfil</a>
@@ -234,16 +297,11 @@
                     </div>
                 `;
 
-                // Reemplazar el elemento actual
-                userMenu.replaceWith(userMenuDiv);
-
-                // Toggle dropdown
-                userMenuDiv.querySelector('span').addEventListener('click', () => {
+                userMenu.querySelector('span').addEventListener('click', () => {
                     const dropdown = document.getElementById('userDropdown');
                     dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
                 });
 
-                // Logout
                 document.getElementById('logoutBtn').addEventListener('click', async (e) => {
                     e.preventDefault();
                     try {
@@ -254,8 +312,7 @@
                     }
                 });
 
-            } else if (userMenu) {
-                // Usuario no autenticado
+            } else {
                 userMenu.innerHTML = '<a href="login.html" style="text-decoration: none; color: inherit;">👤 Iniciar Sesión</a>';
             }
         });

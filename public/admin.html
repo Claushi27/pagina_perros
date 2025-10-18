@@ -273,6 +273,32 @@
         .close-modal:hover {
             color: #333;
         }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .admin-table {
+                min-width: 100% !important;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .admin-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .admin-tabs {
+                gap: 0.5rem;
+            }
+            
+            .tab-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -390,10 +416,45 @@
                     <label for="productSubcategory">Subcategoría</label>
                     <input type="text" id="productSubcategory" placeholder="Ej: Alimento, Juguetes, Accesorios" required>
                 </div>
+
+                <!-- SECCIÓN: ESPECIFICACIONES DEL PRODUCTO -->
+                <div style="border-top: 2px solid #e0e0e0; margin: 1.5rem 0; padding-top: 1.5rem;">
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">📋 Especificaciones Técnicas</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="productBrand">Marca</label>
+                            <input type="text" id="productBrand" placeholder="Ej: Royal Canin, Pedigree">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productAge">Edad recomendada</label>
+                            <select id="productAge">
+                                <option value="">Seleccionar...</option>
+                                <option value="cachorro">Cachorro / Gatito</option>
+                                <option value="adulto">Adulto</option>
+                                <option value="senior">Senior</option>
+                                <option value="todas">Todas las edades</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productWeight">Peso del producto</label>
+                            <input type="text" id="productWeight" placeholder="Ej: 15kg, 3kg, 500g">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productSpecifications">Especificaciones adicionales (una por línea)</label>
+                        <textarea id="productSpecifications" rows="4" placeholder="Ingredientes: Pollo, arroz, vitaminas&#10;Proteínas: 25%&#10;Grasas: 15%"></textarea>
+                        <small style="color: #666;">Escribe cada especificación en una línea nueva</small>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label for="productImageFile">Imagen del producto</label>
                     <input type="file" id="productImageFile" accept="image/jpeg,image/jpg,image/png,image/webp" style="margin-bottom: 0.5rem;">
-                    <small style="color: #666; display: block;">Formatos: JPEG, JPG, PNG, WEBP - Máx: 5MB</small>
+                    <small style="color: #666; display: block;">Formatos: JPEG, JPG, PNG, WEBP - Máx: 5MB - Se redimensionará a 800x800px</small>
                     <div id="imagePreview" style="margin-top: 1rem; display: none;">
                         <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #e0e0e0;">
                     </div>
@@ -668,6 +729,16 @@
                     document.getElementById('productImageUrl').value = data.imagen;
                     document.getElementById('productStock').value = data.stock || 10;
 
+                    // Cargar especificaciones
+                    document.getElementById('productBrand').value = data.marca || '';
+                    document.getElementById('productAge').value = data.edad || '';
+                    document.getElementById('productWeight').value = data.peso || '';
+                    
+                    // Cargar especificaciones adicionales (array a texto)
+                    if (data.especificaciones && Array.isArray(data.especificaciones)) {
+                        document.getElementById('productSpecifications').value = data.especificaciones.join('\n');
+                    }
+
                     // Mostrar preview de imagen existente
                     if (data.imagen) {
                         document.getElementById('previewImg').src = data.imagen;
@@ -745,6 +816,13 @@
                     subcategoria: document.getElementById('productSubcategory').value,
                     imagen: imageUrl,
                     stock: parseInt(document.getElementById('productStock').value),
+                    // Nuevos campos de especificaciones
+                    marca: document.getElementById('productBrand').value || '',
+                    edad: document.getElementById('productAge').value || '',
+                    peso: document.getElementById('productWeight').value || '',
+                    especificaciones: document.getElementById('productSpecifications').value
+                        ? document.getElementById('productSpecifications').value.split('\n').filter(s => s.trim())
+                        : [],
                     fechaActualizacion: new Date()
                 };
 

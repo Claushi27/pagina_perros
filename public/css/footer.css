@@ -143,6 +143,8 @@
     color: #fff;
     font-size: 0.95rem;
     transition: all 0.3s ease;
+    min-height: 44px;
+    box-sizing: border-box;
 }
 
 .newsletter-form input::placeholder {
@@ -165,6 +167,8 @@
     cursor: pointer;
     transition: all 0.3s ease;
     white-space: nowrap;
+    min-height: 44px;
+    box-sizing: border-box;
 }
 
 .newsletter-form button:hover {

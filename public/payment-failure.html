@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Rechazado - Awka</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .payment-result-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 1rem;
+            text-align: center;
+        }
+
+        .failure-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: shake 0.5s ease-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .failure-card {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .failure-card h1 {
+            color: #dc3545;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .failure-card p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .failure-reasons {
+            background: #fff3cd;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            text-align: left;
+            border-left: 4px solid #ffc107;
+        }
+
+        .failure-reasons h3 {
+            color: #856404;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .failure-reasons ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .failure-reasons li {
+            color: #856404;
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .failure-reasons li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #FF6B35;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #ff5722;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #FF6B35;
+            border: 2px solid #FF6B35;
+        }
+
+        .btn-secondary:hover {
+            background: #fff5f2;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: white;
+            color: #666;
+            border: 2px solid #ddd;
+        }
+
+        .btn-outline:hover {
+            border-color: #999;
+            transform: translateY(-2px);
+        }
+
+        .help-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .help-section h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .help-section p {
+            color: #666;
+            font-size: 0.95rem;
+            margin: 0.5rem 0;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #FF6B35;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .failure-card {
+                padding: 2rem 1rem;
+            }
+
+            .failure-card h1 {
+                font-size: 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-top">
+            <div class="header-logo">
+                <a href="index.html">
+                    <img src="imagenes/petshop1.png" alt="Logo Awka">
+                    <span>Awka Petshop</span>
+                </a>
+            </div>
+            <div class="header-icons">
+                <div id="userMenu" class="icon">👤 Iniciar Sesión</div>
+                <a href="cart.html" class="icon">🛒</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="payment-result-container">
+            <div class="failure-icon">❌</div>
+            <div class="failure-card">
+                <h1>Pago Rechazado</h1>
+                <p>
+                    Lo sentimos, tu pago no pudo ser procesado.
+                    Tu pedido no ha sido confirmado y no se realizó ningún cargo.
+                </p>
+
+                <div class="failure-reasons">
+                    <h3>⚠️ Posibles razones:</h3>
+                    <ul>
+                        <li>Fondos insuficientes en la tarjeta</li>
+                        <li>Datos de la tarjeta incorrectos</li>
+                        <li>Tarjeta bloqueada o vencida</li>
+                        <li>Límite de compra excedido</li>
+                        <li>Rechazo por el banco emisor</li>
+                        <li>Problemas de conectividad durante el pago</li>
+                    </ul>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="checkout.html" class="btn btn-primary">🔄 Intentar Nuevamente</a>
+                    <a href="cart.html" class="btn btn-secondary">🛒 Revisar Carrito</a>
+                    <a href="index.html" class="btn btn-outline">🏠 Volver al Inicio</a>
+                </div>
+
+                <div class="help-section">
+                    <h4>💡 ¿Necesitas ayuda?</h4>
+                    <p>
+                        Si el problema persiste, te recomendamos contactar con tu banco
+                        o intentar con otro método de pago. También puedes elegir pago
+                        contra entrega al finalizar tu compra.
+                    </p>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span>📧</span>
+                            <span>info@awka.cl</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>📞</span>
+                            <span>+56 9 1234 5678</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>💬</span>
+                            <span>WhatsApp</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Awka Petshop. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { auth, analytics } from './js/firebase-config.js';
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { logEvent } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js';
+
+        // Obtener parámetros de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentId = urlParams.get('payment_id');
+        const status = urlParams.get('status');
+
+        console.log('❌ Pago rechazado:', { paymentId, status });
+
+        // Registrar evento en Analytics
+        try {
+            if (analytics) {
+                logEvent(analytics, 'payment_failed', {
+                    payment_id: paymentId || 'unknown',
+                    status: status || 'rejected'
+                });
+            }
+        } catch (error) {
+            console.warn('Analytics no disponible:', error);
+        }
+
+        // Restaurar carrito desde localStorage si existe orden pendiente
+        const pendingOrder = localStorage.getItem('pending_order');
+        if (pendingOrder) {
+            console.log('📦 Orden pendiente encontrada, carrito restaurado');
+        }
+
+        // Auth state para el menú de usuario
+        const userMenu = document.getElementById('userMenu');
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const displayName = user.displayName || user.email.split('@')[0];
+                userMenu.innerHTML = `<span>👤 ${displayName}</span>`;
+            } else {
+                userMenu.innerHTML = '<a href="login.html" style="text-decoration: none; color: inherit;">👤 Iniciar Sesión</a>';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -119,71 +119,37 @@ document.getElementById('checkoutForm').addEventListener('submit', async (e) => 
         const envio = subtotal >= 39990 ? 0 : 5000;
         const total = subtotal + envio;
 
-        // Generar número de pedido único
-        const numeroPedido = `AWK-${Date.now()}`;
-
-        // Crear pedido en Firestore
-        const pedidoData = {
-            numeroPedido,
-            userId: currentUser ? currentUser.uid : 'invitado',
-            cliente: {
-                nombre: `${formData.nombre} ${formData.apellido}`,
-                email: formData.email,
-                telefono: formData.telefono
-            },
-            direccionEnvio: {
-                direccion: formData.direccion,
-                ciudad: formData.ciudad,
-                region: formData.region,
-                referencia: formData.referencia
-            },
-            productos: carrito.map(item => ({
+        // Preparar datos para Cloud Function
+        const requestData = {
+            items: carrito.map(item => ({
                 id: item.id,
                 nombre: item.nombre,
                 precio: item.precio,
                 cantidad: item.cantidad,
                 imagen: item.imagen
             })),
-            subtotal,
-            envio,
-            total,
-            metodoPago: formData.metodoPago,
-            notas: formData.notas,
-            estado: 'pendiente',
-            fechaCreacion: serverTimestamp(),
-            fechaActualizacion: serverTimestamp()
+            payer: {
+                nombre: `${formData.nombre} ${formData.apellido}`,
+                email: formData.email,
+                telefono: formData.telefono
+            },
+            shipment: {
+                direccion: formData.direccion,
+                ciudad: formData.ciudad,
+                region: formData.region,
+                codigoPostal: '8320000',
+                referencia: formData.referencia
+            }
         };
 
-        // Guardar pedido
-        const pedidoRef = await addDoc(collection(db, 'pedidos'), pedidoData);
-
-        // Actualizar stock de productos (si es posible)
-        // Nota: Esto sería mejor hacerlo con Cloud Functions para garantizar atomicidad
-        try {
-            for (const item of carrito) {
-                // Asegurarse de que el ID sea string
-                const itemId = String(item.id || item.productId || '');
-                if (itemId) {
-                    const productoRef = doc(db, 'productos', itemId);
-                    await updateDoc(productoRef, {
-                        stock: increment(-item.cantidad)
-                    });
-                }
-            }
-        } catch (error) {
-            console.warn('No se pudo actualizar el stock:', error);
-            // No bloqueamos el pedido si falla la actualización de stock
-        }
-
-        // Registrar evento en Analytics (opcional)
+        // Registrar evento en Analytics
         try {
             if (analytics) {
-                logEvent(analytics, 'purchase', {
-                    transaction_id: numeroPedido,
+                logEvent(analytics, 'begin_checkout', {
                     value: total,
                     currency: 'CLP',
                     items: carrito.map(item => ({
-                        item_id: String(item.id || item.productId || ''),
+                        item_id: String(item.id),
                         item_name: item.nombre,
                         price: item.precio,
                         quantity: item.cantidad
@@ -192,18 +158,69 @@ document.getElementById('checkoutForm').addEventListener('submit', async (e) => 
             }
         } catch (error) {
             console.warn('Analytics no disponible:', error);
-            // No bloqueamos el pedido si falla Analytics
         }
 
-        // Limpiar carrito
-        localStorage.removeItem('carrito');
+        // Procesar según método de pago
+        if (formData.metodoPago === 'mercadopago') {
+            // MERCADO PAGO - Crear preferencia y redirigir
+            console.log('🔄 Creando preferencia de Mercado Pago...');
 
-        // Redirigir a página de confirmación
-        window.location.href = `order-confirmation.html?pedido=${pedidoRef.id}&numero=${numeroPedido}`;
+            const response = await fetch('https://southamerica-west1-awka-ddc36.cloudfunctions.net/createPaymentPreference', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.error || 'Error al crear preferencia de pago');
+            }
+
+            console.log('✅ Preferencia creada:', data.preference_id);
+            console.log('🔗 Redirigiendo a Mercado Pago...');
+
+            // Guardar datos en localStorage por si el usuario vuelve
+            localStorage.setItem('pending_order', JSON.stringify({
+                pedidoId: data.pedidoId,
+                preference_id: data.preference_id
+            }));
+
+            // Redirigir a Mercado Pago
+            window.location.href = data.init_point;
+
+        } else if (formData.metodoPago === 'efectivo') {
+            // PAGO CONTRA ENTREGA - Crear pedido directo
+            console.log('💵 Creando pedido con pago contra entrega...');
+
+            const response = await fetch('https://southamerica-west1-awka-ddc36.cloudfunctions.net/createCashOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.error || 'Error al crear pedido');
+            }
+
+            console.log('✅ Pedido creado:', data.pedidoId);
+
+            // Limpiar carrito
+            localStorage.removeItem('carrito');
+
+            // Redirigir a página de confirmación
+            window.location.href = `order-confirmation.html?pedido=${data.pedidoId}&metodo=efectivo`;
+        }
 
     } catch (error) {
-        console.error('Error al procesar el pedido:', error);
-        alert('Hubo un error al procesar tu pedido. Por favor intenta nuevamente.');
+        console.error('❌ Error al procesar el pedido:', error);
+        alert(`Hubo un error al procesar tu pedido: ${error.message}\n\nPor favor intenta nuevamente.`);
 
         placeOrderBtn.disabled = false;
         placeOrderBtn.textContent = 'Realizar Pedido';

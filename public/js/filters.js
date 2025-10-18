@@ -79,7 +79,14 @@ function sortProducts(products, sortBy) {
 
 // Extraer marca del nombre del producto
 function extractBrand(productName) {
-    const brands = ['Royal Canin', 'Pro Plan', 'Pedigree', 'Whiskas', 'Brit', 'Eukanuba', 'Hills', 'Acana', 'Orijen', 'Taste of the Wild', 'Blue Buffalo', 'Wellness', 'Merrick'];
+    const brands = [
+        'Master Dog', 'Champion Dog', 'Pedigree', 'Fit Formula', 'Dog Chow', 'Can',
+        'Tyson', 'Dog Buffet', 'Nomade', 'Cannes', 'Cachupin', 'Kongo', 'Gooster',
+        'Voller', 'Criadores', 'Power Dog', 'XT', 'Strong', 'Master Cat', 'Champion Cat',
+        'Whiskas', 'Cat Chow', 'Gati', 'Masko', 'Bravery', 'Ownat', 'Amity', 'Biofresh',
+        'Pro Plan', 'Bokato', 'Agility', 'Yokan', 'Royal Canin', 'Brit', 'Eukanuba',
+        'Hills', 'Acana', 'Orijen'
+    ];
     const nameLower = productName.toLowerCase();
 
     for (const brand of brands) {
@@ -146,102 +153,60 @@ export function getCurrentFilters() {
     return { ...currentFilters };
 }
 
-// Crear HTML para panel de filtros
+// Crear HTML para panel de filtros LATERAL
 export function createFilterPanel(products, category = 'perros') {
     const brands = getAllBrands(products);
     const priceRange = getPriceRange(products);
 
     return `
-        <div class="filters-panel" style="background: white; padding: 1.5rem; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 2rem;">
-            <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
-                <h3 style="margin: 0; font-size: 1.3rem; color: #333;">🔍 Filtros</h3>
-                <button onclick="window.clearAllFilters()" style="background: #f0f0f0; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">Limpiar</button>
+        <div class="filters-sidebar" style="background: white; padding: 1.25rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 20px;">
+            <!-- Header con botón limpiar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid #8B4513;">
+                <h3 style="margin: 0; font-size: 1.1rem; color: #8B4513; font-weight: 700;">🔍 Filtros</h3>
+                <button onclick="window.clearAllFilters()" style="background: #f5f5f5; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; color: #666; font-weight: 600;">Limpiar</button>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-                <!-- Filtro de Precio -->
-                <div class="filter-section">
-                    <h4 style="margin-bottom: 0.75rem; color: #555; font-size: 1rem;">💰 Precio</h4>
-                    <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
-                        <input type="number" id="priceMin" placeholder="Mín" value="${currentFilters.priceMin}"
-                               style="width: 100%; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 8px;">
-                        <span>-</span>
-                        <input type="number" id="priceMax" placeholder="Máx" value="${currentFilters.priceMax === 999999 ? '' : currentFilters.priceMax}"
-                               style="width: 100%; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 8px;">
-                    </div>
-                    <input type="range" id="priceSlider" min="${priceRange.min}" max="${priceRange.max}"
-                           value="${currentFilters.priceMax === 999999 ? priceRange.max : currentFilters.priceMax}"
-                           style="width: 100%; cursor: pointer;" onchange="window.updatePriceFilter(this.value)">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #999;">
-                        <span>$${priceRange.min.toLocaleString()}</span>
-                        <span>$${priceRange.max.toLocaleString()}</span>
-                    </div>
-                </div>
-
-                <!-- Filtro de Marcas -->
-                <div class="filter-section">
-                    <h4 style="margin-bottom: 0.75rem; color: #555; font-size: 1rem;">🏷️ Marcas</h4>
-                    <div style="max-height: 150px; overflow-y: auto;">
-                        ${brands.map(brand => `
-                            <label style="display: flex; align-items: center; margin-bottom: 0.5rem; cursor: pointer;">
-                                <input type="checkbox" value="${brand}" ${currentFilters.brands.includes(brand) ? 'checked' : ''}
-                                       onchange="window.updateBrandFilter('${brand}')"
-                                       style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
-                                <span style="font-size: 0.9rem;">${brand}</span>
-                            </label>
-                        `).join('')}
-                    </div>
-                </div>
-
-                <!-- Filtro de Edad/Categoría -->
-                <div class="filter-section">
-                    <h4 style="margin-bottom: 0.75rem; color: #555; font-size: 1rem;">🎂 Edad</h4>
-                    ${category === 'perros' ? `
-                        <label style="display: flex; align-items: center; margin-bottom: 0.5rem; cursor: pointer;">
-                            <input type="checkbox" value="cachorro" ${currentFilters.ages.includes('cachorro') ? 'checked' : ''}
-                                   onchange="window.updateAgeFilter('cachorro')"
-                                   style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
-                            <span style="font-size: 0.9rem;">Cachorro</span>
+            <!-- Filtro de Marcas (compacto con scroll) -->
+            <div class="filter-section" style="margin-bottom: 1.5rem;">
+                <h4 style="margin-bottom: 0.75rem; color: #8B4513; font-size: 0.95rem; font-weight: 700;">🏷️ Marcas</h4>
+                <div style="max-height: 220px; overflow-y: auto; padding-right: 0.5rem;">
+                    ${brands.map(brand => `
+                        <label style="display: flex; align-items: center; margin-bottom: 0.4rem; cursor: pointer; font-size: 0.85rem;">
+                            <input type="checkbox" value="${brand}" ${currentFilters.brands.includes(brand) ? 'checked' : ''}
+                                   onchange="window.updateBrandFilter('${brand}')"
+                                   style="margin-right: 0.5rem; width: 16px; height: 16px; cursor: pointer; accent-color: #8B4513;">
+                            <span style="color: #555;">${brand}</span>
                         </label>
-                    ` : `
-                        <label style="display: flex; align-items: center; margin-bottom: 0.5rem; cursor: pointer;">
-                            <input type="checkbox" value="gatito" ${currentFilters.ages.includes('gatito') ? 'checked' : ''}
-                                   onchange="window.updateAgeFilter('gatito')"
-                                   style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
-                            <span style="font-size: 0.9rem;">Gatito</span>
-                        </label>
-                    `}
-                    <label style="display: flex; align-items: center; margin-bottom: 0.5rem; cursor: pointer;">
-                        <input type="checkbox" value="adulto" ${currentFilters.ages.includes('adulto') ? 'checked' : ''}
-                               onchange="window.updateAgeFilter('adulto')"
-                               style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
-                        <span style="font-size: 0.9rem;">Adulto</span>
-                    </label>
-                    <label style="display: flex; align-items: center; margin-bottom: 0.5rem; cursor: pointer;">
-                        <input type="checkbox" value="senior" ${currentFilters.ages.includes('senior') ? 'checked' : ''}
-                               onchange="window.updateAgeFilter('senior')"
-                               style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
-                        <span style="font-size: 0.9rem;">Senior</span>
-                    </label>
-                </div>
-
-                <!-- Ordenar Por -->
-                <div class="filter-section">
-                    <h4 style="margin-bottom: 0.75rem; color: #555; font-size: 1rem;">📊 Ordenar por</h4>
-                    <select onchange="window.updateSortFilter(this.value)"
-                            style="width: 100%; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 0.9rem; cursor: pointer;">
-                        <option value="default" ${currentFilters.sortBy === 'default' ? 'selected' : ''}>Relevancia</option>
-                        <option value="price-asc" ${currentFilters.sortBy === 'price-asc' ? 'selected' : ''}>Precio: Menor a Mayor</option>
-                        <option value="price-desc" ${currentFilters.sortBy === 'price-desc' ? 'selected' : ''}>Precio: Mayor a Menor</option>
-                        <option value="name" ${currentFilters.sortBy === 'name' ? 'selected' : ''}>Nombre A-Z</option>
-                        <option value="rating" ${currentFilters.sortBy === 'rating' ? 'selected' : ''}>Mejor Calificados</option>
-                        <option value="popular" ${currentFilters.sortBy === 'popular' ? 'selected' : ''}>Más Populares</option>
-                    </select>
+                    `).join('')}
                 </div>
             </div>
 
-            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0; text-align: center;">
-                <span id="filterResultCount" style="color: #666; font-size: 0.9rem;"></span>
+            <!-- Filtro de Precio (compacto) -->
+            <div class="filter-section" style="margin-bottom: 1.5rem;">
+                <h4 style="margin-bottom: 0.75rem; color: #8B4513; font-size: 0.95rem; font-weight: 700;">💰 Precio</h4>
+                <input type="range" id="priceSlider" min="${priceRange.min}" max="${priceRange.max}"
+                       value="${currentFilters.priceMax === 999999 ? priceRange.max : currentFilters.priceMax}"
+                       style="width: 100%; cursor: pointer; accent-color: #8B4513;" onchange="window.updatePriceFilter(this.value)">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #999; margin-top: 0.25rem;">
+                    <span>$${priceRange.min.toLocaleString()}</span>
+                    <span>$${(currentFilters.priceMax === 999999 ? priceRange.max : currentFilters.priceMax).toLocaleString()}</span>
+                </div>
+            </div>
+
+            <!-- Ordenar Por -->
+            <div class="filter-section">
+                <h4 style="margin-bottom: 0.75rem; color: #8B4513; font-size: 0.95rem; font-weight: 700;">📊 Ordenar</h4>
+                <select onchange="window.updateSortFilter(this.value)"
+                        style="width: 100%; padding: 0.6rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 0.85rem; cursor: pointer; color: #555;">
+                    <option value="default" ${currentFilters.sortBy === 'default' ? 'selected' : ''}>Relevancia</option>
+                    <option value="price-asc" ${currentFilters.sortBy === 'price-asc' ? 'selected' : ''}>Precio ↑</option>
+                    <option value="price-desc" ${currentFilters.sortBy === 'price-desc' ? 'selected' : ''}>Precio ↓</option>
+                </select>
+            </div>
+
+            <!-- Contador de resultados -->
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #e0e0e0; text-align: center;">
+                <span id="filterResultCount" style="color: #666; font-size: 0.85rem; font-weight: 600;"></span>
             </div>
         </div>
     `;

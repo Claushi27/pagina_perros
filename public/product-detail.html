@@ -437,21 +437,99 @@
         }
 
         @media (max-width: 768px) {
+            .product-detail-container {
+                padding: 0 0.5rem;
+                margin: 1rem auto;
+            }
+            
             .product-main {
                 grid-template-columns: 1fr;
-                gap: 2rem;
+                gap: 1rem;
+                padding: 1rem;
             }
 
             .main-image {
-                height: 350px;
+                height: 250px;
+                margin-bottom: 0.5rem;
+            }
+            
+            .thumbnail {
+                width: 60px;
+                height: 60px;
             }
 
             .product-title {
-                font-size: 1.8rem;
+                font-size: 1.3rem;
+                margin-bottom: 0.5rem;
             }
 
             .product-price {
-                font-size: 2rem;
+                font-size: 1.5rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .product-description {
+                font-size: 0.9rem;
+                line-height: 1.5;
+                margin-bottom: 1rem;
+            }
+            
+            .product-features {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .product-features h3 {
+                font-size: 1.1rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .features-list li {
+                padding: 0.3rem 0;
+                font-size: 0.85rem;
+            }
+            
+            .quantity-selector {
+                margin-bottom: 1rem;
+            }
+            
+            .quantity-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            
+            .quantity-input {
+                width: 50px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.75rem;
+                margin-bottom: 1rem;
+            }
+            
+            .btn-add-cart {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+            }
+            
+            .btn-wishlist {
+                width: 100%;
+                height: 44px;
+            }
+            
+            .product-category-badge {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.75rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .product-rating-section {
+                margin-bottom: 1rem;
+                padding-bottom: 1rem;
             }
 
             .trust-badges {
@@ -467,11 +545,35 @@
                 border-bottom: 1px solid #f0f0f0;
                 border-left: 3px solid transparent;
                 text-align: left;
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
             }
 
             .tab-btn.active {
                 border-bottom-color: #f0f0f0;
                 border-left-color: var(--primary-orange);
+            }
+            
+            .related-products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+            
+            .related-product-card img {
+                height: 110px;
+            }
+            
+            .related-product-info {
+                padding: 0.5rem;
+            }
+            
+            .related-product-info h3 {
+                font-size: 0.85rem;
+                margin-bottom: 0.25rem;
+            }
+            
+            .related-product-price {
+                font-size: 1rem;
             }
         }
     </style>
@@ -503,36 +605,10 @@
         <div class="header-divider"></div>
         <nav class="header-nav">
             <ul>
-                <li class="has-dropdown">
-                    <a href="perros.html" class="nav-link">🐕 Perros</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Alimento para perros</a></li>
-                        <li><a href="#">Juguetes para perros</a></li>
-                        <li><a href="#">Accesorios para perros</a></li>
-                        <li><a href="#">Camas y transportes</a></li>
-                    </ul>
-                </li>
-                <li class="has-dropdown">
-                    <a href="gatos.html" class="nav-link">🐱 Gatos</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Alimento para gatos</a></li>
-                        <li><a href="#">Juguetes para gatos</a></li>
-                        <li><a href="#">Accesorios para gatos</a></li>
-                        <li><a href="#">Rascadores y camas</a></li>
-                    </ul>
-                </li>
-                <li class="has-dropdown">
-                    <a href="#" class="nav-link">🏥 Salud</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Medicamentos</a></li>
-                        <li><a href="#">Vitaminas</a></li>
-                        <li><a href="#">Higiene</a></li>
-                        <li><a href="#">Antiparasitarios</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" class="nav-link">🏥 Veterinarias</a></li>
-                <li><a href="#" class="nav-link">🔥 Ofertas</a></li>
-                <li><a href="#" class="nav-link">⭐ Más vendidos</a></li>
+                <li><a href="index.html" class="nav-link">🏠 Inicio</a></li>
+                <li><a href="perros.html" class="nav-link">🐕 Perros</a></li>
+                <li><a href="gatos.html" class="nav-link">🐱 Gatos</a></li>
+                <li><a href="cart.html" class="nav-link">🛒 Carrito</a></li>
             </ul>
         </nav>
     </header>
@@ -544,12 +620,10 @@
         </div>
         <div class="mobile-menu-content">
             <ul>
-                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.2rem; height: 1.2rem; margin-right: 0.5rem;"><path fill="currentColor" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4Z"/></svg>Iniciar Sesión</a></li>
+                <li><a href="index.html">🏠 Inicio</a></li>
                 <li><a href="perros.html">🐕 Perros</a></li>
                 <li><a href="gatos.html">🐱 Gatos</a></li>
-                <li><a href="#">Ofertas</a></li>
-                <li><a href="#">Veterinarios</a></li>
-                <li><a href="#">Marcas</a></li>
+                <li><a href="cart.html">🛒 Carrito</a></li>
             </ul>
         </div>
     </div>
@@ -687,7 +761,7 @@
                     <p>Tu tienda de confianza para todo lo que tu mascota necesita. Calidad, amor y dedicación en cada producto.</p>
                     <div class="social-links">
                         <a href="#" aria-label="Facebook">📘</a>
-                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="https://www.instagram.com/awkapet.cl/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
                         <a href="#" aria-label="Twitter">🐦</a>
                         <a href="#" aria-label="WhatsApp">💬</a>
                     </div>
@@ -706,20 +780,19 @@
                 <div class="footer-section footer-links">
                     <h3>Atención al Cliente</h3>
                     <ul>
-                        <li><a href="#">Preguntas Frecuentes</a></li>
-                        <li><a href="#">Política de Envíos</a></li>
-                        <li><a href="#">Cambios y Devoluciones</a></li>
-                        <li><a href="#">Términos y Condiciones</a></li>
-                        <li><a href="#">Política de Privacidad</a></li>
-                        <li><a href="#">Seguimiento de Pedido</a></li>
+                        <li><a href="faq.html">Preguntas Frecuentes</a></li>
+                        <li><a href="politica-envios.html">Política de Envíos</a></li>
+                        <li><a href="cambios-devoluciones.html">Cambios y Devoluciones</a></li>
+                        <li><a href="terminos-condiciones.html">Términos y Condiciones</a></li>
+                        <li><a href="politica-privacidad.html">Política de Privacidad</a></li>
                     </ul>
                 </div>
                 <div class="footer-section footer-contact">
                     <h3>Contáctanos</h3>
-                    <p><span class="icon">📍</span> Santiago, Chile</p>
-                    <p><span class="icon">📧</span> info@awka.cl</p>
-                    <p><span class="icon">📞</span> +56 9 1234 5678</p>
-                    <p><span class="icon">⏰</span> Lun-Vie: 9:00-18:00</p>
+                    <p><span class="icon">📍</span> María Luisa Santander 468, Oficina 203, Providencia</p>
+                    <p><span class="icon">📧</span> awkapetshop@gmail.com</p>
+                    <p><span class="icon">📞</span> +56 9 4877 5370</p>
+                    <p><span class="icon">⏰</span> Lun - Sáb: 9:00 - 20:00</p>
                     <h3 style="margin-top: 1.5rem;">Newsletter</h3>
                     <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Recibe ofertas exclusivas</p>
                     <form id="newsletterForm" class="newsletter-form">
@@ -731,10 +804,10 @@
             <div class="footer-section" style="margin-top: 2rem;">
                 <h3>Métodos de Pago</h3>
                 <div class="payment-methods">
-                    <span class="payment-method">💳 Tarjetas</span>
-                    <span class="payment-method">🏦 Transferencia</span>
-                    <span class="payment-method">💰 Mercado Pago</span>
-                    <span class="payment-method">🛒 WebPay</span>
+                    <span class="payment-method">💰 Efectivo</span>
+                    <span class="payment-method">🏦 Transferencia Bancaria</span>
+                    <span class="payment-method">💳 Tarjetas Débito/Crédito</span>
+                    <span class="payment-method">🛒 Mercado Pago</span>
                 </div>
             </div>
             <div class="footer-bottom">

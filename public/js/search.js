@@ -1,6 +1,8 @@
 import { getProductRating, generateStars } from './reviews.js';
 import { db } from './firebase-config.js';
 import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+import { applyFilters, createFilterPanel, updateFilter, clearFilters } from './filters.js';
+import { toggleFavorite, updateFavoriteButton, initializeFavoriteButtons } from './favorites.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Mobile Menu functionality
@@ -63,16 +65,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Cargar productos desde Firestore
     let productos = [];
+    let allProductos = [];
+    let currentSearchTerm = '';
     try {
         const querySnapshot = await getDocs(collection(db, 'productos'));
         productos = querySnapshot.docs.map(doc => ({
             id: doc.id,  // Usar docId como ID
             ...doc.data()
         }));
+        allProductos = [...productos];
         console.log('✅ Productos cargados desde Firestore:', productos.length);
+
+        // Crear panel de filtros
+        const filtersContainer = document.getElementById('filtersContainer');
+        if (filtersContainer) {
+            filtersContainer.innerHTML = createFilterPanel(productos, 'search');
+        }
     } catch (error) {
         console.error('❌ Error cargando productos desde Firestore:', error);
         productos = [];
+        allProductos = [];
     }
 
     // Estado de filtros y búsquedas recientes
@@ -153,19 +165,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         const searchResults = document.getElementById('searchResults');
         const noResults = document.getElementById('noResults');
         const searchTermValue = document.getElementById('searchTermValue');
-        const resultsCount = document.getElementById('resultsCount');
 
         // Actualizar el término de búsqueda mostrado
         if (searchTermValue) {
             searchTermValue.textContent = termino;
         }
 
-        const resultadosFiltrados = aplicarFiltros(resultados);
+        // Aplicar filtros del sistema de filtros lateral
+        const resultadosFiltrados = applyFilters(resultados);
+
+        // Actualizar contador de resultados
+        const filterResultCount = document.getElementById('filterResultCount');
+        if (filterResultCount) {
+            filterResultCount.textContent = `Mostrando ${resultadosFiltrados.length} de ${resultados.length} productos`;
+        }
 
         if (resultadosFiltrados.length === 0) {
             searchResults.style.display = 'none';
             noResults.style.display = 'block';
-            if (resultsCount) resultsCount.style.display = 'none';
             const p = noResults.querySelector('p');
             if (p && termino && termino.length < 2) p.textContent = 'Ingresa al menos 2 caracteres para buscar';
             return;
@@ -174,14 +191,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         searchResults.style.display = 'grid';
         noResults.style.display = 'none';
 
-        // Mostrar contador de resultados
-        if (resultsCount) {
-            resultsCount.style.display = 'inline-block';
-            resultsCount.textContent = `${resultadosFiltrados.length} ${resultadosFiltrados.length === 1 ? 'producto encontrado' : 'productos encontrados'}`;
-        }
-
         searchResults.innerHTML = resultadosFiltrados.map(producto => `
-            <div class="search-product-card" style="cursor: pointer;" onclick="window.location.href='product-detail.html?id=${producto.id}'">
+            <div class="search-product-card" style="cursor: pointer; position: relative;" onclick="window.location.href='product-detail.html?id=${producto.id}'">
+                <button class="favorite-btn" data-product-id="${producto.id}" onclick="event.stopPropagation(); handleFavoriteClick('${producto.id}')"
+                        style="position: absolute; top: 10px; right: 10px; background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 10; transition: transform 0.2s;">
+                    🤍
+                </button>
                 <img src="${producto.imagen}" alt="${producto.nombre}" class="search-product-image" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/300x250?text=Imagen+No+Disponible'">
                 <div class="search-product-info">
                     <span class="search-product-category">${producto.categoria.toUpperCase()}</span>
@@ -191,8 +206,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <span style="font-size: 0.85rem; color: #999;">Cargando...</span>
                     </div>
                     <div class="search-product-price">$${producto.precio.toLocaleString()}</div>
-                    <button class="search-add-btn" onclick="event.stopPropagation(); agregarAlCarrito(${producto.id})">
-                        Agregar al carrito 🛒
+                    <button class="search-add-btn" onclick="event.stopPropagation(); agregarAlCarrito('${producto.id}')">
+                        🛒 Agregar al carrito
                     </button>
                 </div>
             </div>
@@ -217,7 +232,62 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
         });
+
+        // Inicializar botones de favoritos
+        initializeFavoriteButtons();
     }
+
+    // Manejar click en favoritos
+    window.handleFavoriteClick = async function(productId) {
+        const button = document.querySelector(`.favorite-btn[data-product-id="${productId}"]`);
+        if (button) {
+            const newState = await toggleFavorite(productId);
+            if (newState !== null) {
+                updateFavoriteButton(button, newState);
+            }
+        }
+    };
+
+    // Funciones globales para filtros
+    window.updatePriceFilter = function(value) {
+        updateFilter('priceMax', value);
+        const term = currentSearchTerm || '';
+        const resultados = term.length >= 2 ? buscarProductos(term) : allProductos;
+        mostrarResultados(resultados, term);
+    };
+
+    window.updateBrandFilter = function(brand) {
+        updateFilter('brand', brand);
+        const term = currentSearchTerm || '';
+        const resultados = term.length >= 2 ? buscarProductos(term) : allProductos;
+        mostrarResultados(resultados, term);
+    };
+
+    window.updateAgeFilter = function(age) {
+        updateFilter('age', age);
+        const term = currentSearchTerm || '';
+        const resultados = term.length >= 2 ? buscarProductos(term) : allProductos;
+        mostrarResultados(resultados, term);
+    };
+
+    window.updateSortFilter = function(sortBy) {
+        updateFilter('sortBy', sortBy);
+        const term = currentSearchTerm || '';
+        const resultados = term.length >= 2 ? buscarProductos(term) : allProductos;
+        mostrarResultados(resultados, term);
+    };
+
+    window.clearAllFilters = function() {
+        clearFilters();
+        // Recargar panel de filtros
+        const filtersContainer = document.getElementById('filtersContainer');
+        if (filtersContainer) {
+            filtersContainer.innerHTML = createFilterPanel(allProductos, 'search');
+        }
+        const term = currentSearchTerm || '';
+        const resultados = term.length >= 2 ? buscarProductos(term) : allProductos;
+        mostrarResultados(resultados, term);
+    };
 
     // Función para agregar al carrito
     window.agregarAlCarrito = function(productoId) {
@@ -231,6 +301,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Función para realizar búsqueda
     function aplicarBusqueda(termino) {
+        currentSearchTerm = termino;
         if (termino.length >= 2) {
             pushRecent(termino);
             const resultados = buscarProductos(termino);
@@ -275,31 +346,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Inicializar contador del carrito
     actualizarContadorCarrito();
-
-    // Filtros: múltiples selección
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const f = btn.getAttribute('data-filter');
-            if (f === 'all') {
-                selectedFilters.clear();
-                selectedFilters.add('all');
-            } else {
-                if (selectedFilters.has('all')) selectedFilters.delete('all');
-                if (selectedFilters.has(f)) selectedFilters.delete(f); else selectedFilters.add(f);
-            }
-            // Actualizar clases activas
-            filterButtons.forEach(b => {
-                const key = b.getAttribute('data-filter');
-                const active = key === 'all' ? selectedFilters.has('all') : selectedFilters.has(key);
-                b.classList.toggle('active', active);
-            });
-            // Re-aplicar búsqueda con filtros
-            const term = (document.getElementById('searchInput')?.value || '').trim();
-            const resultados = term.length >= 2 ? buscarProductos(term) : productos;
-            mostrarResultados(resultados, term);
-        });
-    });
 
     // Render de recientes
     renderRecents();
