@@ -134,12 +134,10 @@ function renderProduct() {
 
     // Especificaciones
     const specifications = [
-        ['Marca', 'Premium Pet'],
+        ['Marca', currentProduct.marca || 'Premium Pet'],
         ['Categoría', currentProduct.categoria.charAt(0).toUpperCase() + currentProduct.categoria.slice(1)],
-        ['Peso', '1.5 kg'],
-        ['Dimensiones', '30 x 20 x 15 cm'],
-        ['País de origen', 'Chile'],
-        ['Garantía', '30 días']
+        ['Peso', currentProduct.peso || '1.5 kg'],
+        ['Tamaño', currentProduct.tamano || 'N/A']
     ];
 
     document.getElementById('specificationsTable').innerHTML = specifications.map(([key, value]) => `

@@ -1194,3 +1194,51 @@
     font-size: 1.2rem;
     margin-bottom: 2.5rem;
 }
+
+/* Banner de Despacho Rotativo */
+.shipping-banner {
+    background: linear-gradient(135deg, var(--primary-orange) 0%, #ffb74d 100%);
+    padding: 0.8rem 1rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.shipping-banner-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shipping-item {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    color: white;
+}
+
+.shipping-item.active {
+    opacity: 1;
+}
+
+.shipping-item .icon {
+    font-size: 1.5rem;
+}
+
+.shipping-item p {
+    margin: 0;
+    font-size: 1rem;
+    color: white;
+}
+
+.shipping-item strong {
+    font-weight: 700;
+}

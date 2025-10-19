@@ -456,6 +456,76 @@
         padding-left: 1rem;
     }
 
+    /* Mobile submenu styles */
+    .mobile-menu-content .has-submenu {
+        position: relative;
+    }
+
+    .mobile-menu-content .has-submenu > a {
+        display: inline-block;
+        width: calc(100% - 40px);
+    }
+
+    .mobile-menu-content .submenu-toggle {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mobile-menu-content .submenu-toggle:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .mobile-menu-content .submenu-toggle.active {
+        transform: translateY(-50%) rotate(180deg);
+    }
+
+    .mobile-menu-content .submenu {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0 0 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .mobile-menu-content .submenu.open {
+        max-height: 300px;
+    }
+
+    .mobile-menu-content .submenu li {
+        margin: 0;
+        padding: 0;
+        border-bottom: none;
+    }
+
+    .mobile-menu-content .submenu a {
+        font-size: 1rem;
+        padding: 0.5rem 0 0.5rem 1.5rem;
+        color: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.05);
+        margin: 0.25rem 0;
+        border-radius: 8px;
+    }
+
+    .mobile-menu-content .submenu a:hover {
+        background: rgba(255, 255, 255, 0.15);
+        padding-left: 2rem;
+    }
+
     /* Search Results Page Mobile Styles */
     .search-results-page {
         padding: 1rem 0.5rem;
@@ -872,5 +942,10 @@
     /* Reduce customer reviews title size on mobile */
     .reviews-title {
         font-size: 1.5rem !important;
+    }
+
+    /* Ocultar dropdown de contacto en móvil */
+    .contact-dropdown {
+        display: none !important;
     }
 }

@@ -207,8 +207,8 @@
     box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     border-radius: 8px;
     padding: 0.5rem 0;
-    z-index: 1000;
-    margin-top: 0.5rem;
+    z-index: 10000;
+    margin-top: 0.25rem;
 }
 
 .dropdown-content a {
@@ -218,6 +218,7 @@
     display: block;
     transition: all 0.3s ease;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .dropdown-content a:hover {
@@ -227,4 +228,22 @@
 
 .nav-dropdown:hover .dropdown-content {
     display: block;
+}
+
+.nav-dropdown > .nav-link {
+    pointer-events: auto;
+}
+
+/* Dropdown de contacto - ancho especial */
+.contact-dropdown {
+    min-width: 320px;
+    max-width: 400px;
+}
+
+.contact-dropdown p {
+    line-height: 1.6;
+}
+
+.contact-dropdown strong {
+    color: var(--primary-orange);
 }
