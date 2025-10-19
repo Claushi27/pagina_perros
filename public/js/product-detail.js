@@ -278,23 +278,30 @@ function setupAddToCart() {
     addToCartBtn.addEventListener('click', () => {
         const quantity = parseInt(document.getElementById('quantity').value);
 
-        // Usar la función global agregarAlCarrito de cart-utils.js
-        if (typeof window.agregarAlCarrito === 'function') {
-            for (let i = 0; i < quantity; i++) {
-                window.agregarAlCarrito(productId);
-            }
-
-            // Feedback visual
-            addToCartBtn.innerHTML = '<span>✓</span><span>¡Agregado!</span>';
-            addToCartBtn.style.background = 'linear-gradient(135deg, #4caf50, #66bb6a)';
-
-            setTimeout(() => {
-                addToCartBtn.innerHTML = '<span>🛒</span><span>Agregar al Carrito</span>';
-                addToCartBtn.style.background = '';
-            }, 2000);
-        } else {
-            alert('Producto agregado al carrito');
+        // Verificar que tengamos el producto actual y CartUtils
+        if (!currentProduct) {
+            alert('Error: Producto no disponible');
+            return;
         }
+
+        if (typeof window.CartUtils === 'undefined' || typeof window.CartUtils.addToCart !== 'function') {
+            alert('Error: Sistema de carrito no disponible');
+            return;
+        }
+
+        // Agregar el producto la cantidad de veces especificada
+        for (let i = 0; i < quantity; i++) {
+            window.CartUtils.addToCart(currentProduct);
+        }
+
+        // Feedback visual
+        addToCartBtn.innerHTML = '<span>✓</span><span>¡Agregado!</span>';
+        addToCartBtn.style.background = 'linear-gradient(135deg, #4caf50, #66bb6a)';
+
+        setTimeout(() => {
+            addToCartBtn.innerHTML = '<span>🛒</span><span>Agregar al Carrito</span>';
+            addToCartBtn.style.background = '';
+        }, 2000);
     });
 }
 

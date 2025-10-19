@@ -65,7 +65,7 @@ function loadOrderSummary() {
 function updateSummary() {
     const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
     const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-    const shipping = subtotal >= 39990 ? 0 : 5000;
+    const shipping = subtotal >= 39990 ? 0 : 3000;
     const total = subtotal + shipping;
 
     document.getElementById('summarySubtotal').textContent = `$${subtotal.toLocaleString()}`;
@@ -116,7 +116,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async (e) => 
 
         // Calcular totales
         const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-        const envio = subtotal >= 39990 ? 0 : 5000;
+        const envio = subtotal >= 39990 ? 0 : 3000;
         const total = subtotal + envio;
 
         // Preparar datos para Cloud Function

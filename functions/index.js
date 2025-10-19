@@ -18,9 +18,11 @@ const nodemailer = require("nodemailer");
 admin.initializeApp();
 
 // Configurar transporter de nodemailer para Gmail
-// IMPORTANTE: Configura la contraseña con: firebase functions:config:set gmail.password="tu-contraseña"
+// IMPORTANTE: Configura las variables de entorno en Firebase
 const {defineString} = require("firebase-functions/params");
 const gmailPassword = defineString("GMAIL_PASSWORD");
+const mercadoPagoAccessToken = defineString("MERCADOPAGO_ACCESS_TOKEN");
+const mercadoPagoPublicKey = defineString("MERCADOPAGO_PUBLIC_KEY");
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -30,9 +32,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Configurar cliente de Mercado Pago
+// Configurar cliente de Mercado Pago de forma segura
 const client = new MercadoPagoConfig({
-  accessToken: 'APP_USR-5996892904628788-101622-acce42f31a1257a1e28e794adeaa073e-439225001',
+  accessToken: mercadoPagoAccessToken.value(),
 });
 
 // Crear instancias de las APIs que vamos a usar

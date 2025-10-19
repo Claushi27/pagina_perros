@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateSummary() {
         const carrito = window.CartUtils ? window.CartUtils.getCart() : [];
         const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-        const shipping = subtotal >= 39990 ? 0 : 5000;
+        const shipping = subtotal >= 39990 ? 0 : 3000;
         const total = subtotal + shipping;
 
         document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()}`;
