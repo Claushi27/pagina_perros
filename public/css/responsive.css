@@ -684,6 +684,63 @@
         font-size: 0.8rem;
     }
 
+    /* Collapsible Filters for Mobile */
+    .filters-sidebar {
+        position: static !important;
+    }
+
+    .filters-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.875rem 1rem;
+        background: linear-gradient(135deg, var(--primary-orange), #ffb74d);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(255, 152, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .filters-toggle-btn:active {
+        transform: scale(0.98);
+    }
+
+    .filters-toggle-btn .toggle-icon {
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+    }
+
+    .filters-toggle-btn.active .toggle-icon {
+        transform: rotate(180deg);
+    }
+
+    .filters-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .filters-content.open {
+        max-height: 1000px;
+    }
+
+    @media (min-width: 768px) {
+        .filters-toggle-btn {
+            display: none;
+        }
+
+        .filters-content {
+            max-height: none !important;
+            overflow: visible !important;
+        }
+    }
+
     /* Checkout Mobile Styles */
     .checkout-container {
         padding: 0 0.5rem;

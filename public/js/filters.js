@@ -160,11 +160,19 @@ export function createFilterPanel(products, category = 'perros') {
 
     return `
         <div class="filters-sidebar" style="background: white; padding: 1.25rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 20px;">
-            <!-- Header con botón limpiar -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid #8B4513;">
-                <h3 style="margin: 0; font-size: 1.1rem; color: #8B4513; font-weight: 700;">🔍 Filtros</h3>
-                <button onclick="window.clearAllFilters()" style="background: #f5f5f5; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; color: #666; font-weight: 600;">Limpiar</button>
-            </div>
+            <!-- Mobile Toggle Button -->
+            <button class="filters-toggle-btn" onclick="window.toggleFilters()" aria-label="Mostrar/Ocultar Filtros">
+                <span>🔍 Filtros</span>
+                <span class="toggle-icon">▼</span>
+            </button>
+
+            <!-- Filters Content (collapsible on mobile) -->
+            <div class="filters-content">
+                <!-- Header con botón limpiar -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid #8B4513;">
+                    <h3 style="margin: 0; font-size: 1.1rem; color: #8B4513; font-weight: 700;">🔍 Filtros</h3>
+                    <button onclick="window.clearAllFilters()" style="background: #f5f5f5; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; color: #666; font-weight: 600;">Limpiar</button>
+                </div>
 
             <!-- Filtro de Marcas (compacto con scroll) -->
             <div class="filter-section" style="margin-bottom: 1.5rem;">
@@ -204,9 +212,10 @@ export function createFilterPanel(products, category = 'perros') {
                 </select>
             </div>
 
-            <!-- Contador de resultados -->
-            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #e0e0e0; text-align: center;">
-                <span id="filterResultCount" style="color: #666; font-size: 0.85rem; font-weight: 600;"></span>
+                <!-- Contador de resultados -->
+                <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #e0e0e0; text-align: center;">
+                    <span id="filterResultCount" style="color: #666; font-size: 0.85rem; font-weight: 600;"></span>
+                </div>
             </div>
         </div>
     `;
@@ -221,4 +230,22 @@ function getPriceRange(products) {
         min: Math.floor(Math.min(...prices) / 1000) * 1000,
         max: Math.ceil(Math.max(...prices) / 1000) * 1000
     };
+}
+
+// Toggle filters visibility on mobile
+window.toggleFilters = function() {
+    const filtersContent = document.querySelector('.filters-content');
+    const toggleBtn = document.querySelector('.filters-toggle-btn');
+
+    if (filtersContent && toggleBtn) {
+        const isOpen = filtersContent.classList.contains('open');
+
+        if (isOpen) {
+            filtersContent.classList.remove('open');
+            toggleBtn.classList.remove('active');
+        } else {
+            filtersContent.classList.add('open');
+            toggleBtn.classList.add('active');
+        }
+    }
 }
