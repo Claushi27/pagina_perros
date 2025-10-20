@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const getFocusableElements = (container) => container.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
 
     const openMobileMenu = () => {
-        if (!mobileMenu) return;
+        if (!mobileMenu || !menuToggle) return;
         lastFocusedElementBeforeMenu = document.activeElement;
         mobileMenu.classList.add('open');
         menuToggle.classList.add('active');
@@ -27,13 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const closeMobileMenu = () => {
-        if (!mobileMenu) return;
+        if (!mobileMenu || !menuToggle) return;
         mobileMenu.classList.remove('open');
         menuToggle.classList.remove('active');
         mobileMenu.setAttribute('aria-hidden', 'true');
         menuToggle.setAttribute('aria-expanded', 'false');
         document.removeEventListener('keydown', handleKeydownInMenu);
-        (lastFocusedElementBeforeMenu || menuToggle).focus();
+        if (lastFocusedElementBeforeMenu) {
+            lastFocusedElementBeforeMenu.focus();
+        } else {
+            menuToggle.focus();
+        }
     };
 
     const handleKeydownInMenu = (e) => {
@@ -130,6 +134,20 @@ document.addEventListener('DOMContentLoaded', () => {
             // Crear panel de filtros si existe el contenedor
             if (filtersContainer) {
                 filtersContainer.innerHTML = createFilterPanel(allProductosPerros, 'perros');
+            }
+
+            // Leer parámetro de categoría de la URL y aplicar filtro
+            const urlParams = new URLSearchParams(window.location.search);
+            const subcategoria = urlParams.get('categoria');
+
+            if (subcategoria) {
+                // Esperar un momento para que los filtros se rendericen
+                setTimeout(() => {
+                    const subcategoriaBtn = document.querySelector(`.filter-btn[data-subcategoria="${subcategoria}"]`);
+                    if (subcategoriaBtn) {
+                        subcategoriaBtn.click();
+                    }
+                }, 100);
             }
 
             // Aplicar filtros y renderizar
