@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeMenuButton = document.querySelector('.close-menu');
     let lastFocusedElementBeforeMenu = null;
 
+    // Debug: Verificar que los elementos existen
+    console.log('Menu Toggle:', menuToggle);
+    console.log('Mobile Menu:', mobileMenu);
+    console.log('Close Button:', closeMenuButton);
+
     let currentIndex = 0;
 
     function goToSlide(index) {
@@ -132,7 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (menuToggle && mobileMenu) {
-        menuToggle.addEventListener('click', () => {
+        menuToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             const isOpen = mobileMenu.classList.contains('open');
             if (isOpen) {
                 closeMobileMenu();
@@ -143,7 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (closeMenuButton && mobileMenu) {
-        closeMenuButton.addEventListener('click', () => {
+        closeMenuButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             closeMobileMenu();
         });
     }

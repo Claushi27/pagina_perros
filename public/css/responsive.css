@@ -311,16 +311,18 @@
         border: none;
         cursor: pointer;
         padding: 0.5rem;
-        margin-left: 0;
-        order: 1;
+        margin-left: auto;
+        order: 4;
         width: 40px;
         height: 40px;
-        display: flex;
+        display: flex !important;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         position: relative;
         z-index: 10001;
+        visibility: visible;
+        opacity: 1;
     }
 
     .menu-toggle span {
@@ -335,6 +337,7 @@
 
     .menu-toggle.active span:nth-child(1) {
         transform: rotate(45deg) translate(6px, 6px);
+        background-color: #fff;
     }
 
     .menu-toggle.active span:nth-child(2) {
@@ -343,26 +346,29 @@
 
     .menu-toggle.active span:nth-child(3) {
         transform: rotate(-45deg) translate(6px, -6px);
+        background-color: #fff;
     }
     
     .mobile-menu-overlay {
         position: fixed;
+        display: flex !important;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         background-color: var(--primary-orange);
-        display: flex;
         align-items: flex-start;
         justify-content: flex-start;
         flex-direction: column;
-        z-index: 9999;
+        z-index: 10000;
         transform: translateX(-100%);
         transition: transform 0.5s ease-in-out;
+        visibility: hidden;
     }
     
     .mobile-menu-overlay.open {
         transform: translateX(0);
+        visibility: visible;
     }
 
     .mobile-menu-top {

@@ -247,3 +247,29 @@
 .contact-dropdown strong {
     color: var(--primary-orange);
 }
+
+/* Mobile menu toggle button - initially hidden, shown on mobile via responsive.css */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    position: relative;
+    z-index: 10001;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--text-color);
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+/* Mobile menu overlay - initially hidden */
+.mobile-menu-overlay {
+    display: none;
+}
