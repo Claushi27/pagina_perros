@@ -534,9 +534,10 @@
 .product-card img {
     width: 100%;
     height: 200px;
-    object-fit: cover;
+    object-fit: contain;
     aspect-ratio: 4 / 3;
     border-bottom: 1px solid rgba(139, 69, 19, 0.1);
+    background-color: #f8f9fa;
 }
 
 /* Mobile: Smaller images */
@@ -1241,4 +1242,26 @@
 
 .shipping-item strong {
     font-weight: 700;
+}
+
+/* Estilos específicos para imágenes de productos - mostrar imagen completa */
+.perro-product-card img,
+.gato-product-card img,
+.search-product-card img,
+.search-product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(139, 69, 19, 0.1);
+}
+
+/* Mobile: Smaller images pero manteniendo imagen completa */
+@media (max-width: 767px) {
+    .perro-product-card img,
+    .gato-product-card img,
+    .search-product-card img,
+    .search-product-image {
+        height: 150px !important;
+    }
 }

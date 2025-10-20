@@ -309,7 +309,7 @@
     .menu-toggle {
         background: none;
         border: none;
-        cursor: pointer;
+        cursor: pointer !important;
         padding: 0.5rem;
         margin-left: auto;
         order: 4;
@@ -320,9 +320,10 @@
         justify-content: center;
         align-items: center;
         position: relative;
-        z-index: 10001;
-        visibility: visible;
-        opacity: 1;
+        z-index: 10001 !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
     }
 
     .menu-toggle span {
@@ -333,6 +334,7 @@
         margin: 3px 0;
         transition: all 0.3s ease;
         border-radius: 2px;
+        pointer-events: none;
     }
 
     .menu-toggle.active span:nth-child(1) {
