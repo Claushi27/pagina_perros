@@ -97,19 +97,6 @@ function renderProduct() {
              onclick="changeMainImage('${currentProduct.imagen}', this)">
     `;
 
-    // Características
-    const features = [
-        'Producto de alta calidad',
-        'Recomendado por veterinarios',
-        'Ingredientes naturales',
-        'Sin conservantes artificiales',
-        'Libre de transgénicos'
-    ];
-
-    document.getElementById('featuresList').innerHTML = features.map(feature =>
-        `<li>${feature}</li>`
-    ).join('');
-
     // Rating
     loadProductRating();
 

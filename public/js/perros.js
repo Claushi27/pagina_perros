@@ -61,6 +61,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (mobileMenu) {
         mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileMenu));
+
+        // Mobile submenu toggle functionality
+        const submenuToggles = mobileMenu.querySelectorAll('.submenu-toggle');
+        submenuToggles.forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const submenu = toggle.nextElementSibling;
+                const isOpen = submenu.classList.contains('open');
+
+                // Close all other submenus
+                mobileMenu.querySelectorAll('.submenu').forEach(s => {
+                    if (s !== submenu) {
+                        s.classList.remove('open');
+                    }
+                });
+                mobileMenu.querySelectorAll('.submenu-toggle').forEach(t => {
+                    if (t !== toggle) {
+                        t.classList.remove('active');
+                    }
+                });
+
+                // Toggle current submenu
+                if (isOpen) {
+                    submenu.classList.remove('open');
+                    toggle.classList.remove('active');
+                } else {
+                    submenu.classList.add('open');
+                    toggle.classList.add('active');
+                }
+            });
+        });
     }
 
     // Variable para almacenar productos
