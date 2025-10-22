@@ -405,6 +405,11 @@
                     <input type="number" id="productPrice" min="0" step="1" required>
                 </div>
                 <div class="form-group">
+                    <label for="productDiscount">Descuento (%)</label>
+                    <input type="number" id="productDiscount" min="0" max="100" step="1" placeholder="Ej: 15 (para 15% de descuento)">
+                    <small style="color: #666; font-size: 0.85rem; display: block; margin-top: 0.25rem;">Dejar en 0 o vacío si no hay descuento</small>
+                </div>
+                <div class="form-group">
                     <label for="productCategory">Categoría</label>
                     <select id="productCategory" required>
                         <option value="">Seleccionar...</option>
@@ -738,6 +743,7 @@
                     document.getElementById('productName').value = data.nombre;
                     document.getElementById('productDescription').value = data.descripcion;
                     document.getElementById('productPrice').value = data.precio;
+                    document.getElementById('productDiscount').value = data.descuento || 0;
                     document.getElementById('productCategory').value = data.categoria;
                     document.getElementById('productSubcategory').value = data.subcategoria;
                     document.getElementById('productImage').value = data.imagen;
@@ -828,6 +834,7 @@
                     nombre: document.getElementById('productName').value,
                     descripcion: document.getElementById('productDescription').value,
                     precio: parseInt(document.getElementById('productPrice').value),
+                    descuento: parseInt(document.getElementById('productDiscount').value) || 0,
                     categoria: document.getElementById('productCategory').value,
                     subcategoria: document.getElementById('productSubcategory').value,
                     imagen: imageUrl,

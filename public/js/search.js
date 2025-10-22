@@ -191,8 +191,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         searchResults.style.display = 'grid';
         noResults.style.display = 'none';
 
-        searchResults.innerHTML = resultadosFiltrados.map(producto => `
+        searchResults.innerHTML = resultadosFiltrados.map(producto => {
+            const descuento = producto.descuento || 0;
+            const precioOriginal = producto.precio;
+            const precioConDescuento = descuento > 0 ? Math.round(precioOriginal * (1 - descuento / 100)) : precioOriginal;
+            const tieneDescuento = descuento > 0;
+
+            return `
             <div class="search-product-card" style="cursor: pointer; position: relative;" onclick="window.location.href='product-detail.html?id=${producto.id}'">
+                ${tieneDescuento ? `<div class="discount-badge" style="position: absolute; top: 10px; left: 10px; background: #ff4757; color: white; padding: 0.3rem 0.6rem; border-radius: 5px; font-weight: bold; font-size: 0.85rem; z-index: 10; box-shadow: 0 2px 8px rgba(255,71,87,0.3);">-${descuento}%</div>` : ''}
                 <button class="favorite-btn" data-product-id="${producto.id}" onclick="event.stopPropagation(); handleFavoriteClick('${producto.id}')"
                         style="position: absolute; top: 10px; right: 10px; background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 10; transition: transform 0.2s;">
                     🤍
@@ -205,13 +212,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div id="search-rating-${producto.id}" class="search-product-rating">
                         <span style="font-size: 0.85rem; color: #999;">Cargando...</span>
                     </div>
-                    <div class="search-product-price">$${producto.precio.toLocaleString()}</div>
+                    <div class="search-product-price">
+                        ${tieneDescuento ? `
+                            <span style="text-decoration: line-through; color: #999; font-size: 0.9rem; display: block;">$${precioOriginal.toLocaleString()}</span>
+                            <span style="color: #ff4757; font-weight: bold; font-size: 1.2rem;">$${precioConDescuento.toLocaleString()}</span>
+                        ` : `$${precioOriginal.toLocaleString()}`}
+                    </div>
                     <button class="search-add-btn" onclick="event.stopPropagation(); agregarAlCarrito('${producto.id}')">
                         🛒 Agregar al carrito
                     </button>
                 </div>
             </div>
-        `).join('');
+        `;
+        }).join('');
 
         // Cargar ratings de cada producto
         resultadosFiltrados.forEach(async (producto) => {

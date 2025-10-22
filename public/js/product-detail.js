@@ -77,8 +77,26 @@ function renderProduct() {
     // Título
     document.getElementById('productTitle').textContent = currentProduct.nombre;
 
-    // Precio
-    document.getElementById('productPrice').textContent = `$${currentProduct.precio.toLocaleString('es-CL')}`;
+    // Precio con descuento
+    const descuento = currentProduct.descuento || 0;
+    const precioOriginal = currentProduct.precio;
+    const precioConDescuento = descuento > 0 ? Math.round(precioOriginal * (1 - descuento / 100)) : precioOriginal;
+    const tieneDescuento = descuento > 0;
+
+    const priceElement = document.getElementById('productPrice');
+    if (tieneDescuento) {
+        priceElement.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                <span style="background: #ff4757; color: white; padding: 0.4rem 0.8rem; border-radius: 8px; font-weight: bold; font-size: 1rem;">-${descuento}% OFF</span>
+                <div>
+                    <span style="text-decoration: line-through; color: #999; font-size: 1.2rem; display: block;">$${precioOriginal.toLocaleString('es-CL')}</span>
+                    <span style="color: #ff4757; font-weight: bold; font-size: 2rem;">$${precioConDescuento.toLocaleString('es-CL')}</span>
+                </div>
+            </div>
+        `;
+    } else {
+        priceElement.textContent = `$${precioOriginal.toLocaleString('es-CL')}`;
+    }
 
     // Descripción
     document.getElementById('productDescription').textContent = currentProduct.descripcion;
@@ -196,15 +214,28 @@ function loadRelatedProducts() {
         return;
     }
 
-    container.innerHTML = relatedProducts.map(producto => `
-        <div class="related-product-card" onclick="window.location.href='product-detail.html?id=${producto.id}'">
+    container.innerHTML = relatedProducts.map(producto => {
+        const descuento = producto.descuento || 0;
+        const precioOriginal = producto.precio;
+        const precioConDescuento = descuento > 0 ? Math.round(precioOriginal * (1 - descuento / 100)) : precioOriginal;
+        const tieneDescuento = descuento > 0;
+
+        return `
+        <div class="related-product-card" onclick="window.location.href='product-detail.html?id=${producto.id}'" style="position: relative;">
+            ${tieneDescuento ? `<div style="position: absolute; top: 10px; left: 10px; background: #ff4757; color: white; padding: 0.3rem 0.6rem; border-radius: 5px; font-weight: bold; font-size: 0.75rem; z-index: 10;">-${descuento}%</div>` : ''}
             <img src="${producto.imagen}" alt="${producto.nombre}">
             <div class="related-product-info">
                 <h3>${producto.nombre}</h3>
-                <div class="related-product-price">$${producto.precio.toLocaleString('es-CL')}</div>
+                <div class="related-product-price">
+                    ${tieneDescuento ? `
+                        <span style="text-decoration: line-through; color: #999; font-size: 0.85rem; display: block;">$${precioOriginal.toLocaleString('es-CL')}</span>
+                        <span style="color: #ff4757; font-weight: bold; font-size: 1.1rem;">$${precioConDescuento.toLocaleString('es-CL')}</span>
+                    ` : `$${precioOriginal.toLocaleString('es-CL')}`}
+                </div>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // Setup tabs
