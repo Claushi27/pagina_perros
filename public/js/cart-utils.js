@@ -91,13 +91,25 @@
 
 	const addToCart = (product) => {
 		if (!product) return;
+
+		// Calcular precio con descuento
+		const descuento = product.descuento || 0;
+		const precioOriginal = product.precio;
+		const precioConDescuento = descuento > 0 ? Math.round(precioOriginal * (1 - descuento / 100)) : precioOriginal;
+
 		const cart = getCart();
 		const existing = cart.find(p => p.id === product.id);
 		if (existing) {
 			existing.cantidad += 1;
 			showNotification(`${product.nombre} (x${existing.cantidad}) actualizado en el carrito`);
 		} else {
-			cart.push({ ...product, cantidad: 1 });
+			// Guardar producto con precio final (con descuento aplicado) y mantener info de descuento
+			cart.push({
+				...product,
+				precioOriginal: precioOriginal,
+				precio: precioConDescuento, // Este es el precio que se usará en el carrito
+				cantidad: 1
+			});
 			showNotification(`¡${product.nombre} agregado al carrito!`);
 		}
 		setCart(cart);

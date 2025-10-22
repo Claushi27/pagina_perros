@@ -73,16 +73,27 @@ document.addEventListener('DOMContentLoaded', () => {
         cartContent.style.display = 'flex';
         emptyCart.style.display = 'none';
 
-        cartItems.innerHTML = carrito.map(item => `
+        cartItems.innerHTML = carrito.map(item => {
+            const tieneDescuento = item.descuento && item.descuento > 0;
+            const precioMostrar = item.precio;
+            const precioOriginalMostrar = item.precioOriginal || item.precio;
+
+            return `
             <div class="cart-item" data-id="${item.id}">
                 <div class="item-image">
                     <img src="${item.imagen}" alt="${item.nombre}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/100x100?text=Imagen+No+Disponible'">
+                    ${tieneDescuento ? `<div style="position: absolute; top: 5px; left: 5px; background: #ff4757; color: white; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.7rem; font-weight: bold;">-${item.descuento}%</div>` : ''}
                 </div>
                 <div class="item-details">
                     <h4>${item.nombre}</h4>
                     <p class="item-category">${item.categoria} - ${item.subcategoria}</p>
                     <p class="item-description">${item.descripcion || ''}</p>
-                    <div class="item-price">$${item.precio.toLocaleString()}</div>
+                    <div class="item-price">
+                        ${tieneDescuento ? `
+                            <span style="text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 0.5rem;">$${precioOriginalMostrar.toLocaleString()}</span>
+                            <span style="color: #ff4757; font-weight: bold;">$${precioMostrar.toLocaleString()}</span>
+                        ` : `$${precioMostrar.toLocaleString()}`}
+                    </div>
                 </div>
                 <div class="item-controls">
                     <div class="quantity-controls">
@@ -90,11 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="quantity">${item.cantidad}</span>
                         <button class="quantity-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
                     </div>
-                    <div class="item-total">$${(item.precio * item.cantidad).toLocaleString()}</div>
+                    <div class="item-total">$${(precioMostrar * item.cantidad).toLocaleString()}</div>
                     <button class="remove-btn" onclick="removeItem('${item.id}')">🗑️</button>
                 </div>
             </div>
-        `).join('');
+        `;
+        }).join('');
 
         updateSummary();
     }
