@@ -166,6 +166,11 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProducts(allProductosGatos);
     };
 
+    window.updateSubcategoryFilter = function(subcategory) {
+        updateFilter('subcategory', subcategory);
+        renderProducts(allProductosGatos);
+    };
+
     window.updateAgeFilter = function(age) {
         updateFilter('age', age);
         renderProducts(allProductosGatos);

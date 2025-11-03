@@ -201,18 +201,29 @@
     position: relative;
 }
 
-.dropdown-content {
-    display: none;
+.nav-dropdown .dropdown-content {
     position: absolute;
     top: 100%;
     left: 0;
     background-color: white;
-    min-width: 200px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    border-radius: 8px;
+    min-width: 220px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-radius: 12px;
     padding: 0.5rem 0;
-    z-index: 10000;
-    margin-top: 0.25rem;
+    z-index: 99999;
+    margin-top: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.nav-dropdown:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
 .dropdown-content a {
@@ -230,26 +241,25 @@
     color: white;
 }
 
-.nav-dropdown:hover .dropdown-content {
-    display: block;
-}
-
-.nav-dropdown > .nav-link {
-    pointer-events: auto;
-}
-
-/* Dropdown de contacto - ancho especial */
-.contact-dropdown {
-    min-width: 320px;
-    max-width: 400px;
+/* Dropdown de contacto específico */
+.nav-dropdown .contact-dropdown {
+    min-width: 340px;
+    max-width: 420px;
+    padding: 1.25rem !important;
+    background: white;
+    border: 1px solid rgba(255, 152, 0, 0.2);
 }
 
 .contact-dropdown p {
+    margin: 0.75rem 0;
+    color: #333;
+    font-size: 0.9rem;
     line-height: 1.6;
 }
 
 .contact-dropdown strong {
     color: var(--primary-orange);
+    font-weight: 600;
 }
 
 /* Mobile menu toggle button - initially hidden, shown on mobile via responsive.css */

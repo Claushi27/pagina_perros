@@ -45,33 +45,9 @@
         <nav class="header-nav">
             <ul>
                 <li><a href="index.html" class="nav-link">🏠 Inicio</a></li>
-                <li class="nav-dropdown">
-                    <a href="perros.html" class="nav-link">🐕 Perros</a>
-                    <div class="dropdown-content">
-                        <a href="perros.html?categoria=alimentos">Alimentos</a>
-                        <a href="perros.html?categoria=accesorios">Accesorios y Snacks</a>
-                        <a href="perros.html?categoria=farmacia">Farmacia</a>
-                    </div>
-                </li>
-                <li class="nav-dropdown">
-                    <a href="gatos.html" class="nav-link">🐱 Gatos</a>
-                    <div class="dropdown-content">
-                        <a href="gatos.html?categoria=alimentos">Alimentos</a>
-                        <a href="gatos.html?categoria=accesorios">Accesorios y Snacks</a>
-                        <a href="gatos.html?categoria=farmacia">Farmacia</a>
-                    </div>
-                </li>
-                <li class="nav-dropdown">
-                    <a href="#contacto" class="nav-link">📞 Contacto</a>
-                    <div class="dropdown-content contact-dropdown">
-                        <div style="padding: 0.5rem;">
-                            <p style="margin: 0.5rem 0; color: #333; font-size: 0.9rem;"><strong>📍 Dirección:</strong><br>María Luisa Santander 468, Oficina 203, Providencia</p>
-                            <p style="margin: 0.5rem 0; color: #333; font-size: 0.9rem;"><strong>📧 Email:</strong><br>awkapetshop@gmail.com</p>
-                            <p style="margin: 0.5rem 0; color: #333; font-size: 0.9rem;"><strong>📞 Teléfono:</strong><br>+56 9 4877 5370</p>
-                            <p style="margin: 0.5rem 0; color: #333; font-size: 0.9rem;"><strong>⏰ Horario:</strong><br>Lun - Sáb: 9:00 - 20:00</p>
-                        </div>
-                    </div>
-                </li>
+                <li><a href="perros.html" class="nav-link">🐕 Perros</a></li>
+                <li><a href="gatos.html" class="nav-link">🐱 Gatos</a></li>
+                <li><a href="#contacto" class="nav-link">📞 Contacto</a></li>
             </ul>
         </nav>
     </header>
@@ -84,24 +60,8 @@
     <div class="mobile-menu-content">
         <ul>
             <li><a href="index.html">🏠 Inicio</a></li>
-            <li class="has-submenu">
-                <a href="perros.html">🐕 Perros</a>
-                <button class="submenu-toggle" aria-label="Expandir menú Perros">▼</button>
-                <ul class="submenu">
-                    <li><a href="perros.html?categoria=alimentos">Alimentos</a></li>
-                    <li><a href="perros.html?categoria=accesorios">Accesorios y Snacks</a></li>
-                    <li><a href="perros.html?categoria=farmacia">Farmacia</a></li>
-                </ul>
-            </li>
-            <li class="has-submenu">
-                <a href="gatos.html">🐱 Gatos</a>
-                <button class="submenu-toggle" aria-label="Expandir menú Gatos">▼</button>
-                <ul class="submenu">
-                    <li><a href="gatos.html?categoria=alimentos">Alimentos</a></li>
-                    <li><a href="gatos.html?categoria=accesorios">Accesorios y Snacks</a></li>
-                    <li><a href="gatos.html?categoria=farmacia">Farmacia</a></li>
-                </ul>
-            </li>
+            <li><a href="perros.html">🐕 Perros</a></li>
+            <li><a href="gatos.html">🐱 Gatos</a></li>
             <li><a href="#contacto">📞 Contacto</a></li>
         </ul>
     </div>
@@ -488,7 +448,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="site-footer">
+    <footer class="site-footer" id="contacto">
         <div class="footer-content">
             <div class="footer-grid">
                 <!-- About Section -->
@@ -592,24 +552,21 @@
     <script src="js/script.js"></script>
     <script src="js/footer.js"></script>
     <script>
-        // Scroll suave al footer en móvil cuando se clickea Contacto
+        // Scroll suave al footer cuando se clickea Contacto
         document.addEventListener('DOMContentLoaded', function() {
             const contactLinks = document.querySelectorAll('a[href="#contacto"], a[href*="#contacto"]');
 
             contactLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
-                    // Solo prevenir default y hacer scroll en móvil
-                    if (window.innerWidth <= 767) {
-                        e.preventDefault();
-                        const footer = document.querySelector('.footer-contact');
-                        if (footer) {
-                            footer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    e.preventDefault();
+                    const footer = document.getElementById('contacto');
+                    if (footer) {
+                        footer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-                            // Cerrar menú móvil si está abierto
-                            const mobileMenu = document.getElementById('mobile-menu');
-                            if (mobileMenu && mobileMenu.classList.contains('open')) {
-                                mobileMenu.classList.remove('open');
-                            }
+                        // Cerrar menú móvil si está abierto
+                        const mobileMenu = document.getElementById('mobile-menu');
+                        if (mobileMenu && mobileMenu.classList.contains('open')) {
+                            mobileMenu.classList.remove('open');
                         }
                     }
                 });

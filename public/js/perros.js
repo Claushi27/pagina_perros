@@ -166,6 +166,11 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProducts(allProductosPerros);
     };
 
+    window.updateSubcategoryFilter = function(subcategory) {
+        updateFilter('subcategory', subcategory);
+        renderProducts(allProductosPerros);
+    };
+
     window.updateAgeFilter = function(age) {
         updateFilter('age', age);
         renderProducts(allProductosPerros);
@@ -179,10 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.clearAllFilters = function() {
         clearFilters();
         // Reset UI
-        document.getElementById('priceMin').value = 0;
-        document.getElementById('priceMax').value = '';
         document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-        document.querySelector('select').value = 'default';
+        const sortSelect = document.querySelector('select[onchange*="updateSortFilter"]');
+        if (sortSelect) sortSelect.value = 'default';
         renderProducts(allProductosPerros);
     };
 

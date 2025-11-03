@@ -276,6 +276,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         mostrarResultados(resultados, term);
     };
 
+    window.updateSubcategoryFilter = function(subcategory) {
+        updateFilter('subcategory', subcategory);
+        const term = currentSearchTerm || '';
+        const resultados = term.length >= 2 ? buscarProductos(term) : allProductos;
+        mostrarResultados(resultados, term);
+    };
+
     window.updateAgeFilter = function(age) {
         updateFilter('age', age);
         const term = currentSearchTerm || '';

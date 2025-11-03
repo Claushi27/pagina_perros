@@ -6,6 +6,7 @@ let currentFilters = {
     priceMax: 999999,
     brands: [],
     categories: [],
+    subcategories: [],
     ages: [],
     sortBy: 'default' // default, price-asc, price-desc, rating, popular
 };
@@ -25,6 +26,16 @@ export function applyFilters(products) {
         filtered = filtered.filter(p => {
             const brand = extractBrand(p.nombre);
             return currentFilters.brands.includes(brand);
+        });
+    }
+
+    // Filtro de subcategorías (Alimentos, Snacks, Farmacia)
+    if (currentFilters.subcategories.length > 0) {
+        filtered = filtered.filter(p => {
+            const subcategory = p.subcategoria ? p.subcategoria.toLowerCase() : '';
+            return currentFilters.subcategories.some(subcat => 
+                subcategory.includes(subcat.toLowerCase())
+            );
         });
     }
 
@@ -123,6 +134,13 @@ export function updateFilter(filterType, value) {
                 currentFilters.brands.push(value);
             }
             break;
+        case 'subcategory':
+            if (currentFilters.subcategories.includes(value)) {
+                currentFilters.subcategories = currentFilters.subcategories.filter(s => s !== value);
+            } else {
+                currentFilters.subcategories.push(value);
+            }
+            break;
         case 'age':
             if (currentFilters.ages.includes(value)) {
                 currentFilters.ages = currentFilters.ages.filter(a => a !== value);
@@ -143,6 +161,7 @@ export function clearFilters() {
         priceMax: 999999,
         brands: [],
         categories: [],
+        subcategories: [],
         ages: [],
         sortBy: 'default'
     };
@@ -173,6 +192,31 @@ export function createFilterPanel(products, category = 'perros') {
                     <h3 style="margin: 0; font-size: 1.1rem; color: #8B4513; font-weight: 700;">🔍 Filtros</h3>
                     <button onclick="window.clearAllFilters()" style="background: #f5f5f5; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; color: #666; font-weight: 600;">Limpiar</button>
                 </div>
+
+            <!-- Filtro de Subcategorías -->
+            <div class="filter-section" style="margin-bottom: 1.5rem;">
+                <h4 style="margin-bottom: 0.75rem; color: #8B4513; font-size: 0.95rem; font-weight: 700;">📦 Tipo de Producto</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-size: 0.85rem;">
+                        <input type="checkbox" value="alimentos" ${currentFilters.subcategories.includes('alimentos') ? 'checked' : ''}
+                               onchange="window.updateSubcategoryFilter('alimentos')"
+                               style="margin-right: 0.5rem; width: 16px; height: 16px; cursor: pointer; accent-color: #8B4513;">
+                        <span style="color: #555;">🍖 Alimentos</span>
+                    </label>
+                    <label style="display: flex; align-items: center; cursor: pointer; font-size: 0.85rem;">
+                        <input type="checkbox" value="snacks" ${currentFilters.subcategories.includes('snacks') ? 'checked' : ''}
+                               onchange="window.updateSubcategoryFilter('snacks')"
+                               style="margin-right: 0.5rem; width: 16px; height: 16px; cursor: pointer; accent-color: #8B4513;">
+                        <span style="color: #555;">🦴 Snacks</span>
+                    </label>
+                    <label style="display: flex; align-items: center; cursor: pointer; font-size: 0.85rem;">
+                        <input type="checkbox" value="farmacia" ${currentFilters.subcategories.includes('farmacia') ? 'checked' : ''}
+                               onchange="window.updateSubcategoryFilter('farmacia')"
+                               style="margin-right: 0.5rem; width: 16px; height: 16px; cursor: pointer; accent-color: #8B4513;">
+                        <span style="color: #555;">💊 Farmacia</span>
+                    </label>
+                </div>
+            </div>
 
             <!-- Filtro de Marcas (compacto con scroll) -->
             <div class="filter-section" style="margin-bottom: 1.5rem;">
